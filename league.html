@@ -86,7 +86,7 @@ async function loadLeague(){
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
         <span style="font-family:'PizzaPilgrims';font-size:14px;color:${r.avg!==null&&i<3?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
         <div style="font-size:13px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
-        <div style="text-align:center">${r.latest!==null?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:${scoreColor(r.latest)}">${r.latest}%</div><div style="font-size:9px;color:${scoreColor(r.latest)}">${scoreLabel(r.latest)}</div>`:'<span style="color:#ccc">—</span>'}</div>
+        <div style="text-align:center">${r.latest!==null?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:${scoreColor(r.latest)}">${r.latest}%</div>`:'<span style="color:#ccc">—</span>'}</div>
         <div style="text-align:center">${r.avg!==null?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`:'<span style="color:#ccc">—</span>'}</div>
       </div>`;
     });
