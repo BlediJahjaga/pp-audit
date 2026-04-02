@@ -349,7 +349,7 @@ function renderForm(app){
         ${state.photoPreviews[s.id]
           ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
           :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()">📷 Add photo (optional)</button>`}
-        <input type="file" id="f-${s.id}" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
+        <input type="file" id="f-${s.id}" accept="image/*" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
       </div>
     </div>
     ${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
