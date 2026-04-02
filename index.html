@@ -495,7 +495,6 @@ function renderForm(app){
 
   if(!state.pizzeria||!state.auditor){
     html+=`<div class="card">
-      <div style="border-radius:10px;overflow:hidden;margin-bottom:14px"><img src="https://i.ibb.co/0yndCqdc/IMG-5797.jpg" style="width:100%;display:block"></div>
       <div style="margin-bottom:14px"><label>Pizzeria</label>
         <select onchange="state.pizzeria=this.value;render()">
           <option value="">Select pizzeria…</option>
@@ -509,6 +508,7 @@ function renderForm(app){
         <input type="text" id="team-input" value="${state.team}" placeholder="Your team…" oninput="state.team=this.value">
       </div>
       ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){state.activeSection=0;render();}">Start Audit →</button>`:""}
+      <div style="margin-top:16px;border-radius:10px;overflow:hidden;max-width:70%;margin-left:auto;margin-right:auto"><img src="https://i.ibb.co/0yndCqdc/IMG-5797.jpg" style="width:100%;display:block"></div>
     </div>`;
   } else {
     const pct=Math.round((ac/TOTAL_WITH_PHOTOS)*100);
