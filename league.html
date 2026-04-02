@@ -4,43 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Quality League Table</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0dc; min-height: 100vh; }
-.wrap { max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-.header-left { display: flex; align-items: center; gap: 8px; }
-.dot { width: 8px; height: 8px; border-radius: 4px; background: #1A5C34; }
-.label { font-size: 13px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
-.meta { font-size: 11px; color: #999; margin-bottom: 20px; }
-.sm-btn { padding: 7px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #f0f0f0; cursor: pointer; font-size: 12px; font-family: inherit; }
-.table-wrap { border: 0.5px solid #ddd; border-radius: 12px; overflow: hidden; background: #fff; }
-.table-head { display: grid; grid-template-columns: 36px 1fr 60px 90px; padding: 10px 16px; background: #f5f5f5; border-bottom: 0.5px solid #ddd; }
-.th { font-size: 11px; color: #999; font-weight: 500; }
-.table-row { display: grid; grid-template-columns: 36px 1fr 60px 90px; padding: 11px 16px; border-bottom: 0.5px solid #eee; align-items: center; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #F5F0DC; min-height: 100vh; }
+.wrap { max-width: 600px; margin: 0 auto; padding: 0 0 3rem; }
+.top-banner { background: #1A5C34; padding: 18px 20px 14px; text-align: center; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+.banner-center { text-align: center; flex: 1; }
+.brand-name { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 400; color: #39D400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+.page-title { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; color: #F5F0DC; letter-spacing: 0.05em; text-transform: uppercase; }
+.refresh-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #39D400; background: transparent; color: #39D400; cursor: pointer; font-size: 13px; font-family: 'Inter', sans-serif; white-space: nowrap; }
+.inner { padding: 0 1rem; }
+.meta { font-size: 12px; color: #888; margin-bottom: 16px; }
+.table-wrap { border: 0.5px solid #d4ceb8; border-radius: 12px; overflow: hidden; background: #fff; }
+.table-head { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 10px 16px; background: #1A5C34; }
+.th { font-family: 'Oswald', sans-serif; font-size: 12px; color: #39D400; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.table-row { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 12px 16px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; }
 .table-row:last-child { border-bottom: none; }
-.table-row.top { background: rgba(15,110,86,0.04); }
-.legend { margin-top: 16px; display: flex; gap: 12px; font-size: 12px; color: #666; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 4px; }
+.table-row.top { background: rgba(26,92,52,0.05); }
+.legend { margin-top: 16px; display: flex; gap: 14px; font-size: 12px; color: #777; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 5px; }
-.loading { text-align: center; padding: 3rem; color: #666; font-size: 14px; }
+.loading { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
+.readonly-note { margin-top: 12px; font-size: 11px; color: #bbb; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
-    <div class="header-left"><div class="dot"></div><span class="label">Quality League Table</span></div>
-    <button class="sm-btn" onclick="loadLeague()">↻ Refresh</button>
+  <div class="top-banner">
+    <div style="width:80px"></div>
+    <div class="banner-center">
+      <div class="brand-name">Pizza Pilgrims</div>
+      <div class="page-title">Quality League Table</div>
+    </div>
+    <button class="refresh-btn" onclick="loadLeague()">↻ Refresh</button>
   </div>
-  <p class="meta" id="meta">Loading…</p>
-  <div id="table"><div class="loading">Loading…</div></div>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>80–100%</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#3B6D11"></div>60–79%</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>40–59%</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>0–39%</div>
+  <div class="inner">
+    <p class="meta" id="meta">Loading…</p>
+    <div id="table"><div class="loading">Loading…</div></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>80–100%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#3B6D11"></div>60–79%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>40–59%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>0–39%</div>
+    </div>
+    <p class="readonly-note">Read-only. Data cannot be edited from this view.</p>
   </div>
-  <p style="margin-top:12px;font-size:11px;color:#bbb">Read-only. Data cannot be edited from this view.</p>
 </div>
 <script>
 const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
@@ -58,34 +67,42 @@ const RESTAURANTS = [
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
 async function loadLeague(){
-  document.getElementById("meta").textContent = "Loading…";
-  document.getElementById("table").innerHTML = '<div class="loading">Loading…</div>';
-  try {
-    const r = await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc", {
-      headers: {"apikey": SB_KEY, "Authorization": "Bearer "+SB_KEY}
+  document.getElementById("meta").textContent="Loading…";
+  document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc",{
+      headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}
     });
-    const rows = await r.json();
-    const seen = new Set(), best = [];
+    const rows=await r.json();
+    const seen=new Set(),best=[];
     (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
-    const all = RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
-    const sorted = [...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
+    const all=RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
+    const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
 
-    document.getElementById("meta").textContent = best.length+" of "+RESTAURANTS.length+" restaurants audited · read-only";
+    document.getElementById("meta").textContent=best.length+" of "+RESTAURANTS.length+" pizzerias audited · read-only";
 
-    let html = `<div class="table-wrap">
-      <div class="table-head"><span class="th">#</span><span class="th">Restaurant</span><span class="th" style="text-align:center">Score</span><span class="th" style="text-align:right">Last audit</span></div>`;
+    let html=`<div class="table-wrap">
+      <div class="table-head">
+        <span class="th">#</span>
+        <span class="th">Pizzeria</span>
+        <span class="th" style="text-align:center">Score</span>
+        <span class="th" style="text-align:right">Last audit</span>
+      </div>`;
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.pct!==null&&i===0?' top':''}">
-        <span style="font-size:13px;font-weight:500;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
-        <div><div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>${r.auditor?`<div style="font-size:11px;color:#bbb">${r.auditor}</div>`:""}</div>
-        <div style="text-align:center;font-size:15px;font-weight:500;color:${r.pct!==null?scoreColor(r.pct):'#bbb'}">${r.pct!==null?r.pct+"%":"—"}</div>
-        <div style="text-align:right;font-size:12px;color:#bbb">${r.audit_date||"—"}</div>
+        <span style="font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
+        <div>
+          <div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>
+          ${r.auditor?`<div style="font-size:11px;color:#aaa">${r.auditor}</div>`:""}
+        </div>
+        <div style="text-align:center;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:${r.pct!==null?scoreColor(r.pct):'#ccc'}">${r.pct!==null?r.pct+"%":"—"}</div>
+        <div style="text-align:right;font-size:12px;color:#aaa">${r.audit_date||"—"}</div>
       </div>`;
     });
-    html += '</div>';
-    document.getElementById("table").innerHTML = html;
-  } catch(e) {
-    document.getElementById("table").innerHTML = '<div class="loading">Failed to load. Try refreshing.</div>';
+    html+='</div>';
+    document.getElementById("table").innerHTML=html;
+  }catch(e){
+    document.getElementById("table").innerHTML='<div class="loading">Failed to load. Try refreshing.</div>';
   }
 }
 
