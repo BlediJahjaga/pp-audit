@@ -438,9 +438,8 @@ async function handleSubmit(){
 
     // Send email in background — doesn't block the confirmation screen
     try{
-      const pdfDataUri=await generatePDF(state.currentReport);
-      await sendEmail(state.currentReport,pdfDataUri);
-    }catch(e){ console.error("Email/PDF error:",e); }
+      await sendEmail(state.currentReport);
+    }catch(e){ console.error("Email error:",e); }
     return;
   }catch(e){
     state.submitError="Save failed: "+e.message;
