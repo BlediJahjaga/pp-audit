@@ -43,15 +43,15 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
     <button class="refresh-btn" onclick="loadLeague()">↻ Refresh</button>
   </div>
   <div class="inner">
-    <div id="table"><div class="loading">Loading…</div></div>
-    <div class="legend">
-      <div class="legend-item"><span style="font-size:14px">🤌</span>100% — Faje Paura!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>95–99.99% — STARS!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#39D400"></div>90–94.99% — Very good!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#C8B97A"></div>85–89.99% — Good but..!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84.99% — Not great!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX URGENTLY!</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:16px;font-size:11px;color:#555">
+      <div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px">🤌</span>100% — Faje Paura!</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#1A5C34;flex-shrink:0"></div>95–99% — STARS!</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#39D400;flex-shrink:0"></div>90–94% — Very good!</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#6B8FA8;flex-shrink:0"></div>85–89% — Good but..!</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#EF9F27;flex-shrink:0"></div>75–84% — Not great!</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#E24B4A;flex-shrink:0"></div>Under 75% — Fix urgently!</div>
     </div>
+    <div id="table"><div class="loading">Loading…</div></div>
   </div>
 </div>
 <script>
@@ -60,7 +60,7 @@ const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 const RESTAURANTS=["Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff","Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market","Glasgow","Greenwich","Hyde Park","King's Cross","Leeds","Liverpool Street","London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch","Soho","Spitalfields","Swingers West End","Victoria","Waterloo","Westfield","Westfield Stratford","Wimbledon"];
 
-function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#C8B97A";if(p>=75)return"#6B8FA8";return"#E24B4A"; }
+function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
 function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX URGENTLY!"; }
 
 async function loadLeague(){
