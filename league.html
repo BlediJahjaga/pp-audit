@@ -81,7 +81,7 @@ async function loadLeague(){
       return{restaurant:r,latest:d.latest,avg,count:d.scores.length};
     });
     const sorted=[...all].sort((a,b)=>(b.avg??-1)-(a.avg??-1));
-    let html='<div class="table-wrap"><div class="table-head"><span class="th">#</span><span class="th">Pizzeria</span><span class="th" style="text-align:center">Last</span><span class="th" style="text-align:center">Avg</span></div>';
+    let html='<div class="table-wrap"><div class="table-head"><span class="th">#</span><span class="th">Pizzeria</span><span class="th" style="text-align:center">Last audit</span><span class="th" style="text-align:center">Average</span></div>';
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
         <span style="font-family:'PizzaPilgrims';font-size:14px;color:${r.avg!==null&&i<3?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
