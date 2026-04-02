@@ -38,7 +38,7 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 .progress-fill { height: 5px; border-radius: 3px; background: #1A5C34; transition: width 0.3s; }
 
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.tab { padding: 6px 11px; border-radius: 16px; font-size: 12px; border: 1px solid #c8c2aa; background: #fff; color: #666; cursor: pointer; font-family: 'Inter', sans-serif; }
+.tab { padding: 6px 11px; border-radius: 16px; font-size: 12px; border: 1px solid #c8c2aa; background: #fff; color: #666; cursor: pointer; font-family: 'Chelsea', sans-serif; font-weight: 300; }
 .tab.active { border-color: #1A5C34; background: #1A5C34; color: #F5F0DC; font-weight: 500; }
 .tab.done { background: rgba(26,92,52,0.1); color: #1A5C34; border-color: #1A5C34; }
 
@@ -314,7 +314,7 @@ function renderForm(app){
     <div class="card">
       <div class="section-header">
         <span class="section-title">${s.label}</span>
-        ${s.weight>1?`<span class="weight-badge">×${s.weight}</span>`:""}
+        ${s.weight>1&&s.id!=="pizza"?`<span class="weight-badge">×${s.weight}</span>`:""}
       </div>`;
 
     const av=state.availability;
