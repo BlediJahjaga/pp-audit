@@ -127,7 +127,7 @@ let state = {
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
   activeSection:0, submitting:false, submitError:"",
-  currentReport:null
+  currentReport:null, confirmPhoto:null
 };
 
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
@@ -228,6 +228,12 @@ function resetForm(){
   render();
 }
 
+function handleConfirmPhoto(input){
+  const file=input.files[0]; if(!file)return;
+  state.confirmPhoto=URL.createObjectURL(file);
+  render();
+}
+
 function handlePhotoChange(sid,input){
   const file=input.files[0];if(!file)return;
   state.photoFiles[sid]=file;
@@ -256,6 +262,7 @@ function renderConfirm(app){
       <div class="confirm-title">Audit Completed!</div>
       <div class="confirm-brand">pizz'&amp;love</div>
       <div class="confirm-meta">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
+      <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="team.jpeg" style="width:100%;display:block"></div>
       <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
     </div>
   </div>`;
