@@ -130,6 +130,9 @@ let state = {
   currentReport:null, confirmPhoto:null
 };
 
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+" "+MONTHS[parseInt(p[1])-1]+" "+p[0]; }
+
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
 function calcScores(scores,avail){
@@ -261,8 +264,8 @@ function renderConfirm(app){
       <div class="confirm-check">✓</div>
       <div class="confirm-title">Audit Completed!</div>
       <div class="confirm-brand">pizz'&amp;love</div>
-      <div class="confirm-meta">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
-      <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="/pp-audit/team.jpeg" style="width:100%;display:block"></div>
+      <div class="confirm-meta">${state.currentReport.restaurant} · ${formatDate(state.currentReport.audit_date)}</div>
+      <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="https://bledijahjaga.github.io/pp-audit/team.jpeg" style="width:100%;display:block" onerror="this.parentElement.style.display='none'"></div>
       <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
     </div>
   </div>`;
