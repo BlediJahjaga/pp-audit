@@ -75,7 +75,7 @@ const RESTAURANTS = [
 const SECTIONS = [
   {id:"pizza",label:"Pizza",weight:14,questions:[
     {id:"spec",label:"Is the pizza made to spec?"},
-    {id:"dough",label:"Dough texture — is the cornicione light, airy and correctly charred?"},
+    {id:"dough",label:"Dough texture — is the crust light, airy and correctly charred?"},
     {id:"bake",label:"Bake / cooking — is the base cooked through without being burnt or underdone?"}
   ]},
   {id:"sides",label:"Sides & Salads",weight:1,questions:[
@@ -94,7 +94,7 @@ const SECTIONS = [
   ]},
   {id:"availability",label:"Menu Availability",weight:1,special:"availability"},
   {id:"vibe",label:"Overall Vibe & Service",weight:1,questions:[
-    {id:"vibe",label:"How is the overall vibe, atmosphere and service quality of the pizzeria today?"}
+    {id:"vibe",label:"What's the overall vibe of the pizzeria today?"}
   ]}
 ];
 
@@ -245,7 +245,8 @@ function renderConfirm(app){
 
 function renderForm(app){
   const ac=answeredCount();
-  const canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting;
+  const availNoteRequired = state.availability.answer==="no" && !state.notes['availability'];
+  const canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting&&!availNoteRequired;
   const s=SECTIONS[state.activeSection];
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
 
@@ -295,9 +296,12 @@ function renderForm(app){
           </div>
           ${av.items>0?`<div><label>How many of those are pizzas?</label>
             <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
-          </div>
-          <p style="font-size:11px;color:#999;margin-top:8px">Each unavailable item −1% · Each unavailable pizza −5%</p>`:''}
+          </div>`:''}
         </div>`:''}
+      </div>
+      <div style="margin-top:10px">
+        <textarea rows="2" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="width:100%;padding:8px 10px;border-radius:8px;border:${s.special==='availability'&&!state.notes['availability']?'0.5px solid #E24B4A':'0.5px solid #ddd'};background:#f9f9f9;font-size:13px;resize:none;color:#111;font-family:inherit">${state.notes['availability']||""}</textarea>
+        ${s.special==='availability'&&!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list any unavailable items</p>`:""}
       </div>`;
     } else {
       html+=s.questions.map(q=>{
