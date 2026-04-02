@@ -114,7 +114,7 @@ async function loadLeague(){
     });
     const sorted=[...all].sort((a,b)=>(b.avg??-1)-(a.avg??-1));
 
-    document.getElementById("meta").textContent=Object.keys(data).length+" of "+RESTAURANTS.length+" pizzerias audited";
+    document.getElementById("meta").textContent="";
 
     let html=`<div class="table-wrap">
       <div class="table-head">
