@@ -288,8 +288,8 @@ function renderForm(app){
       <div style="margin-bottom:14px"><label>Your name</label>
         <input type="text" id="auditor-input" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value">
       </div>
-      <div><label>Pizzeria / pizza base team</label>
-        <input type="text" id="team-input" value="${state.team}" placeholder="e.g. AM team, PM team, full team…" oninput="state.team=this.value">
+      <div><label>Your team</label>
+        <input type="text" id="team-input" value="${state.team}" placeholder="Your team…" oninput="state.team=this.value">
       </div>
       ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){state.activeSection=0;render();}">Start Audit →</button>`:""}
     </div>`;
