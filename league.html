@@ -60,7 +60,7 @@ const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 const RESTAURANTS=["Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff","Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market","Glasgow","Greenwich","Hyde Park","King's Cross","Leeds","Liverpool Street","London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch","Soho","Spitalfields","Swingers West End","Victoria","Waterloo","Westfield","Westfield Stratford","Wimbledon"];
 
-function scoreColor(p){ if(p===100)return"#1A5C34";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#C8B97A";if(p>=75)return"#EF9F27";return"#E24B4A"; }
+function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#C8B97A";if(p>=75)return"#EF9F27";return"#E24B4A"; }
 function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX URGENTLY!"; }
 
 async function loadLeague(){
@@ -86,8 +86,8 @@ async function loadLeague(){
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
         <span style="font-family:'PizzaPilgrims';font-size:14px;color:${r.avg!==null&&i<3?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
         <div style="font-size:13px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
-        <div style="text-align:center">${r.latest!==null?`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.latest)}">${r.latest}%</div>`:'<span style="color:#ccc">—</span>'}</div>
-        <div style="text-align:center">${r.avg!==null?`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`:'<span style="color:#ccc">—</span>'}</div>
+        <div style="text-align:center">${r.latest!==null?r.latest===100?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`:`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.latest)}">${r.latest}%</div>`:'<span style="color:#ccc">—</span>'}</div>
+        <div style="text-align:center">${r.avg!==null?r.avg===100?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`:`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`:'<span style="color:#ccc">—</span>'}</div>
       </div>`;
     });
     html+='</div>';
