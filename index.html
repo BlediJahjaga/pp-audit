@@ -101,61 +101,82 @@ const RESTAURANTS = [
 
 const SECTIONS = [
   { id:"pizza", label:"Pizza", weight:3, questions:[
-    { id:"spec", label:"Is the pizza made to spec? (toppings, sauce spread, cheese coverage)" },
+    { id:"spec", label:"Is the pizza made to spec?" },
     { id:"dough", label:"Dough texture — is the cornicione light, airy and correctly charred?" },
     { id:"bake", label:"Bake / cooking — is the base cooked through without being burnt or underdone?" },
   ]},
   { id:"sides", label:"Sides & Salads", weight:1, questions:[
-    { id:"spec", label:"Are sides and salads made to spec?" },
-    { id:"specific", label:"Are fresh components (leaves, herbs, dressings) in good condition and well balanced?" },
+    { id:"spec", label:"Are our sides/salads made to spec?" },
+    { id:"fresh", label:"Are the ingredients fresh and well-dressed (salads)?" },
   ]},
   { id:"dippers", label:"Dippers", weight:1, questions:[
-    { id:"spec", label:"Are dippers made to spec?" },
-    { id:"specific", label:"Is the dip accompaniment correct in portion and consistency?" },
+    { id:"spec", label:"Are our dippers made to spec?" },
   ]},
-  { id:"desserts", label:"Desserts", weight:1, questions:[
-    { id:"spec", label:"Are desserts made to spec?" },
-    { id:"specific", label:"Are desserts at the correct temperature and presented neatly?" },
+  { id:"afterpizza", label:"After Pizza", weight:1, questions:[
+    { id:"spec", label:"Is everything made to spec?" },
+    { id:"temp", label:"Is everything served at the correct temperature and presented neatly?" },
   ]},
-  { id:"drinks", label:"After Pizza & Drinks", weight:1, questions:[
-    { id:"spec", label:"Are after-pizza items and drinks made to spec?" },
-    { id:"specific", label:"Are drinks correctly garnished and served at the right temperature?" },
+  { id:"drinks", label:"Drinks", weight:1, questions:[
+    { id:"spec", label:"Are our drinks made to spec?" },
   ]},
-  { id:"availability", label:"Menu Availability", weight:1, questions:[
-    { id:"availability", label:"Is the full menu available? (no items 86'd without good reason)" },
-  ]},
+  { id:"availability", label:"Menu Availability", weight:1, special:"availability" },
   { id:"vibe", label:"Overall Vibe & Service", weight:1, questions:[
-    { id:"vibe", label:"How is the overall vibe, atmosphere and service quality of the restaurant today?" },
+    { id:"vibe", label:"How is the overall vibe, atmosphere and service quality of the pizzeria today?" },
   ]},
 ];
 
-const TOTAL_Q = SECTIONS.reduce((a,s)=>a+s.questions.length,0);
+const TOTAL_Q = SECTIONS.reduce((a,s)=>a+(s.special?1:s.questions.length),0);
 
 let state = {
   view: "form", restaurant: "", auditor: "",
   scores: {}, photoFiles: {}, photoPreviews: {}, photoUrls: {}, notes: {},
+  availability: { answer: "", items: "", pizzas: "" },
   activeSection: 0, submitting: false, submitError: "",
   currentReport: null, leagueData: [], leagueLoading: false
 };
 
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
-function calcScores(scores){
+function calcScores(scores,availability){
   let total=0, maxTotal=0;
   const ss={};
   SECTIONS.forEach(s=>{
-    let sum=0,count=0;
-    s.questions.forEach(q=>{ const v=scores[s.id]?.[q.id]; if(v!==undefined){sum+=v;count++;} });
-    const raw=count>0?sum/count:null;
-    const weighted=raw!==null?raw*s.weight:null;
-    ss[s.id]={raw,weighted,maxWeighted:5*s.weight};
-    if(weighted!==null){total+=weighted;maxTotal+=5*s.weight;}
+    if(s.special==="availability"){
+      if(state.availability.answer==="yes"){
+        const raw=5, weighted=5*s.weight;
+        ss[s.id]={raw,weighted,maxWeighted:5*s.weight};
+        total+=weighted; maxTotal+=5*s.weight;
+      } else if(state.availability.answer==="no"){
+        const unavail=parseInt(availability.items||0);
+        const pizzas=Math.min(parseInt(availability.pizzas||0),unavail);
+        const nonPizza=Math.max(0,unavail-pizzas);
+        const deduction=(pizzas*0.25)+(nonPizza*0.05);
+        const raw=Math.max(0,5-deduction);
+        const weighted=raw*s.weight;
+        ss[s.id]={raw:Math.round(raw*100)/100,weighted,maxWeighted:5*s.weight};
+        total+=weighted; maxTotal+=5*s.weight;
+      } else {
+        ss[s.id]={raw:null,weighted:null,maxWeighted:5*s.weight};
+      }
+    } else {
+      let sum=0,count=0;
+      s.questions.forEach(q=>{ const v=scores[s.id]?.[q.id]; if(v!==undefined){sum+=v;count++;} });
+      const raw=count>0?sum/count:null;
+      const weighted=raw!==null?raw*s.weight:null;
+      ss[s.id]={raw,weighted,maxWeighted:5*s.weight};
+      if(weighted!==null){total+=weighted;maxTotal+=5*s.weight;}
+    }
   });
   const pct=maxTotal>0?Math.round((total/maxTotal)*100):0;
   return {sectionScores:ss,total:Math.round(total*10)/10,maxTotal,pct};
 }
 
-function answeredCount(){ return SECTIONS.reduce((a,s)=>a+s.questions.filter(q=>state.scores[s.id]?.[q.id]!==undefined).length,0); }
+function answeredCount(){
+  return SECTIONS.reduce((a,s)=>{
+    if(s.special==="availability") return a+(state.availability.answer!==""?1:0);
+    return a+s.questions.filter(q=>state.scores[s.id]?.[q.id]!==undefined).length;
+  },0);
+}
 
 async function compressImage(file){
   return new Promise(resolve=>{
@@ -201,12 +222,13 @@ async function handleSubmit(){
       try{ const blob=await compressImage(file); photoUrls[sid]=await uploadPhoto(blob,sid,state.restaurant); }
       catch(e){ photoUrls[sid]=null; }
     }
-    const result=calcScores(state.scores);
+    const result=calcScores(state.scores,state.availability);
     const payload={
       restaurant:state.restaurant, auditor:state.auditor,
       scores:state.scores, notes:state.notes,
       photo_urls:photoUrls, pct:result.pct,
       total_weighted:result.total, section_scores:result.sectionScores,
+      availability:state.availability,
       audit_date:new Date().toISOString().split("T")[0]
     };
     const res=await fetch(`${SB_URL}/rest/v1/audits`,{method:"POST",headers:{...H,"Prefer":"return=minimal"},body:JSON.stringify(payload)});
@@ -234,7 +256,7 @@ function render(){
 function renderForm(app){
   const ac=answeredCount(), canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting;
   const s=SECTIONS[state.activeSection];
-  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Food Quality Audit</span></div><button class="link-btn" onclick="state.view='league';loadLeague()">League table →</button></div>`;
+  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Food Quality Audit</span></div></div>`;
 
   if(!state.restaurant||!state.auditor){
     html+=`<div class="card">
@@ -265,7 +287,28 @@ function renderForm(app){
         <span class="section-title">${s.label}</span>
         ${s.weight>1?`<span class="weight-badge">×${s.weight} weighted</span>`:""}
       </div>
-      ${s.questions.map(q=>{
+      ${s.special==="availability"?`
+        <div class="question"><p>Is all the menu available?</p>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button onclick="state.availability.answer='yes';render()" style="flex:1;padding:11px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;border:${state.availability.answer==='yes'?'2px solid #1A5C34':'0.5px solid #ccc'};background:${state.availability.answer==='yes'?'#1A5C34':'#fff'};color:${state.availability.answer==='yes'?'#fff':'#111'};font-weight:${state.availability.answer==='yes'?'500':'400'}">Yes</button>
+            <button onclick="state.availability.answer='no';render()" style="flex:1;padding:11px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;border:${state.availability.answer==='no'?'2px solid #E24B4A':'0.5px solid #ccc'};background:${state.availability.answer==='no'?'#E24B4A':'#fff'};color:${state.availability.answer==='no'?'#fff':'#111'};font-weight:${state.availability.answer==='no'?'500':'400'}">No</button>
+          </div>
+          ${state.availability.answer==='no'?`
+          <div style="margin-top:14px">
+            <div style="margin-bottom:12px">
+              <label>How many items are unavailable?</label>
+              <input type="number" min="0" value="${state.availability.items}" placeholder="0" style="width:100%;padding:10px 12px;border-radius:8px;border:0.5px solid #ccc;font-size:15px" oninput="state.availability.items=this.value;render()">
+            </div>
+            ${state.availability.items>0?`
+            <div>
+              <label>How many of those are pizzas?</label>
+              <input type="number" min="0" max="${state.availability.items}" value="${state.availability.pizzas}" placeholder="0" style="width:100%;padding:10px 12px;border-radius:8px;border:0.5px solid #ccc;font-size:15px" oninput="state.availability.pizzas=this.value;render()">
+            </div>
+            <p style="font-size:11px;color:#999;margin-top:8px">Each unavailable item −1% · Each unavailable pizza −5%</p>
+            `:''}
+          </div>`:''}
+        </div>`
+      :s.questions.map(q=>{
         const val=state.scores[s.id]?.[q.id];
         const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
         return `<div class="question"><p>${q.label}</p>
@@ -277,6 +320,7 @@ function renderForm(app){
             }).join("")}
           </div></div>`;
       }).join("")}
+      `}
       <textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>
       <div id="photo-${s.id}">
         ${state.photoPreviews[s.id]
@@ -305,31 +349,15 @@ function handlePhotoChange(sid,input){
 }
 
 function renderReport(app){
-  const r=state.currentReport;
-  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Audit report — saved ✓</span></div></div>
-  <div class="report-header">
-    <div><div class="report-name">${r.restaurant}</div><div class="report-meta">${r.audit_date} · ${r.auditor}</div></div>
-    <div class="report-pct"><div class="report-pct-val" style="color:${scoreColor(r.pct)}">${r.pct}%</div><div class="report-pct-label">overall score</div></div>
-  </div>`;
-  SECTIONS.forEach(s=>{
-    const sc=r.sectionScores[s.id];
-    const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
-    html+=`<div class="section-card">
-      <div class="section-card-header">
-        <span style="font-weight:500;font-size:14px">${s.label}${s.weight>1?` <span style="font-size:11px;color:#999">×${s.weight}</span>`:""}</span>
-        <span style="font-size:14px;font-weight:500;color:${scoreColor(pct)}">${pct}%</span>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${scoreColor(pct)}"></div></div>
-      ${s.questions.map(q=>`<div class="q-row"><span style="max-width:80%;line-height:1.3">${q.label.substring(0,55)}…</span><span class="q-score">${r.scores[s.id]?.[q.id]??"-"}/5</span></div>`).join("")}
-      ${r.notes[s.id]?`<div class="notes-row">📝 ${r.notes[s.id]}</div>`:""}
-      ${r.photoPreviews[s.id]?`<img class="section-photo" src="${r.photoPreviews[s.id].url}">`:""}
-    </div>`;
-  });
-  html+=`<div class="report-btns">
-    <button class="btn" style="flex:1" onclick="resetForm()">New audit</button>
-    <button class="btn btn-primary" style="flex:1" onclick="state.view='league';loadLeague()">League table →</button>
-  </div>`;
-  app.innerHTML=html;
+  app.innerHTML=`
+    <div style="text-align:center;padding:3rem 1rem">
+      <div style="font-size:48px;margin-bottom:16px">✓</div>
+      <div style="font-size:24px;font-weight:500;margin-bottom:8px">Audit Completed!</div>
+      <div style="font-size:20px;color:#1A5C34;font-weight:500;margin-bottom:24px">pizz'&love</div>
+      <div style="font-size:13px;color:#666;margin-bottom:32px">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
+      <button class="btn-start" style="max-width:200px;margin:0 auto" onclick="resetForm()">New audit</button>
+    </div>
+  `;
 }
 
 function renderLeague(app){
