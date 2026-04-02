@@ -390,15 +390,20 @@ async function sendEmail(report, pdfDataUri){
       </div>
     </div>`;
 
-  await fetch("https://api.resend.com/emails",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","Authorization":"Bearer "+RESEND_KEY},
-    body:JSON.stringify({
-      from:"Pizza Pilgrims Audit <onboarding@resend.dev>",
-      to:recipients,
+  await fetch(`${SB_URL}/functions/v1/send-audit-email`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${SB_KEY}`
+    },
+    body: JSON.stringify({
+      to: recipients,
       subject,
       html,
-      attachments:[{filename:`audit-${report.restaurant.toLowerCase().replace(/\s+/g,"-")}-${report.audit_date}.pdf`,content:base64}]
+      attachments: [{
+        filename: `audit-${report.restaurant.toLowerCase().replace(/\s+/g,"-")}-${report.audit_date}.pdf`,
+        content: base64
+      }]
     })
   });
 }
