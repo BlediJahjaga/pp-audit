@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Pilgrims — Quality League Table</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0dc; min-height: 100vh; }
+.wrap { max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.header-left { display: flex; align-items: center; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 4px; background: #1A5C34; }
+.label { font-size: 13px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+.meta { font-size: 11px; color: #999; margin-bottom: 20px; }
+.sm-btn { padding: 7px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #f0f0f0; cursor: pointer; font-size: 12px; font-family: inherit; }
+.table-wrap { border: 0.5px solid #ddd; border-radius: 12px; overflow: hidden; background: #fff; }
+.table-head { display: grid; grid-template-columns: 36px 1fr 60px 90px; padding: 10px 16px; background: #f5f5f5; border-bottom: 0.5px solid #ddd; }
+.th { font-size: 11px; color: #999; font-weight: 500; }
+.table-row { display: grid; grid-template-columns: 36px 1fr 60px 90px; padding: 11px 16px; border-bottom: 0.5px solid #eee; align-items: center; }
+.table-row:last-child { border-bottom: none; }
+.table-row.top { background: rgba(15,110,86,0.04); }
+.legend { margin-top: 16px; display: flex; gap: 12px; font-size: 12px; color: #666; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 5px; }
+.loading { text-align: center; padding: 3rem; color: #666; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-left"><div class="dot"></div><span class="label">Quality League Table</span></div>
+    <button class="sm-btn" onclick="loadLeague()">↻ Refresh</button>
+  </div>
+  <p class="meta" id="meta">Loading…</p>
+  <div id="table"><div class="loading">Loading…</div></div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>80–100%</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3B6D11"></div>60–79%</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>40–59%</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>0–39%</div>
+  </div>
+  <p style="margin-top:12px;font-size:11px;color:#bbb">Read-only. Data cannot be edited from this view.</p>
+</div>
+<script>
+const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
 
+const RESTAURANTS = [
+  "Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff",
+  "Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market",
+  "Glasgow","Greenwich","Hyde Park","King's Cross","Leeds","Liverpool Street",
+  "London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch",
+  "Soho","Spitalfields","Swingers West End","Victoria","Waterloo","Westfield",
+  "Westfield Stratford","Wimbledon"
+];
+
+function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
+
+async function loadLeague(){
+  document.getElementById("meta").textContent = "Loading…";
+  document.getElementById("table").innerHTML = '<div class="loading">Loading…</div>';
+  try {
+    const r = await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc", {
+      headers: {"apikey": SB_KEY, "Authorization": "Bearer "+SB_KEY}
+    });
+    const rows = await r.json();
+    const seen = new Set(), best = [];
+    (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
+    const all = RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
+    const sorted = [...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
+
+    document.getElementById("meta").textContent = best.length+" of "+RESTAURANTS.length+" restaurants audited · read-only";
+
+    let html = `<div class="table-wrap">
+      <div class="table-head"><span class="th">#</span><span class="th">Restaurant</span><span class="th" style="text-align:center">Score</span><span class="th" style="text-align:right">Last audit</span></div>`;
+    sorted.forEach((r,i)=>{
+      html+=`<div class="table-row${r.pct!==null&&i===0?' top':''}">
+        <span style="font-size:13px;font-weight:500;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
+        <div><div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>${r.auditor?`<div style="font-size:11px;color:#bbb">${r.auditor}</div>`:""}</div>
+        <div style="text-align:center;font-size:15px;font-weight:500;color:${r.pct!==null?scoreColor(r.pct):'#bbb'}">${r.pct!==null?r.pct+"%":"—"}</div>
+        <div style="text-align:right;font-size:12px;color:#bbb">${r.audit_date||"—"}</div>
+      </div>`;
+    });
+    html += '</div>';
+    document.getElementById("table").innerHTML = html;
+  } catch(e) {
+    document.getElementById("table").innerHTML = '<div class="loading">Failed to load. Try refreshing.</div>';
+  }
+}
+
+loadLeague();
+</script>
+</body>
+</html>
