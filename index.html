@@ -4,56 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Food Quality Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0dc; min-height: 100vh; }
-.wrap { max-width: 540px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.header-left { display: flex; align-items: center; gap: 8px; }
-.dot { width: 8px; height: 8px; border-radius: 4px; background: #1A5C34; }
-.label { font-size: 13px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
-.card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
-label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
-select, input[type=text], input[type=number] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; font-size: 15px; color: #111; font-family: inherit; }
-textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 0.5px solid #ddd; background: #f9f9f9; font-size: 13px; resize: none; color: #111; font-family: inherit; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #F5F0DC; min-height: 100vh; }
+.wrap { max-width: 540px; margin: 0 auto; padding: 0 0 3rem; }
+
+/* Header banner */
+.top-banner { background: #1A5C34; padding: 18px 20px 14px; text-align: center; margin-bottom: 20px; }
+.brand-name { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 400; color: #39D400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+.page-title { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 600; color: #F5F0DC; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.inner { padding: 0 1rem; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.status-label { font-size: 12px; font-weight: 500; color: #1A5C34; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; }
+.status-label::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #1A5C34; display: inline-block; }
+
+.card { background: #fff; border: 0.5px solid #d4ceb8; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
+label { font-size: 13px; color: #555; display: block; margin-bottom: 6px; font-weight: 500; }
+select, input[type=text], input[type=number] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 15px; color: #111; font-family: 'Inter', sans-serif; }
+textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 13px; resize: none; color: #111; font-family: 'Inter', sans-serif; }
+
 .progress-wrap { margin-bottom: 16px; }
-.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 5px; }
-.progress-bar { height: 4px; border-radius: 2px; background: #e0e0e0; }
-.progress-fill { height: 4px; border-radius: 2px; background: #1A5C34; transition: width 0.3s; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 6px; }
+.progress-bar { height: 5px; border-radius: 3px; background: #d4ceb8; }
+.progress-fill { height: 5px; border-radius: 3px; background: #1A5C34; transition: width 0.3s; }
+
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.tab { padding: 5px 10px; border-radius: 16px; font-size: 12px; border: 0.5px solid #ddd; background: #fff; color: #666; cursor: pointer; font-family: inherit; }
-.tab.active { border: 1.5px solid #1A5C34; background: #1A5C34; color: #fff; font-weight: 500; }
-.tab.done { background: rgba(15,110,86,0.08); color: #1A5C34; }
+.tab { padding: 6px 11px; border-radius: 16px; font-size: 12px; border: 1px solid #c8c2aa; background: #fff; color: #666; cursor: pointer; font-family: 'Inter', sans-serif; }
+.tab.active { border-color: #1A5C34; background: #1A5C34; color: #F5F0DC; font-weight: 500; }
+.tab.done { background: rgba(26,92,52,0.1); color: #1A5C34; border-color: #1A5C34; }
+
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.section-title { font-weight: 500; font-size: 16px; }
-.weight-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(15,110,86,0.1); color: #1A5C34; }
-.question { margin-bottom: 16px; }
-.question p { font-size: 13px; color: #111; margin-bottom: 10px; line-height: 1.5; }
+.section-title { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 500; color: #1A5C34; letter-spacing: 0.03em; }
+.weight-badge { font-size: 11px; padding: 3px 9px; border-radius: 10px; background: #1A5C34; color: #39D400; font-weight: 500; }
+
+.question { margin-bottom: 18px; }
+.question p { font-size: 14px; color: #222; margin-bottom: 11px; line-height: 1.5; }
 .score-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.score-btn { width: 40px; height: 40px; border-radius: 20px; border: 1.5px solid #ddd; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; font-family: inherit; }
-.photo-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0.5px dashed #ccc; border-radius: 8px; background: #f9f9f9; color: #666; font-size: 13px; cursor: pointer; margin-top: 10px; font-family: inherit; }
-.photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-.photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 0.5px solid #ddd; }
-.photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
-.photo-name { font-size: 12px; color: #666; }
-.btn-row { display: flex; gap: 10px; margin-top: 4px; }
-.btn { flex: 1; padding: 11px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; border: 0.5px solid #ccc; background: #f0f0f0; color: #111; }
-.btn-primary { background: #1A5C34; color: #fff; border-color: #1A5C34; font-weight: 500; }
-.btn-primary:disabled { background: #ccc; border-color: #ccc; color: #888; cursor: default; }
-.btn-start { width: 100%; padding: 12px; border-radius: 8px; background: #1A5C34; color: #fff; border: none; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 16px; font-family: inherit; }
+.score-btn { width: 42px; height: 42px; border-radius: 21px; border: 1.5px solid #c8c2aa; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.1s; }
+
+.photo-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px dashed #c8c2aa; border-radius: 8px; background: #fdfaf3; color: #888; font-size: 13px; cursor: pointer; margin-top: 12px; font-family: 'Inter', sans-serif; }
+.photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #d4ceb8; }
+.photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Inter', sans-serif; }
+.photo-name { font-size: 12px; color: #888; }
+
+.btn-row { display: flex; gap: 10px; margin-top: 6px; }
+.btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif; border: 1px solid #c8c2aa; background: #eee8d5; color: #333; }
+.btn-primary { background: #1A5C34; color: #F5F0DC; border-color: #1A5C34; font-weight: 500; }
+.btn-primary:disabled { background: #b0b0a0; border-color: #b0b0a0; color: #eee; cursor: default; }
+.btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 18px; font-family: 'Oswald', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
+
 .error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
-.hint { margin-top: 10px; font-size: 12px; color: #666; text-align: center; }
-.yn-btn { flex: 1; padding: 11px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: inherit; }
+.hint { margin-top: 10px; font-size: 12px; color: #888; text-align: center; }
+
+.yn-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; }
+
+/* Confirm screen */
+.confirm-wrap { text-align: center; padding: 4rem 1rem; }
+.confirm-check { width: 72px; height: 72px; border-radius: 36px; background: #1A5C34; color: #39D400; font-size: 36px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.confirm-title { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 600; color: #1A5C34; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+.confirm-brand { font-family: 'Oswald', sans-serif; font-size: 22px; color: #1A5C34; margin-bottom: 24px; }
+.confirm-meta { font-size: 13px; color: #888; margin-bottom: 36px; }
+
 .loading { text-align: center; padding: 2rem; color: #666; font-size: 14px; }
-/* League */
-.table-wrap { border: 0.5px solid #ddd; border-radius: 12px; overflow: hidden; }
-.table-head { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 8px 14px; background: #f5f5f5; border-bottom: 0.5px solid #ddd; }
-.th { font-size: 11px; color: #999; }
-.table-row { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 10px 14px; border-bottom: 0.5px solid #ddd; align-items: center; background: #fff; }
-.table-row:last-child { border-bottom: none; }
-.legend { margin-top: 16px; display: flex; gap: 12px; font-size: 12px; color: #666; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 4px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 5px; }
 </style>
 </head>
 <body>
@@ -101,17 +116,17 @@ const SECTIONS = [
 const TOTAL_Q = SECTIONS.reduce((a,s)=>a+(s.special?1:s.questions.length),0);
 
 let state = {
-  view:"form", restaurant:"", auditor:"",
+  view:"form", pizzeria:"", auditor:"", team:"",
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
   activeSection:0, submitting:false, submitError:"",
-  currentReport:null, leagueData:[], leagueLoading:false
+  currentReport:null
 };
 
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
-function calcScores(scores, avail){
-  let total=0, maxTotal=0;
+function calcScores(scores,avail){
+  let total=0,maxTotal=0;
   const ss={};
   SECTIONS.forEach(s=>{
     if(s.special==="availability"){
@@ -147,19 +162,19 @@ function answeredCount(){
 
 async function compressImage(file){
   return new Promise(resolve=>{
-    const img=new Image(), url=URL.createObjectURL(file);
+    const img=new Image(),url=URL.createObjectURL(file);
     img.onload=()=>{
-      const MAX=1000; let w=img.width,h=img.height;
-      if(w>MAX||h>MAX){ if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;} }
-      const c=document.createElement("canvas"); c.width=w; c.height=h;
+      const MAX=1000;let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+      const c=document.createElement("canvas");c.width=w;c.height=h;
       c.getContext("2d").drawImage(img,0,0,w,h);
       c.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob);},"image/jpeg",0.7);
-    }; img.src=url;
+    };img.src=url;
   });
 }
 
-async function uploadPhoto(blob,sid,restaurant){
-  const name=restaurant.replace(/\s+/g,"-").toLowerCase()+"-"+sid+"-"+Date.now()+".jpg";
+async function uploadPhoto(blob,sid,pizzeria){
+  const name=pizzeria.replace(/\s+/g,"-").toLowerCase()+"-"+sid+"-"+Date.now()+".jpg";
   const r=await fetch(SB_URL+"/storage/v1/object/audit-photos/"+name,{
     method:"POST",
     headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"image/jpeg","x-upsert":"true"},
@@ -170,17 +185,16 @@ async function uploadPhoto(blob,sid,restaurant){
 }
 
 async function handleSubmit(){
-  state.submitting=true; state.submitError=""; render();
-if(window.location.search==="?league"){ state.view="league"; loadLeague(); }
+  state.submitting=true;state.submitError="";render();
   try{
     const photoUrls={};
     for(const [sid,file] of Object.entries(state.photoFiles)){
-      try{ const blob=await compressImage(file); photoUrls[sid]=await uploadPhoto(blob,sid,state.restaurant); }
-      catch(e){ photoUrls[sid]=null; }
+      try{const blob=await compressImage(file);photoUrls[sid]=await uploadPhoto(blob,sid,state.pizzeria);}
+      catch(e){photoUrls[sid]=null;}
     }
     const result=calcScores(state.scores,state.availability);
     const payload={
-      restaurant:state.restaurant, auditor:state.auditor,
+      restaurant:state.pizzeria, auditor:state.auditor, team:state.team,
       scores:state.scores, notes:state.notes,
       photo_urls:photoUrls, pct:result.pct,
       total_weighted:result.total, section_scores:result.sectionScores,
@@ -192,83 +206,83 @@ if(window.location.search==="?league"){ state.view="league"; loadLeague(); }
       headers:Object.assign({},H,{"Prefer":"return=minimal"}),
       body:JSON.stringify(payload)
     });
-    if(!res.ok){ const t=await res.text(); throw new Error(t); }
+    if(!res.ok){const t=await res.text();throw new Error(t);}
     state.currentReport={...payload,...result};
     state.view="report";
-  } catch(e){
+  }catch(e){
     state.submitError="Save failed: "+e.message;
   }
-  state.submitting=false; render();
+  state.submitting=false;render();
 }
 
 function resetForm(){
-  state={...state,view:"form",restaurant:"",auditor:"",scores:{},photoFiles:{},photoPreviews:{},notes:{},
+  state={...state,view:"form",pizzeria:"",auditor:"",team:"",scores:{},photoFiles:{},photoPreviews:{},notes:{},
     availability:{answer:"",items:"",pizzas:""},activeSection:0,submitting:false,submitError:"",currentReport:null};
   render();
 }
 
-async function loadLeague(){
-  state.leagueLoading=true; render();
-  try{
-    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc",{headers:H});
-    const rows=await r.json();
-    const seen=new Set(), best=[];
-    (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
-    state.leagueData=best;
-  } catch(e){ console.error(e); }
-  state.leagueLoading=false; render();
-}
-
 function handlePhotoChange(sid,input){
-  const file=input.files[0]; if(!file)return;
+  const file=input.files[0];if(!file)return;
   state.photoFiles[sid]=file;
   state.photoPreviews[sid]={url:URL.createObjectURL(file),name:file.name};
   render();
 }
 
+function banner(subtitle){
+  return `<div class="top-banner">
+    <div class="brand-name">Pizza Pilgrims</div>
+    <div class="page-title">${subtitle}</div>
+  </div>`;
+}
+
 function render(){
   const app=document.getElementById("app");
   if(state.view==="report") renderConfirm(app);
-  else if(state.view==="league") renderLeague(app);
   else renderForm(app);
 }
 
 function renderConfirm(app){
-  app.innerHTML=`<div style="text-align:center;padding:4rem 1rem">
-    <div style="font-size:56px;margin-bottom:20px">✓</div>
-    <div style="font-size:26px;font-weight:500;margin-bottom:10px;color:#111">Audit Completed!</div>
-    <div style="font-size:22px;color:#1A5C34;font-weight:500;margin-bottom:28px">pizz'&amp;love</div>
-    <div style="font-size:13px;color:#888;margin-bottom:36px">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
-    <button class="btn-start" style="max-width:220px;margin:0 auto;display:block" onclick="resetForm()">New audit</button>
+  app.innerHTML=banner("Food Quality Audit")+`
+  <div class="inner">
+    <div class="confirm-wrap">
+      <div class="confirm-check">✓</div>
+      <div class="confirm-title">Audit Completed!</div>
+      <div class="confirm-brand">pizz'&amp;love</div>
+      <div class="confirm-meta">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
+      <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
+    </div>
   </div>`;
 }
 
 function renderForm(app){
   const ac=answeredCount();
-  const availNoteRequired = state.availability.answer==="no" && !state.notes['availability'];
-  const canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting&&!availNoteRequired;
+  const availNoteRequired=state.availability.answer==="no"&&!state.notes['availability'];
+  const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_Q&&!state.submitting&&!availNoteRequired;
   const s=SECTIONS[state.activeSection];
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
 
-  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Food Quality Audit</span></div></div>`;
+  let html=banner("Food Quality Audit")+'<div class="inner">';
 
-  if(!state.restaurant||!state.auditor){
+  if(!state.pizzeria||!state.auditor){
     html+=`<div class="card">
-      <div style="margin-bottom:14px"><label>Restaurant</label>
-        <select onchange="state.restaurant=this.value;render()">
-          <option value="">Select restaurant…</option>
-          ${RESTAURANTS.map(r=>`<option value="${r}"${state.restaurant===r?" selected":""}>${r}</option>`).join("")}
+      <div style="margin-bottom:14px"><label>Pizzeria</label>
+        <select onchange="state.pizzeria=this.value;render()">
+          <option value="">Select pizzeria…</option>
+          ${RESTAURANTS.map(r=>`<option value="${r}"${state.pizzeria===r?" selected":""}>${r}</option>`).join("")}
         </select>
       </div>
-      <div><label>Your name</label>
-        <input type="text" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value">
+      <div style="margin-bottom:14px"><label>Your name</label>
+        <input type="text" id="auditor-input" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value">
       </div>
-      ${state.restaurant?`<button class="btn-start" onclick="state.auditor=document.querySelector('input[type=text]').value;if(state.auditor){state.activeSection=0;render();}">Start audit →</button>`:""}
+      <div><label>Pizzeria / pizza base team</label>
+        <input type="text" id="team-input" value="${state.team}" placeholder="e.g. AM team, PM team, full team…" oninput="state.team=this.value">
+      </div>
+      ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){state.activeSection=0;render();}">Start Audit →</button>`:""}
     </div>`;
   } else {
     const pct=Math.round((ac/TOTAL_Q)*100);
     html+=`<div class="progress-wrap">
-      <div class="progress-info"><span>${state.restaurant} · ${state.auditor}</span><span>${ac}/${TOTAL_Q} answered</span></div>
+      <div class="progress-info"><span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span><span>${ac}/${TOTAL_Q}</span></div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>
     <div class="tabs">
@@ -280,15 +294,15 @@ function renderForm(app){
     <div class="card">
       <div class="section-header">
         <span class="section-title">${s.label}</span>
-        ${s.weight>1?`<span class="weight-badge">×${s.weight} weighted</span>`:""}
+        ${s.weight>1?`<span class="weight-badge">×${s.weight}</span>`:""}
       </div>`;
 
+    const av=state.availability;
     if(s.special==="availability"){
-      const av=state.availability;
       html+=`<div class="question"><p>Is all the menu available?</p>
         <div style="display:flex;gap:10px;margin-top:8px">
-          <button class="yn-btn" onclick="state.availability.answer='yes';render()" style="border:${av.answer==='yes'?'2px solid #1A5C34':'0.5px solid #ccc'};background:${av.answer==='yes'?'#1A5C34':'#fff'};color:${av.answer==='yes'?'#fff':'#111'}">Yes</button>
-          <button class="yn-btn" onclick="state.availability.answer='no';render()" style="border:${av.answer==='no'?'2px solid #E24B4A':'0.5px solid #ccc'};background:${av.answer==='no'?'#E24B4A':'#fff'};color:${av.answer==='no'?'#fff':'#111'}">No</button>
+          <button class="yn-btn" onclick="state.availability.answer='yes';render()" style="border:${av.answer==='yes'?'2px solid #1A5C34':'1px solid #c8c2aa'};background:${av.answer==='yes'?'#1A5C34':'#fff'};color:${av.answer==='yes'?'#F5F0DC':'#111'}">Yes</button>
+          <button class="yn-btn" onclick="state.availability.answer='no';render()" style="border:${av.answer==='no'?'2px solid #E24B4A':'1px solid #c8c2aa'};background:${av.answer==='no'?'#E24B4A':'#fff'};color:${av.answer==='no'?'#fff':'#111'}">No</button>
         </div>
         ${av.answer==='no'?`<div style="margin-top:14px">
           <div style="margin-bottom:12px"><label>How many items are unavailable?</label>
@@ -297,11 +311,12 @@ function renderForm(app){
           ${av.items>0?`<div><label>How many of those are pizzas?</label>
             <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
           </div>`:''}
+        </div>
+        <div style="margin-top:14px">
+          <label>List the unavailable items here</label>
+          <textarea rows="3" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="border-color:${!state.notes['availability']?'#E24B4A':'#c8c2aa'}">${state.notes['availability']||""}</textarea>
+          ${!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list the unavailable items</p>`:""}
         </div>`:''}
-      </div>
-      <div style="margin-top:10px">
-        <textarea rows="2" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="width:100%;padding:8px 10px;border-radius:8px;border:${s.special==='availability'&&!state.notes['availability']?'0.5px solid #E24B4A':'0.5px solid #ddd'};background:#f9f9f9;font-size:13px;resize:none;color:#111;font-family:inherit">${state.notes['availability']||""}</textarea>
-        ${s.special==='availability'&&!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list any unavailable items</p>`:""}
       </div>`;
     } else {
       html+=s.questions.map(q=>{
@@ -310,13 +325,13 @@ function renderForm(app){
           <div class="score-btns">
             ${[0,1,2,3,4,5].map(v=>`<button class="score-btn"
               onclick="if(!state.scores['${s.id}'])state.scores['${s.id}']={};state.scores['${s.id}']['${q.id}']=${v};render()"
-              style="${val===v?`background:${cols[v]};color:#fff;border-color:${cols[v]}`:'border-color:#ddd'}">${v}</button>`).join("")}
+              style="${val===v?`background:${cols[v]};color:#fff;border-color:${cols[v]};`:'border-color:#c8c2aa;'}">${v}</button>`).join("")}
           </div></div>`;
       }).join("");
+      html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>`;
     }
 
-    html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>
-      <div>
+    html+=`<div style="margin-top:10px">
         ${state.photoPreviews[s.id]
           ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
           :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()">📷 Add photo (optional)</button>`}
@@ -328,47 +343,15 @@ function renderForm(app){
       ${state.activeSection>0?`<button class="btn" onclick="state.activeSection--;render()">← Back</button>`:""}
       ${state.activeSection<SECTIONS.length-1
         ?`<button class="btn btn-primary" onclick="state.activeSection++;render()">Next →</button>`
-        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving…":"Submit audit ✓"}</button>`}
+        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving…":"Submit Audit ✓"}</button>`}
     </div>
     ${!canSubmit&&ac<TOTAL_Q&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions to submit</p>`:""}`;
   }
-  app.innerHTML=html;
-}
-
-function renderLeague(app){
-  const all=RESTAURANTS.map(r=>{ const f=state.leagueData.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
-  const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
-  let html=`<div class="header">
-    <div class="header-left"><div class="dot"></div><span class="label">Quality League Table</span></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn" style="flex:none;padding:7px 12px;font-size:12px" onclick="loadLeague()">↻ Refresh</button>
-      <button class="btn" style="flex:none;padding:7px 12px;font-size:12px" onclick="resetForm()">New audit</button>
-    </div>
-  </div>
-  <p style="font-size:11px;color:#999;margin-bottom:16px">${state.leagueData.length} of ${RESTAURANTS.length} restaurants audited · read-only</p>`;
-
-  if(state.leagueLoading){
-    html+=`<div class="loading">Loading…</div>`;
-  } else {
-    html+=`<div class="table-wrap">
-      <div class="table-head"><span class="th">#</span><span class="th">Restaurant</span><span class="th" style="text-align:center">Score</span><span class="th" style="text-align:right">Date</span></div>
-      ${sorted.map((r,i)=>`<div class="table-row" style="${r.pct!==null&&i===0?'background:rgba(15,110,86,0.04)':''}">
-        <span style="font-size:13px;font-weight:500;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
-        <div><div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>${r.auditor?`<div style="font-size:11px;color:#bbb">${r.auditor}</div>`:""}</div>
-        <div style="text-align:center;font-size:14px;font-weight:500;color:${r.pct!==null?scoreColor(r.pct):'#bbb'}">${r.pct!==null?r.pct+"%":"—"}</div>
-        <div style="text-align:right;font-size:12px;color:#bbb">${r.audit_date||"—"}</div>
-      </div>`).join("")}
-    </div>
-    <div class="legend">
-      ${[["#0F6E56","80–100%"],["#3B6D11","60–79%"],["#EF9F27","40–59%"],["#E24B4A","0–39%"]].map(([c,l])=>`<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${l}</div>`).join("")}
-    </div>
-    <p style="margin-top:12px;font-size:11px;color:#bbb">Read-only. Data cannot be edited from this view.</p>`;
-  }
+  html+='</div>';
   app.innerHTML=html;
 }
 
 render();
-if(window.location.search==="?league"){ state.view="league"; loadLeague(); }
 </script>
 </body>
 </html>
