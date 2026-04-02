@@ -47,11 +47,12 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
     <p class="meta" id="meta">Loading…</p>
     <div id="table"><div class="loading">Loading…</div></div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>95–100% — STARS!</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>100% — Faje Paura!</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>95–99.99% — STARS!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#39D400"></div>90–94.99% — Very good!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#C8B97A"></div>85–89.99% — Good but..!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84.99% — Not great!</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX!</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX URGENTLY!</div>
     </div>
   </div>
 </div>
@@ -72,6 +73,7 @@ const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov
 function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
 
 function scoreColor(p){
+  if(p===100) return "#1A5C34";
   if(p>=95) return "#1A5C34";
   if(p>=90) return "#39D400";
   if(p>=85) return "#C8B97A";
@@ -79,11 +81,12 @@ function scoreColor(p){
   return "#E24B4A";
 }
 function scoreLabel(p){
+  if(p===100) return "Faje Paura!";
   if(p>=95) return "STARS!";
   if(p>=90) return "Very good!";
   if(p>=85) return "Good but..!";
   if(p>=75) return "Not great!";
-  return "NEED TO FIX!";
+  return "NEED TO FIX URGENTLY!";
 }
 
 async function loadLeague(){
