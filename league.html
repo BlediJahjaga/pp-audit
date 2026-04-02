@@ -66,7 +66,7 @@ function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";i
 async function loadLeague(){
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
   try{
-    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date&order=audit_date.desc",{headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});
+    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date,created_at&order=created_at.desc",{headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});
     const rows=await r.json();
     const data={};
     (rows||[]).forEach(row=>{
