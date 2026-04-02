@@ -5,82 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Food Quality Audit</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0dc; min-height: 100vh; padding: 0; }
-  .wrap { max-width: 540px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .header-left { display: flex; align-items: center; gap: 8px; }
-  .dot { width: 8px; height: 8px; border-radius: 4px; background: #1A5C34; }
-  .label { font-size: 13px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
-  .link-btn { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; }
-  .card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
-  label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
-  select, input[type=text] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; font-size: 15px; color: #111; appearance: none; }
-  textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 0.5px solid #ddd; background: #f9f9f9; font-size: 13px; resize: none; color: #111; font-family: inherit; }
-  .progress-wrap { margin-bottom: 16px; }
-  .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 5px; }
-  .progress-bar { height: 4px; border-radius: 2px; background: #e0e0e0; }
-  .progress-fill { height: 4px; border-radius: 2px; background: #1A5C34; transition: width 0.3s; }
-  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-  .tab { padding: 5px 10px; border-radius: 16px; font-size: 12px; border: 0.5px solid #ddd; background: #fff; color: #666; cursor: pointer; }
-  .tab.active { border: 1.5px solid #1A5C34; background: #1A5C34; color: #fff; font-weight: 500; }
-  .tab.done { background: rgba(15,110,86,0.08); color: #1A5C34; border-color: #ddd; }
-  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .section-title { font-weight: 500; font-size: 16px; }
-  .weight-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(15,110,86,0.1); color: #1A5C34; }
-  .question { margin-bottom: 16px; }
-  .question p { font-size: 13px; color: #111; margin-bottom: 10px; line-height: 1.5; }
-  .score-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-  .score-btn { width: 40px; height: 40px; border-radius: 20px; border: 1.5px solid #ddd; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; transition: all 0.15s; }
-  .photo-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0.5px dashed #ccc; border-radius: 8px; background: #f9f9f9; color: #666; font-size: 13px; cursor: pointer; margin-top: 10px; font-family: inherit; }
-  .photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 0.5px solid #ddd; }
-  .photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; }
-  .photo-name { font-size: 12px; color: #666; }
-  .btn-row { display: flex; gap: 10px; margin-top: 4px; }
-  .btn { flex: 1; padding: 11px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; border: 0.5px solid #ccc; background: #f0f0f0; color: #111; }
-  .btn-primary { background: #1A5C34; color: #fff; border-color: #1A5C34; font-weight: 500; }
-  .btn-primary:disabled { background: #ccc; border-color: #ccc; color: #888; cursor: default; }
-  .btn-start { width: 100%; padding: 12px; border-radius: 8px; background: #1A5C34; color: #fff; border: none; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 16px; font-family: inherit; }
-  .error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
-  .hint { margin-top: 10px; font-size: 12px; color: #666; text-align: center; }
-  /* Report */
-  .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
-  .report-name { font-size: 22px; font-weight: 500; }
-  .report-meta { font-size: 13px; color: #666; }
-  .report-pct { text-align: center; }
-  .report-pct-val { font-size: 36px; font-weight: 500; line-height: 1; }
-  .report-pct-label { font-size: 11px; color: #666; }
-  .section-card { margin-bottom: 12px; padding: 12px 14px; border: 0.5px solid #ddd; border-radius: 10px; background: #fff; }
-  .section-card-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-  .bar-bg { height: 4px; border-radius: 2px; background: #e0e0e0; margin-bottom: 8px; }
-  .bar-fill { height: 4px; border-radius: 2px; }
-  .q-row { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 2px; }
-  .q-score { font-weight: 500; color: #111; }
-  .notes-row { margin-top: 6px; font-size: 12px; color: #666; border-top: 0.5px solid #ddd; padding-top: 6px; }
-  .section-photo { margin-top: 8px; width: 100%; max-height: 120px; object-fit: cover; border-radius: 6px; }
-  .report-btns { margin-top: 20px; display: flex; gap: 10px; }
-  /* League */
-  .league-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .league-btns { display: flex; gap: 8px; }
-  .sm-btn { padding: 7px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #f0f0f0; cursor: pointer; font-size: 12px; font-family: inherit; }
-  .table-wrap { border: 0.5px solid #ddd; border-radius: 12px; overflow: hidden; }
-  .table-head { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 8px 14px; background: #f5f5f5; border-bottom: 0.5px solid #ddd; }
-  .th { font-size: 11px; color: #999; }
-  .table-row { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 10px 14px; border-bottom: 0.5px solid #ddd; align-items: center; background: #fff; }
-  .table-row:last-child { border-bottom: none; }
-  .table-row.top { background: rgba(15,110,86,0.04); }
-  .row-rank { font-size: 13px; font-weight: 500; }
-  .row-name { font-size: 14px; }
-  .row-name.pending { color: #bbb; }
-  .row-auditor { font-size: 11px; color: #bbb; }
-  .row-score { text-align: center; font-size: 14px; font-weight: 500; }
-  .row-date { text-align: right; font-size: 12px; color: #bbb; }
-  .legend { margin-top: 16px; display: flex; gap: 12px; font-size: 12px; color: #666; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 4px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 5px; }
-  .readonly-note { margin-top: 12px; font-size: 11px; color: #bbb; }
-  .loading { text-align: center; padding: 2rem; color: #666; font-size: 14px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0dc; min-height: 100vh; }
+.wrap { max-width: 540px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.header-left { display: flex; align-items: center; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 4px; background: #1A5C34; }
+.label { font-size: 13px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+.card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
+label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
+select, input[type=text], input[type=number] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; font-size: 15px; color: #111; font-family: inherit; }
+textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 0.5px solid #ddd; background: #f9f9f9; font-size: 13px; resize: none; color: #111; font-family: inherit; }
+.progress-wrap { margin-bottom: 16px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 5px; }
+.progress-bar { height: 4px; border-radius: 2px; background: #e0e0e0; }
+.progress-fill { height: 4px; border-radius: 2px; background: #1A5C34; transition: width 0.3s; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab { padding: 5px 10px; border-radius: 16px; font-size: 12px; border: 0.5px solid #ddd; background: #fff; color: #666; cursor: pointer; font-family: inherit; }
+.tab.active { border: 1.5px solid #1A5C34; background: #1A5C34; color: #fff; font-weight: 500; }
+.tab.done { background: rgba(15,110,86,0.08); color: #1A5C34; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.section-title { font-weight: 500; font-size: 16px; }
+.weight-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(15,110,86,0.1); color: #1A5C34; }
+.question { margin-bottom: 16px; }
+.question p { font-size: 13px; color: #111; margin-bottom: 10px; line-height: 1.5; }
+.score-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.score-btn { width: 40px; height: 40px; border-radius: 20px; border: 1.5px solid #ddd; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; font-family: inherit; }
+.photo-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0.5px dashed #ccc; border-radius: 8px; background: #f9f9f9; color: #666; font-size: 13px; cursor: pointer; margin-top: 10px; font-family: inherit; }
+.photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 0.5px solid #ddd; }
+.photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
+.photo-name { font-size: 12px; color: #666; }
+.btn-row { display: flex; gap: 10px; margin-top: 4px; }
+.btn { flex: 1; padding: 11px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; border: 0.5px solid #ccc; background: #f0f0f0; color: #111; }
+.btn-primary { background: #1A5C34; color: #fff; border-color: #1A5C34; font-weight: 500; }
+.btn-primary:disabled { background: #ccc; border-color: #ccc; color: #888; cursor: default; }
+.btn-start { width: 100%; padding: 12px; border-radius: 8px; background: #1A5C34; color: #fff; border: none; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 16px; font-family: inherit; }
+.error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
+.hint { margin-top: 10px; font-size: 12px; color: #666; text-align: center; }
+.yn-btn { flex: 1; padding: 11px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: inherit; }
+.loading { text-align: center; padding: 2rem; color: #666; font-size: 14px; }
+/* League */
+.table-wrap { border: 0.5px solid #ddd; border-radius: 12px; overflow: hidden; }
+.table-head { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 8px 14px; background: #f5f5f5; border-bottom: 0.5px solid #ddd; }
+.th { font-size: 11px; color: #999; }
+.table-row { display: grid; grid-template-columns: 32px 1fr 56px 80px; padding: 10px 14px; border-bottom: 0.5px solid #ddd; align-items: center; background: #fff; }
+.table-row:last-child { border-bottom: none; }
+.legend { margin-top: 16px; display: flex; gap: 12px; font-size: 12px; color: #666; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 5px; }
 </style>
 </head>
 <body>
@@ -88,7 +61,7 @@
 <script>
 const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
-const H = { "Content-Type":"application/json", "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` };
+const H = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
 
 const RESTAURANTS = [
   "Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff",
@@ -100,64 +73,58 @@ const RESTAURANTS = [
 ];
 
 const SECTIONS = [
-  { id:"pizza", label:"Pizza", weight:3, questions:[
-    { id:"spec", label:"Is the pizza made to spec?" },
-    { id:"dough", label:"Dough texture — is the cornicione light, airy and correctly charred?" },
-    { id:"bake", label:"Bake / cooking — is the base cooked through without being burnt or underdone?" },
+  {id:"pizza",label:"Pizza",weight:3,questions:[
+    {id:"spec",label:"Is the pizza made to spec?"},
+    {id:"dough",label:"Dough texture — is the cornicione light, airy and correctly charred?"},
+    {id:"bake",label:"Bake / cooking — is the base cooked through without being burnt or underdone?"}
   ]},
-  { id:"sides", label:"Sides & Salads", weight:1, questions:[
-    { id:"spec", label:"Are our sides/salads made to spec?" },
-    { id:"fresh", label:"Are the ingredients fresh and well-dressed (salads)?" },
+  {id:"sides",label:"Sides & Salads",weight:1,questions:[
+    {id:"spec",label:"Are our sides/salads made to spec?"},
+    {id:"fresh",label:"Are the ingredients fresh and well-dressed (salads)?"}
   ]},
-  { id:"dippers", label:"Dippers", weight:1, questions:[
-    { id:"spec", label:"Are our dippers made to spec?" },
+  {id:"dippers",label:"Dippers",weight:1,questions:[
+    {id:"spec",label:"Are our dippers made to spec?"}
   ]},
-  { id:"afterpizza", label:"After Pizza", weight:1, questions:[
-    { id:"spec", label:"Is everything made to spec?" },
-    { id:"temp", label:"Is everything served at the correct temperature and presented neatly?" },
+  {id:"afterpizza",label:"After Pizza",weight:1,questions:[
+    {id:"spec",label:"Is everything made to spec?"},
+    {id:"temp",label:"Is everything served at the correct temperature and presented neatly?"}
   ]},
-  { id:"drinks", label:"Drinks", weight:1, questions:[
-    { id:"spec", label:"Are our drinks made to spec?" },
+  {id:"drinks",label:"Drinks",weight:1,questions:[
+    {id:"spec",label:"Are our drinks made to spec?"}
   ]},
-  { id:"availability", label:"Menu Availability", weight:1, special:"availability" },
-  { id:"vibe", label:"Overall Vibe & Service", weight:1, questions:[
-    { id:"vibe", label:"How is the overall vibe, atmosphere and service quality of the pizzeria today?" },
-  ]},
+  {id:"availability",label:"Menu Availability",weight:1,special:"availability"},
+  {id:"vibe",label:"Overall Vibe & Service",weight:1,questions:[
+    {id:"vibe",label:"How is the overall vibe, atmosphere and service quality of the pizzeria today?"}
+  ]}
 ];
 
 const TOTAL_Q = SECTIONS.reduce((a,s)=>a+(s.special?1:s.questions.length),0);
 
 let state = {
-  view: "form", restaurant: "", auditor: "",
-  scores: {}, photoFiles: {}, photoPreviews: {}, photoUrls: {}, notes: {},
-  availability: { answer: "", items: "", pizzas: "" },
-  activeSection: 0, submitting: false, submitError: "",
-  currentReport: null, leagueData: [], leagueLoading: false
+  view:"form", restaurant:"", auditor:"",
+  scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
+  availability:{answer:"",items:"",pizzas:""},
+  activeSection:0, submitting:false, submitError:"",
+  currentReport:null, leagueData:[], leagueLoading:false
 };
 
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
-function calcScores(scores,availability){
+function calcScores(scores, avail){
   let total=0, maxTotal=0;
   const ss={};
   SECTIONS.forEach(s=>{
     if(s.special==="availability"){
-      if(state.availability.answer==="yes"){
-        const raw=5, weighted=5*s.weight;
-        ss[s.id]={raw,weighted,maxWeighted:5*s.weight};
-        total+=weighted; maxTotal+=5*s.weight;
-      } else if(state.availability.answer==="no"){
-        const unavail=parseInt(availability.items||0);
-        const pizzas=Math.min(parseInt(availability.pizzas||0),unavail);
-        const nonPizza=Math.max(0,unavail-pizzas);
-        const deduction=(pizzas*0.25)+(nonPizza*0.05);
-        const raw=Math.max(0,5-deduction);
-        const weighted=raw*s.weight;
-        ss[s.id]={raw:Math.round(raw*100)/100,weighted,maxWeighted:5*s.weight};
-        total+=weighted; maxTotal+=5*s.weight;
-      } else {
-        ss[s.id]={raw:null,weighted:null,maxWeighted:5*s.weight};
+      let raw=5;
+      if(avail.answer==="no"){
+        const items=parseInt(avail.items)||0;
+        const pizzas=Math.min(parseInt(avail.pizzas)||0,items);
+        const other=Math.max(0,items-pizzas);
+        raw=Math.max(0,5-(pizzas*0.25)-(other*0.05));
       }
+      const weighted=raw*s.weight;
+      ss[s.id]={raw:Math.round(raw*100)/100,weighted,maxWeighted:5*s.weight};
+      total+=weighted; maxTotal+=5*s.weight;
     } else {
       let sum=0,count=0;
       s.questions.forEach(q=>{ const v=scores[s.id]?.[q.id]; if(v!==undefined){sum+=v;count++;} });
@@ -192,26 +159,14 @@ async function compressImage(file){
 }
 
 async function uploadPhoto(blob,sid,restaurant){
-  const name=`${restaurant.replace(/\s+/g,"-").toLowerCase()}-${sid}-${Date.now()}.jpg`;
-  const r=await fetch(`${SB_URL}/storage/v1/object/audit-photos/${name}`,{
+  const name=restaurant.replace(/\s+/g,"-").toLowerCase()+"-"+sid+"-"+Date.now()+".jpg";
+  const r=await fetch(SB_URL+"/storage/v1/object/audit-photos/"+name,{
     method:"POST",
-    headers:{"apikey":SB_KEY,"Authorization":`Bearer ${SB_KEY}`,"Content-Type":"image/jpeg","x-upsert":"true"},
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"image/jpeg","x-upsert":"true"},
     body:blob
   });
   if(!r.ok) throw new Error("Photo upload failed");
-  return `${SB_URL}/storage/v1/object/public/audit-photos/${name}`;
-}
-
-async function loadLeague(){
-  state.leagueLoading=true; render();
-  try{
-    const r=await fetch(`${SB_URL}/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc`,{headers:H});
-    const rows=await r.json();
-    const seen=new Set(), best=[];
-    (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
-    state.leagueData=best;
-  }catch(e){console.error(e);}
-  state.leagueLoading=false; render();
+  return SB_URL+"/storage/v1/object/public/audit-photos/"+name;
 }
 
 async function handleSubmit(){
@@ -231,114 +186,36 @@ async function handleSubmit(){
       availability:state.availability,
       audit_date:new Date().toISOString().split("T")[0]
     };
-    const res=await fetch(`${SB_URL}/rest/v1/audits`,{method:"POST",headers:{...H,"Prefer":"return=minimal"},body:JSON.stringify(payload)});
+    const res=await fetch(SB_URL+"/rest/v1/audits",{
+      method:"POST",
+      headers:Object.assign({},H,{"Prefer":"return=minimal"}),
+      body:JSON.stringify(payload)
+    });
     if(!res.ok){ const t=await res.text(); throw new Error(t); }
-    state.currentReport={...payload,...result,photoPreviews:state.photoPreviews};
+    state.currentReport={...payload,...result};
     state.view="report";
-  }catch(e){
+  } catch(e){
     state.submitError="Save failed: "+e.message;
   }
   state.submitting=false; render();
 }
 
 function resetForm(){
-  state={...state,view:"form",restaurant:"",auditor:"",scores:{},photoFiles:{},photoPreviews:{},photoUrls:{},notes:{},activeSection:0,submitting:false,submitError:"",currentReport:null};
+  state={...state,view:"form",restaurant:"",auditor:"",scores:{},photoFiles:{},photoPreviews:{},notes:{},
+    availability:{answer:"",items:"",pizzas:""},activeSection:0,submitting:false,submitError:"",currentReport:null};
   render();
 }
 
-function render(){
-  const app=document.getElementById("app");
-  if(state.view==="report"){ renderReport(app); }
-  else if(state.view==="league"){ renderLeague(app); }
-  else{ renderForm(app); }
-}
-
-function renderForm(app){
-  const ac=answeredCount(), canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting;
-  const s=SECTIONS[state.activeSection];
-  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Food Quality Audit</span></div></div>`;
-
-  if(!state.restaurant||!state.auditor){
-    html+=`<div class="card">
-      <div style="margin-bottom:14px"><label>Restaurant</label>
-      <select onchange="state.restaurant=this.value;render()">
-        <option value="">Select restaurant…</option>
-        ${RESTAURANTS.map(r=>`<option value="${r}" ${state.restaurant===r?"selected":""}>${r}</option>`).join("")}
-      </select></div>
-      <div><label>Your name</label>
-      <input type="text" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value;render()"></div>
-      ${state.restaurant&&state.auditor?`<button class="btn-start" onclick="state.activeSection=0;render()">Start audit →</button>`:""}
-    </div>`;
-  } else {
-    const pct=Math.round((ac/TOTAL_Q)*100);
-    html+=`<div class="progress-wrap">
-      <div class="progress-info"><span>${state.restaurant} · ${state.auditor}</span><span>${ac}/${TOTAL_Q} answered</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-    </div>
-    <div class="tabs">
-      ${SECTIONS.map((sec,i)=>{
-        const done=sec.questions.every(q=>state.scores[sec.id]?.[q.id]!==undefined);
-        const cls=state.activeSection===i?"tab active":done?"tab done":"tab";
-        return `<button class="${cls}" onclick="state.activeSection=${i};render()">${sec.label}</button>`;
-      }).join("")}
-    </div>
-    <div class="card">
-      <div class="section-header">
-        <span class="section-title">${s.label}</span>
-        ${s.weight>1?`<span class="weight-badge">×${s.weight} weighted</span>`:""}
-      </div>
-      ${s.special==="availability"?`
-        <div class="question"><p>Is all the menu available?</p>
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <button onclick="state.availability.answer='yes';render()" style="flex:1;padding:11px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;border:${state.availability.answer==='yes'?'2px solid #1A5C34':'0.5px solid #ccc'};background:${state.availability.answer==='yes'?'#1A5C34':'#fff'};color:${state.availability.answer==='yes'?'#fff':'#111'};font-weight:${state.availability.answer==='yes'?'500':'400'}">Yes</button>
-            <button onclick="state.availability.answer='no';render()" style="flex:1;padding:11px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;border:${state.availability.answer==='no'?'2px solid #E24B4A':'0.5px solid #ccc'};background:${state.availability.answer==='no'?'#E24B4A':'#fff'};color:${state.availability.answer==='no'?'#fff':'#111'};font-weight:${state.availability.answer==='no'?'500':'400'}">No</button>
-          </div>
-          ${state.availability.answer==='no'?`
-          <div style="margin-top:14px">
-            <div style="margin-bottom:12px">
-              <label>How many items are unavailable?</label>
-              <input type="number" min="0" value="${state.availability.items}" placeholder="0" style="width:100%;padding:10px 12px;border-radius:8px;border:0.5px solid #ccc;font-size:15px" oninput="state.availability.items=this.value;render()">
-            </div>
-            ${state.availability.items>0?`
-            <div>
-              <label>How many of those are pizzas?</label>
-              <input type="number" min="0" max="${state.availability.items}" value="${state.availability.pizzas}" placeholder="0" style="width:100%;padding:10px 12px;border-radius:8px;border:0.5px solid #ccc;font-size:15px" oninput="state.availability.pizzas=this.value;render()">
-            </div>
-            <p style="font-size:11px;color:#999;margin-top:8px">Each unavailable item −1% · Each unavailable pizza −5%</p>
-            `:''}
-          </div>`:''}
-        </div>`
-      :s.questions.map(q=>{
-        const val=state.scores[s.id]?.[q.id];
-        const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
-        return `<div class="question"><p>${q.label}</p>
-          <div class="score-btns">
-            ${[0,1,2,3,4,5].map(v=>{
-              const sel=val===v;
-              return `<button class="score-btn" onclick="state.scores['${s.id}']={...state.scores['${s.id}']||{}}; state.scores['${s.id}']['${q.id}']=${v}; render()"
-                style="${sel?`background:${cols[v]};color:#fff;border-color:${cols[v]}`:"background:#fff;color:#666;border-color:#ddd"}">${v}</button>`;
-            }).join("")}
-          </div></div>`;
-      }).join("")}
-      `}
-      <textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>
-      <div id="photo-${s.id}">
-        ${state.photoPreviews[s.id]
-          ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('file-${s.id}').click()">Change photo</button></div></div>`
-          :`<button class="photo-btn" onclick="document.getElementById('file-${s.id}').click()">📷 Add photo (optional)</button>`}
-        <input type="file" id="file-${s.id}" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
-      </div>
-    </div>
-    ${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
-    <div class="btn-row">
-      ${state.activeSection>0?`<button class="btn" onclick="state.activeSection--;render()">← Back</button>`:""}
-      ${state.activeSection<SECTIONS.length-1
-        ?`<button class="btn btn-primary" onclick="state.activeSection++;render()">Next →</button>`
-        :`<button class="btn btn-primary" ${canSubmit?"":"disabled"} onclick="handleSubmit()">${state.submitting?"Saving…":"Submit audit ✓"}</button>`}
-    </div>
-    ${!canSubmit&&ac<TOTAL_Q&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions to submit</p>`:""}`;
-  }
-  app.innerHTML=html;
+async function loadLeague(){
+  state.leagueLoading=true; render();
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc",{headers:H});
+    const rows=await r.json();
+    const seen=new Set(), best=[];
+    (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
+    state.leagueData=best;
+  } catch(e){ console.error(e); }
+  state.leagueLoading=false; render();
 }
 
 function handlePhotoChange(sid,input){
@@ -348,45 +225,139 @@ function handlePhotoChange(sid,input){
   render();
 }
 
-function renderReport(app){
-  app.innerHTML=`
-    <div style="text-align:center;padding:3rem 1rem">
-      <div style="font-size:48px;margin-bottom:16px">✓</div>
-      <div style="font-size:24px;font-weight:500;margin-bottom:8px">Audit Completed!</div>
-      <div style="font-size:20px;color:#1A5C34;font-weight:500;margin-bottom:24px">pizz'&love</div>
-      <div style="font-size:13px;color:#666;margin-bottom:32px">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
-      <button class="btn-start" style="max-width:200px;margin:0 auto" onclick="resetForm()">New audit</button>
+function render(){
+  const app=document.getElementById("app");
+  if(state.view==="report") renderConfirm(app);
+  else if(state.view==="league") renderLeague(app);
+  else renderForm(app);
+}
+
+function renderConfirm(app){
+  app.innerHTML=`<div style="text-align:center;padding:4rem 1rem">
+    <div style="font-size:56px;margin-bottom:20px">✓</div>
+    <div style="font-size:26px;font-weight:500;margin-bottom:10px;color:#111">Audit Completed!</div>
+    <div style="font-size:22px;color:#1A5C34;font-weight:500;margin-bottom:28px">pizz'&amp;love</div>
+    <div style="font-size:13px;color:#888;margin-bottom:36px">${state.currentReport.restaurant} · ${state.currentReport.audit_date}</div>
+    <button class="btn-start" style="max-width:220px;margin:0 auto;display:block" onclick="resetForm()">New audit</button>
+  </div>`;
+}
+
+function renderForm(app){
+  const ac=answeredCount();
+  const canSubmit=state.restaurant&&state.auditor&&ac===TOTAL_Q&&!state.submitting;
+  const s=SECTIONS[state.activeSection];
+  const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
+
+  let html=`<div class="header"><div class="header-left"><div class="dot"></div><span class="label">Food Quality Audit</span></div></div>`;
+
+  if(!state.restaurant||!state.auditor){
+    html+=`<div class="card">
+      <div style="margin-bottom:14px"><label>Restaurant</label>
+        <select onchange="state.restaurant=this.value;render()">
+          <option value="">Select restaurant…</option>
+          ${RESTAURANTS.map(r=>`<option value="${r}"${state.restaurant===r?" selected":""}>${r}</option>`).join("")}
+        </select>
+      </div>
+      <div><label>Your name</label>
+        <input type="text" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value">
+      </div>
+      ${state.restaurant?`<button class="btn-start" onclick="state.auditor=document.querySelector('input[type=text]').value;if(state.auditor){state.activeSection=0;render();}">Start audit →</button>`:""}
+    </div>`;
+  } else {
+    const pct=Math.round((ac/TOTAL_Q)*100);
+    html+=`<div class="progress-wrap">
+      <div class="progress-info"><span>${state.restaurant} · ${state.auditor}</span><span>${ac}/${TOTAL_Q} answered</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>
-  `;
+    <div class="tabs">
+      ${SECTIONS.map((sec,i)=>{
+        const done=sec.special?state.availability.answer!=="":sec.questions.every(q=>state.scores[sec.id]?.[q.id]!==undefined);
+        return `<button class="tab${state.activeSection===i?" active":done?" done":""}" onclick="state.activeSection=${i};render()">${sec.label}</button>`;
+      }).join("")}
+    </div>
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">${s.label}</span>
+        ${s.weight>1?`<span class="weight-badge">×${s.weight} weighted</span>`:""}
+      </div>`;
+
+    if(s.special==="availability"){
+      const av=state.availability;
+      html+=`<div class="question"><p>Is all the menu available?</p>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="yn-btn" onclick="state.availability.answer='yes';render()" style="border:${av.answer==='yes'?'2px solid #1A5C34':'0.5px solid #ccc'};background:${av.answer==='yes'?'#1A5C34':'#fff'};color:${av.answer==='yes'?'#fff':'#111'}">Yes</button>
+          <button class="yn-btn" onclick="state.availability.answer='no';render()" style="border:${av.answer==='no'?'2px solid #E24B4A':'0.5px solid #ccc'};background:${av.answer==='no'?'#E24B4A':'#fff'};color:${av.answer==='no'?'#fff':'#111'}">No</button>
+        </div>
+        ${av.answer==='no'?`<div style="margin-top:14px">
+          <div style="margin-bottom:12px"><label>How many items are unavailable?</label>
+            <input type="number" min="0" value="${av.items}" placeholder="0" oninput="state.availability.items=this.value;state.availability.pizzas='';render()">
+          </div>
+          ${av.items>0?`<div><label>How many of those are pizzas?</label>
+            <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
+          </div>
+          <p style="font-size:11px;color:#999;margin-top:8px">Each unavailable item −1% · Each unavailable pizza −5%</p>`:''}
+        </div>`:''}
+      </div>`;
+    } else {
+      html+=s.questions.map(q=>{
+        const val=state.scores[s.id]?.[q.id];
+        return `<div class="question"><p>${q.label}</p>
+          <div class="score-btns">
+            ${[0,1,2,3,4,5].map(v=>`<button class="score-btn"
+              onclick="if(!state.scores['${s.id}'])state.scores['${s.id}']={};state.scores['${s.id}']['${q.id}']=${v};render()"
+              style="${val===v?`background:${cols[v]};color:#fff;border-color:${cols[v]}`:'border-color:#ddd'}">${v}</button>`).join("")}
+          </div></div>`;
+      }).join("");
+    }
+
+    html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>
+      <div>
+        ${state.photoPreviews[s.id]
+          ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
+          :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()">📷 Add photo (optional)</button>`}
+        <input type="file" id="f-${s.id}" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
+      </div>
+    </div>
+    ${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
+    <div class="btn-row">
+      ${state.activeSection>0?`<button class="btn" onclick="state.activeSection--;render()">← Back</button>`:""}
+      ${state.activeSection<SECTIONS.length-1
+        ?`<button class="btn btn-primary" onclick="state.activeSection++;render()">Next →</button>`
+        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving…":"Submit audit ✓"}</button>`}
+    </div>
+    ${!canSubmit&&ac<TOTAL_Q&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions to submit</p>`:""}`;
+  }
+  app.innerHTML=html;
 }
 
 function renderLeague(app){
-  const all=RESTAURANTS.map(r=>{ const f=state.leagueData.find(e=>e.restaurant===r); return f?{...f}:{restaurant:r,pct:null,audit_date:null,auditor:null}; });
+  const all=RESTAURANTS.map(r=>{ const f=state.leagueData.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
   const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
-  let html=`<div class="league-header">
-    <div><div class="header-left" style="margin-bottom:4px"><div class="dot"></div><span class="label">Quality league table</span></div>
-    <div style="font-size:11px;color:#999">${state.leagueData.length} of ${RESTAURANTS.length} restaurants audited · read-only</div></div>
-    <div class="league-btns">
-      <button class="sm-btn" onclick="loadLeague()">↻ Refresh</button>
-      <button class="sm-btn" onclick="resetForm()">New audit</button>
+  let html=`<div class="header">
+    <div class="header-left"><div class="dot"></div><span class="label">Quality League Table</span></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" style="flex:none;padding:7px 12px;font-size:12px" onclick="loadLeague()">↻ Refresh</button>
+      <button class="btn" style="flex:none;padding:7px 12px;font-size:12px" onclick="resetForm()">New audit</button>
     </div>
-  </div>`;
+  </div>
+  <p style="font-size:11px;color:#999;margin-bottom:16px">${state.leagueData.length} of ${RESTAURANTS.length} restaurants audited · read-only</p>`;
+
   if(state.leagueLoading){
     html+=`<div class="loading">Loading…</div>`;
   } else {
     html+=`<div class="table-wrap">
       <div class="table-head"><span class="th">#</span><span class="th">Restaurant</span><span class="th" style="text-align:center">Score</span><span class="th" style="text-align:right">Date</span></div>
-      ${sorted.map((r,i)=>`<div class="table-row ${r.pct!==null&&i===0?"top":""}">
-        <span class="row-rank" style="color:${r.pct!==null&&i<3?scoreColor(r.pct):"#ccc"}">${r.pct!==null?i+1:"–"}</span>
-        <div><div class="row-name ${r.pct===null?"pending":""}">${r.restaurant}</div>${r.auditor?`<div class="row-auditor">${r.auditor}</div>`:""}</div>
-        <div class="row-score" style="color:${r.pct!==null?scoreColor(r.pct):"#ccc"}">${r.pct!==null?r.pct+"%":"—"}</div>
-        <div class="row-date">${r.audit_date||"—"}</div>
+      ${sorted.map((r,i)=>`<div class="table-row" style="${r.pct!==null&&i===0?'background:rgba(15,110,86,0.04)':''}">
+        <span style="font-size:13px;font-weight:500;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
+        <div><div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>${r.auditor?`<div style="font-size:11px;color:#bbb">${r.auditor}</div>`:""}</div>
+        <div style="text-align:center;font-size:14px;font-weight:500;color:${r.pct!==null?scoreColor(r.pct):'#bbb'}">${r.pct!==null?r.pct+"%":"—"}</div>
+        <div style="text-align:right;font-size:12px;color:#bbb">${r.audit_date||"—"}</div>
       </div>`).join("")}
     </div>
     <div class="legend">
       ${[["#0F6E56","80–100%"],["#3B6D11","60–79%"],["#EF9F27","40–59%"],["#E24B4A","0–39%"]].map(([c,l])=>`<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${l}</div>`).join("")}
     </div>
-    <p class="readonly-note">League table is read-only. Data stored securely and cannot be edited from this view.</p>`;
+    <p style="margin-top:12px;font-size:11px;color:#bbb">Read-only. Data cannot be edited from this view.</p>`;
   }
   app.innerHTML=html;
 }
