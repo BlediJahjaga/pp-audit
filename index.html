@@ -314,7 +314,7 @@ function renderForm(app){
     <div class="card">
       <div class="section-header">
         <span class="section-title">${s.label}</span>
-        ${s.weight>1&&s.id!=="pizza"?`<span class="weight-badge">×${s.weight}</span>`:""}
+        ${s.weight>1&&s.id!=="pizza"&&s.id!=="drinks"?`<span class="weight-badge">×${s.weight}</span>`:""}
       </div>`;
 
     const av=state.availability;
