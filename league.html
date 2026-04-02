@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizza Pilgrims — Quality League Table</title>
+<title>Pizza Pilgrims — Food Quality League Table</title>
 <style>
 @font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); font-weight: normal; }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRLight.otf') format('opentype'); font-weight: 300; }
-</style>
-<style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Chelsea', -apple-system, sans-serif; font-weight: 300; background: #1A5C34; min-height: 100vh;
   background-image: url('https://www.datocms-assets.com/94903/1741971975-pp-pizza-spread-with-menu.jpg?auto=format&w=2080');
@@ -24,22 +22,21 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
 .inner { padding: 0 1rem; }
 .meta { font-size: 12px; color: #888; margin-bottom: 16px; }
 .table-wrap { border: 0.5px solid #d4ceb8; border-radius: 12px; overflow: hidden; background: #fff; }
-.table-head { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 10px 16px; background: #1A5C34; }
+.table-head { display: grid; grid-template-columns: 40px 1fr 100px 90px; padding: 10px 16px; background: #1A5C34; }
 .th { font-family: 'PizzaPilgrims'; font-size: 14px; color: #39D400; font-weight: normal; letter-spacing: 0.05em; }
-.table-row { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 12px 16px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; }
+.table-row { display: grid; grid-template-columns: 40px 1fr 100px 90px; padding: 12px 16px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; }
 .table-row:last-child { border-bottom: none; }
 .table-row.top { background: rgba(26,92,52,0.05); }
-.legend { margin-top: 16px; display: flex; gap: 14px; font-size: 12px; color: #777; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 5px; }
+.legend { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #555; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 6px; flex-shrink: 0; }
 .loading { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
-.readonly-note { margin-top: 12px; font-size: 11px; color: #bbb; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top-banner">
-    <div style="width:80px"></div>
+    <div style="width:90px"></div>
     <div class="banner-center">
       <div class="brand-name">Pizza Pilgrims</div>
       <div class="page-title">Food Quality League Table</div>
@@ -71,6 +68,9 @@ const RESTAURANTS = [
   "Westfield Stratford","Wimbledon"
 ];
 
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
+
 function scoreColor(p){
   if(p>=95) return "#1A5C34";
   if(p>=90) return "#39D400";
@@ -86,23 +86,20 @@ function scoreLabel(p){
   return "NEED TO FIX!";
 }
 
-const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
-
 async function loadLeague(){
   document.getElementById("meta").textContent="Loading…";
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
   try{
-    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,auditor,pct,audit_date&order=pct.desc",{
+    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date&order=pct.desc",{
       headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}
     });
     const rows=await r.json();
     const seen=new Set(),best=[];
     (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
-    const all=RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null,auditor:null}; });
+    const all=RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null}; });
     const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
 
-    document.getElementById("meta").textContent=best.length+" of "+RESTAURANTS.length+" pizzerias audited · read-only";
+    document.getElementById("meta").textContent=best.length+" of "+RESTAURANTS.length+" pizzerias audited";
 
     let html=`<div class="table-wrap">
       <div class="table-head">
@@ -113,12 +110,14 @@ async function loadLeague(){
       </div>`;
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.pct!==null&&i===0?' top':''}">
-        <span style="font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
-        <div>
-          <div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>
-
+        <span style="font-family:'PizzaPilgrims',sans-serif;font-size:16px;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
+        <div style="font-size:14px;font-weight:${r.pct!==null?500:300};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>
+        <div style="text-align:center">
+          ${r.pct!==null
+            ?`<div style="font-family:'PizzaPilgrims',sans-serif;font-size:16px;color:${scoreColor(r.pct)}">${r.pct}%</div>
+               <div style="font-size:10px;color:${scoreColor(r.pct)};font-weight:500">${scoreLabel(r.pct)}</div>`
+            :`<span style="color:#ccc">—</span>`}
         </div>
-        <div style="text-align:center;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:${r.pct!==null?scoreColor(r.pct):'#ccc'}">${r.pct!==null?r.pct+"%":"—"}</div>
         <div style="text-align:right;font-size:12px;color:#aaa">${r.audit_date?formatDate(r.audit_date):"—"}</div>
       </div>`;
     });
