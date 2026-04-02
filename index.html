@@ -488,7 +488,6 @@ function renderForm(app){
   const ac=answeredCount();
   const availNoteRequired=state.availability.answer==="no"&&!state.notes['availability'];
   const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_WITH_PHOTOS&&!state.submitting&&!availNoteRequired;
-  const s=SECTIONS[state.activeSection];
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
 
   let html=banner("Food Quality Audit")+'<div class="inner">';
@@ -512,80 +511,78 @@ function renderForm(app){
     </div>`;
   } else {
     const pct=Math.round((ac/TOTAL_WITH_PHOTOS)*100);
-    html+=`<div class="progress-wrap">
-      <div class="progress-info">
-        <span style="display:flex;align-items:center;gap:8px">
-          <button onclick="state.pizzeria='';state.auditor='';state.team='';state.activeSection=0;render()" style="font-size:11px;color:#1A5C34;background:none;border:0.5px solid #1A5C34;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'Chelsea',sans-serif">← Edit</button>
-          <span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span>
-        </span>
-        <span>${ac}/${TOTAL_WITH_PHOTOS}</span>
+    html+=`<div style="position:sticky;top:0;z-index:10;background:#F5F0DC;padding:8px 0 6px">
+      <div class="progress-wrap" style="margin-bottom:0">
+        <div class="progress-info">
+          <span style="display:flex;align-items:center;gap:8px">
+            <button onclick="state.pizzeria='';state.auditor='';state.team='';render()" style="font-size:11px;color:#1A5C34;background:none;border:0.5px solid #1A5C34;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'Chelsea',sans-serif">← Edit</button>
+            <span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span>
+          </span>
+          <span>${ac}/${TOTAL_WITH_PHOTOS}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-    </div>
-    <div class="tabs">
-      ${SECTIONS.map((sec,i)=>{
-        const done=sec.special?state.availability.answer!=="":sec.questions.every(q=>state.scores[sec.id]?.[q.id]!==undefined)&&(PHOTO_RULES[sec.id]!=="mandatory"||state.photoFiles[sec.id]);
-        return `<button class="tab${state.activeSection===i?" active":done?" done":""}" onclick="state.activeSection=${i};render()">${sec.label}</button>`;
-      }).join("")}
-    </div>
-    <div class="card">
-      <div class="section-header"><span class="section-title">${s.label}</span></div>`;
+    </div>`;
 
-    const av=state.availability;
-    if(s.special==="availability"){
-      html+=`<div class="question"><p>Is all the menu available?</p>
-        <div style="display:flex;gap:10px;margin-top:8px">
-          <button class="yn-btn" onclick="state.availability.answer='yes';render()" style="border:${av.answer==='yes'?'2px solid #1A5C34':'1px solid #c8c2aa'};background:${av.answer==='yes'?'#1A5C34':'#fff'};color:${av.answer==='yes'?'#F5F0DC':'#111'}">Yes</button>
-          <button class="yn-btn" onclick="state.availability.answer='no';render()" style="border:${av.answer==='no'?'2px solid #E24B4A':'1px solid #c8c2aa'};background:${av.answer==='no'?'#E24B4A':'#fff'};color:${av.answer==='no'?'#fff':'#111'}">No</button>
-        </div>
-        ${av.answer==='no'?`<div style="margin-top:14px">
-          <div style="margin-bottom:12px"><label>How many items are unavailable?</label>
-            <input type="number" min="0" value="${av.items}" placeholder="0" oninput="state.availability.items=this.value;state.availability.pizzas='';render()">
+    SECTIONS.forEach(s=>{
+      const av=state.availability;
+      html+=`<div class="card">
+        <div class="section-header"><span class="section-title">${s.label}</span></div>`;
+
+      if(s.special==="availability"){
+        html+=`<div class="question"><p>Is all the menu available?</p>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="yn-btn" onclick="state.availability.answer='yes';render()" style="border:${av.answer==='yes'?'2px solid #1A5C34':'1px solid #c8c2aa'};background:${av.answer==='yes'?'#1A5C34':'#fff'};color:${av.answer==='yes'?'#F5F0DC':'#111'}">Yes</button>
+            <button class="yn-btn" onclick="state.availability.answer='no';render()" style="border:${av.answer==='no'?'2px solid #E24B4A':'1px solid #c8c2aa'};background:${av.answer==='no'?'#E24B4A':'#fff'};color:${av.answer==='no'?'#fff':'#111'}">No</button>
           </div>
-          ${av.items>0?`<div><label>How many of those are pizzas?</label>
-            <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
+          ${av.answer==='no'?`<div style="margin-top:14px">
+            <div style="margin-bottom:12px"><label>How many items are unavailable?</label>
+              <input type="number" min="0" value="${av.items}" placeholder="0" oninput="state.availability.items=this.value;state.availability.pizzas='';render()">
+            </div>
+            ${av.items>0?`<div><label>How many of those are pizzas?</label>
+              <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
+            </div>`:''}
+          </div>
+          <div style="margin-top:14px">
+            <label>List the unavailable items here</label>
+            <textarea rows="3" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="border-color:${!state.notes['availability']?'#E24B4A':'#c8c2aa'}">${state.notes['availability']||""}</textarea>
+            ${!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list the unavailable items</p>`:""}
           </div>`:''}
-        </div>
-        <div style="margin-top:14px">
-          <label>List the unavailable items here</label>
-          <textarea rows="3" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="border-color:${!state.notes['availability']?'#E24B4A':'#c8c2aa'}">${state.notes['availability']||""}</textarea>
-          ${!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list the unavailable items</p>`:""}
-        </div>`:''}
-      </div>`;
-    } else {
-      html+=s.questions.map(q=>{
-        const val=state.scores[s.id]?.[q.id];
-        return `<div class="question"><p>${q.label}</p>
-          <div class="score-btns">
-            ${[0,1,2,3,4,5].map(v=>`<button class="score-btn"
-              onclick="if(!state.scores['${s.id}'])state.scores['${s.id}']={};state.scores['${s.id}']['${q.id}']=${v};render()"
-              style="${val===v?`background:${cols[v]};color:#fff;border-color:${cols[v]};`:'border-color:#c8c2aa;'}">${v}</button>`).join("")}
-          </div></div>`;
-      }).join("");
-      html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>`;
-    }
+        </div>`;
+      } else {
+        html+=s.questions.map(q=>{
+          const val=state.scores[s.id]?.[q.id];
+          return `<div class="question"><p>${q.label}</p>
+            <div class="score-btns">
+              ${[0,1,2,3,4,5].map(v=>`<button class="score-btn"
+                onclick="if(!state.scores['${s.id}'])state.scores['${s.id}']={};state.scores['${s.id}']['${q.id}']=${v};render()"
+                style="${val===v?`background:${cols[v]};color:#fff;border-color:${cols[v]};`:'border-color:#c8c2aa;'}">${v}</button>`).join("")}
+            </div></div>`;
+        }).join("");
+        html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>`;
+      }
 
-    const photoRule=PHOTO_RULES[s.id];
-    if(photoRule!=="none"){
-      html+=`<div style="margin-top:10px">
-        ${state.photoPreviews[s.id]
-          ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
-          :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()" style="${photoRule==='mandatory'?'border-color:#1A5C34;color:#1A5C34':''}">${photoRule==='mandatory'?'📷 Add pizza photo (required)':'📷 Add photo (optional)'}</button>`}
-        <input type="file" id="f-${s.id}" accept="image/*" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
-        ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo of the pizza</p>`:""}
-      </div>`;
-    }
+      const photoRule=PHOTO_RULES[s.id];
+      if(photoRule!=="none"){
+        html+=`<div style="margin-top:10px">
+          ${state.photoPreviews[s.id]
+            ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
+            :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()" style="${photoRule==='mandatory'?'border-color:#1A5C34;color:#1A5C34':''}">${photoRule==='mandatory'?'📷 Add pizza photo (required)':'📷 Add photo (optional)'}</button>`}
+          <input type="file" id="f-${s.id}" accept="image/*" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
+          ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo of the pizza</p>`:""}
+        </div>`;
+      }
 
-    html+=`</div>
-    ${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
-    <div class="btn-row">
-      ${state.activeSection>0?`<button class="btn" onclick="state.activeSection--;render()">← Back</button>`:""}
-      ${state.activeSection<SECTIONS.length-1
-        ?`<button class="btn btn-primary" onclick="state.activeSection++;render()">Next →</button>`
-        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving & sending…":"Submit Audit ✓"}</button>`}
-    </div>
-    ${!canSubmit&&ac<TOTAL_WITH_PHOTOS&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions and add the pizza photo to submit</p>`:""}`;
+      html+=`</div>`;
+    });
+
+    html+=`${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
+    <button class="btn-start" ${canSubmit?"":'style="background:#b0b0a0;border-color:#b0b0a0"'} ${canSubmit?`onclick="handleSubmit()"`:""}>
+      ${state.submitting?"Saving…":"Submit Audit ✓"}
+    </button>
+    ${!canSubmit?`<p class="hint">Answer all questions and add the pizza photo to submit</p>`:""}`;
   }
+
   html+='</div>';
   app.innerHTML=html;
 }
