@@ -73,7 +73,7 @@ const RESTAURANTS = [
 ];
 
 const SECTIONS = [
-  {id:"pizza",label:"Pizza",weight:3,questions:[
+  {id:"pizza",label:"Pizza",weight:14,questions:[
     {id:"spec",label:"Is the pizza made to spec?"},
     {id:"dough",label:"Dough texture — is the cornicione light, airy and correctly charred?"},
     {id:"bake",label:"Bake / cooking — is the base cooked through without being burnt or underdone?"}
@@ -82,14 +82,14 @@ const SECTIONS = [
     {id:"spec",label:"Are our sides/salads made to spec?"},
     {id:"fresh",label:"Are the ingredients fresh and well-dressed (salads)?"}
   ]},
-  {id:"dippers",label:"Dippers",weight:1,questions:[
+  {id:"dippers",label:"Dippers",weight:0.5,questions:[
     {id:"spec",label:"Are our dippers made to spec?"}
   ]},
   {id:"afterpizza",label:"After Pizza",weight:1,questions:[
     {id:"spec",label:"Is everything made to spec?"},
     {id:"temp",label:"Is everything served at the correct temperature and presented neatly?"}
   ]},
-  {id:"drinks",label:"Drinks",weight:1,questions:[
+  {id:"drinks",label:"Drinks",weight:1.5,questions:[
     {id:"spec",label:"Are our drinks made to spec?"}
   ]},
   {id:"availability",label:"Menu Availability",weight:1,special:"availability"},
@@ -171,6 +171,7 @@ async function uploadPhoto(blob,sid,restaurant){
 
 async function handleSubmit(){
   state.submitting=true; state.submitError=""; render();
+if(window.location.search==="?league"){ state.view="league"; loadLeague(); }
   try{
     const photoUrls={};
     for(const [sid,file] of Object.entries(state.photoFiles)){
