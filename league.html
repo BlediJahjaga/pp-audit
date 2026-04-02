@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizza Pilgrims — Food Quality League Table</title>
+<title>Pizza Pilgrims — Quality League Table</title>
 <style>
 @font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); font-weight: normal; }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
@@ -42,7 +42,7 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
     <div style="width:80px"></div>
     <div class="banner-center">
       <div class="brand-name">Pizza Pilgrims</div>
-      <div class="page-title">Quality League Table</div>
+      <div class="page-title">Food Quality League Table</div>
     </div>
     <button class="refresh-btn" onclick="loadLeague()">↻ Refresh</button>
   </div>
@@ -73,6 +73,9 @@ const RESTAURANTS = [
 
 function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
 
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
+
 async function loadLeague(){
   document.getElementById("meta").textContent="Loading…";
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
@@ -100,10 +103,10 @@ async function loadLeague(){
         <span style="font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
         <div>
           <div style="font-size:14px;font-weight:${r.pct!==null?500:400};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>
-          ${r.auditor?`<div style="font-size:11px;color:#aaa">${r.auditor}</div>`:""}
+
         </div>
         <div style="text-align:center;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:${r.pct!==null?scoreColor(r.pct):'#ccc'}">${r.pct!==null?r.pct+"%":"—"}</div>
-        <div style="text-align:right;font-size:12px;color:#aaa">${r.audit_date||"—"}</div>
+        <div style="text-align:right;font-size:12px;color:#aaa">${r.audit_date?formatDate(r.audit_date):"—"}</div>
       </div>`;
     });
     html+='</div>';
