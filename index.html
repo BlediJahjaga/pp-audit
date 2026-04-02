@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +66,7 @@ const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
 const H = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
 
-const FIXED_EMAILS = ["bledi@pizzapilgrims.co.uk","domenico.luongo@pizzapilgrims.co.uk"];
+const FIXED_EMAILS = ["bledi@pizzapilgrims.co.uk"];
 
 const PIZZERIA_EMAILS = {
   "Soho":"deanst@pizzapilgrims.co.uk",
@@ -356,7 +357,8 @@ async function generatePDF(report){
 
 async function sendEmail(report, pdfDataUri){
   const recipients=[...FIXED_EMAILS];
-  if(PIZZERIA_EMAILS[report.restaurant]) recipients.push(PIZZERIA_EMAILS[report.restaurant]);
+  // Pizzeria email temporarily disabled for testing
+  // if(PIZZERIA_EMAILS[report.restaurant]) recipients.push(PIZZERIA_EMAILS[report.restaurant]);
 
   const base64=pdfDataUri.split(",")[1];
   const subject=`Pizza Pilgrims Food Quality Audit — ${report.restaurant} — ${formatDate(report.audit_date)}`;
