@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -433,14 +432,16 @@ async function handleSubmit(){
     });
     if(!res.ok){const t=await res.text();throw new Error(t);}
     state.currentReport={...payload,...result};
+    state.view="report";
+    state.submitting=false;
+    render();
 
-    // Generate PDF and send email
+    // Send email in background — doesn't block the confirmation screen
     try{
       const pdfDataUri=await generatePDF(state.currentReport);
       await sendEmail(state.currentReport,pdfDataUri);
-    }catch(e){console.error("Email/PDF error:",e);}
-
-    state.view="report";
+    }catch(e){ console.error("Email/PDF error:",e); }
+    return;
   }catch(e){
     state.submitError="Save failed: "+e.message;
   }
