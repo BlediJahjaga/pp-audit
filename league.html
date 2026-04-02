@@ -44,10 +44,10 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
     <button class="refresh-btn" onclick="loadLeague()">↻ Refresh</button>
   </div>
   <div class="inner">
-    <p class="meta" id="meta">Loading…</p>
+    <p class="meta" id="meta"></p>
     <div id="table"><div class="loading">Loading…</div></div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>100% — Faje Paura!</div>
+      <div class="legend-item"><span style="font-size:16px">🤌</span>100% — Faje Paura!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>95–99.99% — STARS!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#39D400"></div>90–94.99% — Very good!</div>
       <div class="legend-item"><div class="legend-dot" style="background:#C8B97A"></div>85–89.99% — Good but..!</div>
@@ -102,7 +102,7 @@ async function loadLeague(){
     const all=RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null}; });
     const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
 
-    document.getElementById("meta").textContent=best.length+" of "+RESTAURANTS.length+" pizzerias audited";
+    document.getElementById("meta").textContent="";
 
     let html=`<div class="table-wrap">
       <div class="table-head">
