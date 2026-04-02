@@ -4,24 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Quality League Table</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); font-weight: normal; }
+@font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
+@font-face { font-family: 'Chelsea'; src: url('ChelseaRRLight.otf') format('opentype'); font-weight: 300; }
+</style>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', -apple-system, sans-serif; background: #1A5C34; min-height: 100vh;
+body { font-family: 'Chelsea', -apple-system, sans-serif; font-weight: 300; background: #1A5C34; min-height: 100vh;
   background-image: url('https://www.datocms-assets.com/94903/1741971975-pp-pizza-spread-with-menu.jpg?auto=format&w=2080');
   background-size: cover; background-position: center; background-attachment: fixed; }
 body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52,0.82); z-index: 0; }
 .wrap { max-width: 600px; margin: 0 auto; padding: 0 0 3rem; position: relative; z-index: 1; background: #F5F0DC; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
 .top-banner { background: #1A5C34; padding: 18px 20px 14px; text-align: center; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
 .banner-center { text-align: center; flex: 1; }
-.brand-name { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 400; color: #39D400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
-.page-title { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; color: #F5F0DC; letter-spacing: 0.05em; text-transform: uppercase; }
-.refresh-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #39D400; background: transparent; color: #39D400; cursor: pointer; font-size: 13px; font-family: 'Inter', sans-serif; white-space: nowrap; }
+.brand-name { font-family: 'PizzaPilgrims'; font-size: 18px; font-weight: normal; color: #39D400; letter-spacing: 0.05em; margin-bottom: 4px; }
+.page-title { font-family: 'PizzaPilgrims'; font-size: 26px; font-weight: normal; color: #F5F0DC; letter-spacing: 0.03em; }
+.refresh-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #39D400; background: transparent; color: #39D400; cursor: pointer; font-size: 13px; font-family: 'Chelsea', sans-serif; white-space: nowrap; }
 .inner { padding: 0 1rem; }
 .meta { font-size: 12px; color: #888; margin-bottom: 16px; }
 .table-wrap { border: 0.5px solid #d4ceb8; border-radius: 12px; overflow: hidden; background: #fff; }
 .table-head { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 10px 16px; background: #1A5C34; }
-.th { font-family: 'Oswald', sans-serif; font-size: 12px; color: #39D400; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.th { font-family: 'PizzaPilgrims'; font-size: 14px; color: #39D400; font-weight: normal; letter-spacing: 0.05em; }
 .table-row { display: grid; grid-template-columns: 40px 1fr 64px 90px; padding: 12px 16px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; }
 .table-row:last-child { border-bottom: none; }
 .table-row.top { background: rgba(26,92,52,0.05); }
