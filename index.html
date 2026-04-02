@@ -4,77 +4,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Food Quality Audit</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 @font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); font-weight: normal; }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRLight.otf') format('opentype'); font-weight: 300; }
-</style>
-<style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Chelsea', -apple-system, sans-serif; font-weight: 300; background: #1A5C34; min-height: 100vh;
   background-image: url('https://www.datocms-assets.com/94903/1741971975-pp-pizza-spread-with-menu.jpg?auto=format&w=2080');
   background-size: cover; background-position: center; background-attachment: fixed; }
 body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52,0.82); z-index: 0; }
 .wrap { max-width: 540px; margin: 0 auto; padding: 0 0 3rem; position: relative; z-index: 1; background: #F5F0DC; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
-
-/* Header banner */
 .top-banner { background: #1A5C34; padding: 18px 20px 14px; text-align: center; margin-bottom: 20px; }
-.brand-name { font-family: 'PizzaPilgrims'; font-size: 20px; font-weight: normal; color: #39D400; letter-spacing: 0.05em; text-transform: none; margin-bottom: 4px; }
-.page-title { font-family: 'PizzaPilgrims'; font-size: 28px; font-weight: normal; color: #F5F0DC; letter-spacing: 0.03em; text-transform: none; }
-
+.brand-name { font-family: 'PizzaPilgrims'; font-size: 20px; font-weight: normal; color: #39D400; letter-spacing: 0.05em; margin-bottom: 4px; }
+.page-title { font-family: 'PizzaPilgrims'; font-size: 28px; font-weight: normal; color: #F5F0DC; letter-spacing: 0.03em; }
 .inner { padding: 0 1rem; }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.status-label { font-size: 12px; font-weight: 500; color: #1A5C34; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; }
-.status-label::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #1A5C34; display: inline-block; }
-
 .card { background: #fff; border: 0.5px solid #d4ceb8; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
 label { font-size: 13px; color: #555; display: block; margin-bottom: 6px; font-weight: 500; }
-select, input[type=text], input[type=number] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 15px; color: #111; font-family: 'Inter', sans-serif; }
-textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 13px; resize: none; color: #111; font-family: 'Inter', sans-serif; }
-
+select, input[type=text], input[type=number] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 15px; color: #111; font-family: 'Chelsea', sans-serif; }
+textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #c8c2aa; background: #fdfaf3; font-size: 13px; resize: none; color: #111; font-family: 'Chelsea', sans-serif; }
 .progress-wrap { margin-bottom: 16px; }
 .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 6px; }
 .progress-bar { height: 5px; border-radius: 3px; background: #d4ceb8; }
 .progress-fill { height: 5px; border-radius: 3px; background: #1A5C34; transition: width 0.3s; }
-
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
 .tab { padding: 6px 11px; border-radius: 16px; font-size: 12px; border: 1px solid #c8c2aa; background: #fff; color: #666; cursor: pointer; font-family: 'Chelsea', sans-serif; font-weight: 300; }
 .tab.active { border-color: #1A5C34; background: #1A5C34; color: #F5F0DC; font-weight: 500; }
 .tab.done { background: rgba(26,92,52,0.1); color: #1A5C34; border-color: #1A5C34; }
-
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .section-title { font-family: 'PizzaPilgrims'; font-size: 22px; font-weight: normal; color: #1A5C34; letter-spacing: 0.02em; }
-.weight-badge { font-size: 11px; padding: 3px 9px; border-radius: 10px; background: #1A5C34; color: #39D400; font-family: 'Chelsea', sans-serif; font-weight: 700; }
-
 .question { margin-bottom: 18px; }
 .question p { font-size: 14px; color: #222; margin-bottom: 11px; line-height: 1.5; }
 .score-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.score-btn { width: 42px; height: 42px; border-radius: 21px; border: 1.5px solid #c8c2aa; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.1s; }
-
-.photo-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px dashed #c8c2aa; border-radius: 8px; background: #fdfaf3; color: #888; font-size: 13px; cursor: pointer; margin-top: 12px; font-family: 'Inter', sans-serif; }
+.score-btn { width: 42px; height: 42px; border-radius: 21px; border: 1.5px solid #c8c2aa; background: #fff; color: #666; font-weight: 500; font-size: 14px; cursor: pointer; font-family: 'Chelsea', sans-serif; }
+.photo-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px dashed #c8c2aa; border-radius: 8px; background: #fdfaf3; color: #888; font-size: 13px; cursor: pointer; margin-top: 12px; font-family: 'Chelsea', sans-serif; }
 .photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
 .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #d4ceb8; }
-.photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Inter', sans-serif; }
+.photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Chelsea', sans-serif; }
 .photo-name { font-size: 12px; color: #888; }
-
 .btn-row { display: flex; gap: 10px; margin-top: 6px; }
-.btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif; border: 1px solid #c8c2aa; background: #eee8d5; color: #333; }
+.btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Chelsea', sans-serif; border: 1px solid #c8c2aa; background: #eee8d5; color: #333; }
 .btn-primary { background: #1A5C34; color: #F5F0DC; border-color: #1A5C34; font-weight: 500; }
 .btn-primary:disabled { background: #b0b0a0; border-color: #b0b0a0; color: #eee; cursor: default; }
-.btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 20px; font-weight: normal; cursor: pointer; margin-top: 18px; font-family: 'PizzaPilgrims'; letter-spacing: 0.05em; }
-
+.btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 20px; cursor: pointer; margin-top: 18px; font-family: 'PizzaPilgrims'; letter-spacing: 0.05em; }
 .error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
 .hint { margin-top: 10px; font-size: 12px; color: #888; text-align: center; }
-
-.yn-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; }
-
-/* Confirm screen */
+.yn-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: 'Chelsea', sans-serif; font-weight: 500; }
 .confirm-wrap { text-align: center; padding: 4rem 1rem; }
 .confirm-check { width: 72px; height: 72px; border-radius: 36px; background: #1A5C34; color: #39D400; font-size: 36px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-.confirm-title { font-family: 'PizzaPilgrims'; font-size: 32px; font-weight: normal; color: #1A5C34; letter-spacing: 0.03em; margin-bottom: 8px; }
+.confirm-title { font-family: 'PizzaPilgrims'; font-size: 32px; color: #1A5C34; margin-bottom: 8px; }
 .confirm-brand { font-family: 'PizzaPilgrims'; font-size: 26px; color: #1A5C34; margin-bottom: 24px; }
-.confirm-meta { font-size: 13px; color: #888; margin-bottom: 36px; }
-
+.confirm-meta { font-size: 13px; color: #888; margin-bottom: 20px; }
 .loading { text-align: center; padding: 2rem; color: #666; font-size: 14px; }
 </style>
 </head>
@@ -83,7 +63,42 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 <script>
 const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
+const RESEND_KEY = "re_WsZCuKib_9jzNjbqm8ueFQCwWH2mbjjeH";
 const H = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
+
+const FIXED_EMAILS = ["bledi@pizzapilgrims.co.uk","domenico.luongo@pizzapilgrims.co.uk"];
+
+const PIZZERIA_EMAILS = {
+  "Soho":"deanst@pizzapilgrims.co.uk",
+  "Carnaby":"kinglyst@pizzapilgrims.co.uk",
+  "Exmouth Market":"exmouthmarket@pizzapilgrims.co.uk",
+  "Covent Garden":"garrickst@pizzapilgrims.co.uk",
+  "Shoreditch":"shoreditch@pizzapilgrims.co.uk",
+  "Canary Wharf":"wiq@pizzapilgrims.co.uk",
+  "Liverpool Street":"city@pizzapilgrims.co.uk",
+  "London Bridge":"londonbridge@pizzapilgrims.co.uk",
+  "Westfield":"westfield@pizzapilgrims.co.uk",
+  "Victoria":"victoria@pizzapilgrims.co.uk",
+  "Camden":"camden@pizzapilgrims.co.uk",
+  "Waterloo":"lowermarsh@pizzapilgrims.co.uk",
+  "Hyde Park":"hydepark@pizzapilgrims.co.uk",
+  "Selfridges":"selfridges@pizzapilgrims.co.uk",
+  "Swingers West End":"swingers@pizzapilgrims.co.uk",
+  "Queens Park":"queenspark@pizzapilgrims.co.uk",
+  "Euston":"euston@pizzapilgrims.co.uk",
+  "Chelsea":"chelsea@pizzapilgrims.co.uk",
+  "Spitalfields":"bricklane@pizzapilgrims.co.uk",
+  "King's Cross":"kingscross@pizzapilgrims.co.uk",
+  "Brighton":"brighton@pizzapilgrims.co.uk",
+  "Cambridge":"cambridge@pizzapilgrims.co.uk",
+  "Nottingham":"nottingham@pizzapilgrims.co.uk",
+  "Leeds":"leeds@pizzapilgrims.co.uk",
+  "Cardiff":"cardiff@pizzapilgrims.co.uk",
+  "Edinburgh":"edinburgh@pizzapilgrims.co.uk",
+  "Manchester":"manchester@pizzapilgrims.co.uk",
+  "Birmingham":"birmingham@pizzapilgrims.co.uk",
+  "Glasgow":"glasgow@pizzapilgrims.co.uk"
+};
 
 const RESTAURANTS = [
   "Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff",
@@ -120,28 +135,38 @@ const SECTIONS = [
   ]}
 ];
 
-const PHOTO_RULES = {
-  pizza: "mandatory",
-  sides: "optional",
-  dippers: "none",
-  afterpizza: "optional",
-  drinks: "optional",
-  availability: "none",
-  vibe: "none"
-};
+const PHOTO_RULES = {pizza:"mandatory",sides:"optional",dippers:"none",afterpizza:"optional",drinks:"optional",availability:"none",vibe:"none"};
+const MANDATORY_PHOTOS = ["pizza"];
+const TOTAL_Q = SECTIONS.reduce((a,s)=>a+(s.special?1:s.questions.length),0);
+const TOTAL_WITH_PHOTOS = TOTAL_Q + MANDATORY_PHOTOS.length;
+
+const MONTHS_LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+" "+MONTHS_LONG[parseInt(p[1])-1]+" "+p[0]; }
 
 let state = {
   view:"form", pizzeria:"", auditor:"", team:"",
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
   activeSection:0, submitting:false, submitError:"",
-  currentReport:null, confirmPhoto:null
+  currentReport:null
 };
 
-const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+" "+MONTHS[parseInt(p[1])-1]+" "+p[0]; }
-
-function scoreColor(p){ return p>=80?"#0F6E56":p>=60?"#3B6D11":p>=40?"#EF9F27":"#E24B4A"; }
+function scoreColor(p){
+  if(p===100) return "#1A5C34";
+  if(p>=95) return "#1A5C34";
+  if(p>=90) return "#39D400";
+  if(p>=85) return "#C8B97A";
+  if(p>=75) return "#EF9F27";
+  return "#E24B4A";
+}
+function scoreLabel(p){
+  if(p===100) return "Faje Paura!";
+  if(p>=95) return "STARS!";
+  if(p>=90) return "Very good!";
+  if(p>=85) return "Good but..!";
+  if(p>=75) return "Not great!";
+  return "NEED TO FIX URGENTLY!";
+}
 
 function calcScores(scores,avail){
   let total=0,maxTotal=0;
@@ -172,25 +197,23 @@ function calcScores(scores,avail){
 }
 
 function answeredCount(){
-  const qCount = SECTIONS.reduce((a,s)=>{
+  const qCount=SECTIONS.reduce((a,s)=>{
     if(s.special==="availability") return a+(state.availability.answer!==""?1:0);
     return a+s.questions.filter(q=>state.scores[s.id]?.[q.id]!==undefined).length;
   },0);
-  const photoCount = MANDATORY_PHOTOS.filter(sid=>state.photoFiles[sid]).length;
-  return qCount + photoCount;
+  const photoCount=MANDATORY_PHOTOS.filter(sid=>state.photoFiles[sid]).length;
+  return qCount+photoCount;
 }
 
-const TOTAL_WITH_PHOTOS = TOTAL_Q + MANDATORY_PHOTOS.length;
-
-async function compressImage(file){
+async function compressImage(file,maxSize=1000,quality=0.7){
   return new Promise(resolve=>{
     const img=new Image(),url=URL.createObjectURL(file);
     img.onload=()=>{
-      const MAX=1000;let w=img.width,h=img.height;
-      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+      let w=img.width,h=img.height;
+      if(w>maxSize||h>maxSize){if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}else{w=Math.round(w*maxSize/h);h=maxSize;}}
       const c=document.createElement("canvas");c.width=w;c.height=h;
       c.getContext("2d").drawImage(img,0,0,w,h);
-      c.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob);},"image/jpeg",0.7);
+      c.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob);},"image/jpeg",quality);
     };img.src=url;
   });
 }
@@ -206,6 +229,180 @@ async function uploadPhoto(blob,sid,pizzeria){
   return SB_URL+"/storage/v1/object/public/audit-photos/"+name;
 }
 
+function fileToDataURL(file){
+  return new Promise(resolve=>{
+    const r=new FileReader();
+    r.onload=e=>resolve(e.target.result);
+    r.readAsDataURL(file);
+  });
+}
+
+async function generatePDF(report){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  const W=210,margin=15,contentW=W-margin*2;
+  let y=margin;
+
+  // Header
+  doc.setFillColor(26,92,52);
+  doc.rect(0,0,W,35,"F");
+  doc.setTextColor(57,212,0);
+  doc.setFontSize(10);
+  doc.text("PIZZA PILGRIMS",W/2,12,{align:"center"});
+  doc.setTextColor(245,240,220);
+  doc.setFontSize(16);
+  doc.text("FOOD QUALITY AUDIT",W/2,22,{align:"center"});
+  y=42;
+
+  // Meta info
+  doc.setTextColor(30,30,30);
+  doc.setFontSize(13);
+  doc.text(report.restaurant,margin,y); y+=7;
+  doc.setFontSize(10);
+  doc.setTextColor(100,100,100);
+  doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:""),margin,y); y+=8;
+
+  // Overall score box
+  const sc=scoreColor(report.pct);
+  const rgb=sc==="#1A5C34"?[26,92,52]:sc==="#39D400"?[57,212,0]:sc==="#C8B97A"?[200,185,122]:sc==="#EF9F27"?[239,159,39]:[226,75,74];
+  doc.setFillColor(...rgb);
+  doc.roundedRect(margin,y,contentW,14,3,3,"F");
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(14);
+  doc.text(report.pct+"% — "+scoreLabel(report.pct),W/2,y+9,{align:"center"});
+  y+=20;
+
+  // Section scores
+  SECTIONS.forEach(s=>{
+    const sc2=report.sectionScores[s.id];
+    const pct2=sc2.maxWeighted>0?Math.round((sc2.weighted/sc2.maxWeighted)*100):0;
+    const col=scoreColor(pct2);
+    const rgb2=col==="#1A5C34"?[26,92,52]:col==="#39D400"?[57,212,0]:col==="#C8B97A"?[200,185,122]:col==="#EF9F27"?[239,159,39]:[226,75,74];
+
+    if(y>255){ doc.addPage(); y=margin; }
+
+    doc.setFillColor(245,240,220);
+    doc.roundedRect(margin,y,contentW,8,2,2,"F");
+    doc.setTextColor(26,92,52);
+    doc.setFontSize(10);
+    doc.text(s.label,margin+3,y+5.5);
+    doc.setFillColor(...rgb2);
+    doc.roundedRect(W-margin-22,y+1.5,22,5,1,1,"F");
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(8);
+    doc.text(pct2+"%",W-margin-11,y+5.5,{align:"center"});
+    y+=11;
+
+    // Questions
+    if(!s.special){
+      s.questions.forEach(q=>{
+        const val=report.scores[s.id]?.[q.id];
+        doc.setTextColor(80,80,80);
+        doc.setFontSize(8);
+        const lines=doc.splitTextToSize("• "+q.label,contentW-20);
+        doc.text(lines,margin+2,y);
+        doc.setTextColor(30,30,30);
+        doc.setFontSize(9);
+        doc.text(val!==undefined?val+"/5":"–",W-margin-2,y,{align:"right"});
+        y+=lines.length*4+1;
+      });
+    } else {
+      doc.setTextColor(80,80,80);
+      doc.setFontSize(8);
+      const avText=report.availability?.answer==="yes"?"Full menu available":
+        "Items unavailable: "+(report.availability?.items||0)+" (pizzas: "+(report.availability?.pizzas||0)+")";
+      doc.text("• "+avText,margin+2,y); y+=5;
+    }
+
+    // Notes
+    if(report.notes[s.id]){
+      doc.setTextColor(100,100,100);
+      doc.setFontSize(8);
+      const nLines=doc.splitTextToSize("Notes: "+report.notes[s.id],contentW-4);
+      doc.text(nLines,margin+2,y);
+      y+=nLines.length*4+1;
+    }
+    y+=3;
+  });
+
+  // Page 2 — Photos
+  const photoSections=SECTIONS.filter(s=>PHOTO_RULES[s.id]&&PHOTO_RULES[s.id]!=="none"&&state.photoFiles[s.id]);
+  if(photoSections.length>0){
+    doc.addPage();
+    let py=margin;
+    doc.setFillColor(26,92,52);
+    doc.rect(0,0,W,18,"F");
+    doc.setTextColor(245,240,220);
+    doc.setFontSize(12);
+    doc.text("PHOTOS — "+report.restaurant.toUpperCase(),W/2,12,{align:"center"});
+    py=25;
+
+    for(const s of photoSections){
+      const file=state.photoFiles[s.id];
+      if(!file) continue;
+      const dataUrl=await fileToDataURL(file);
+      const imgW=contentW;
+      const imgH=Math.min(80,imgW*0.6);
+      if(py+imgH+10>285){break;}
+      doc.setFontSize(9);
+      doc.setTextColor(26,92,52);
+      doc.text(s.label,margin,py); py+=5;
+      doc.addImage(dataUrl,"JPEG",margin,py,imgW,imgH);
+      py+=imgH+8;
+    }
+  }
+
+  return doc.output("datauristring");
+}
+
+async function sendEmail(report, pdfDataUri){
+  const recipients=[...FIXED_EMAILS];
+  if(PIZZERIA_EMAILS[report.restaurant]) recipients.push(PIZZERIA_EMAILS[report.restaurant]);
+
+  const base64=pdfDataUri.split(",")[1];
+  const subject=`Pizza Pilgrims Food Quality Audit — ${report.restaurant} — ${formatDate(report.audit_date)}`;
+
+  const html=`
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+      <div style="background:#1A5C34;padding:20px;text-align:center">
+        <p style="color:#39D400;font-size:12px;margin:0">PIZZA PILGRIMS</p>
+        <h1 style="color:#F5F0DC;font-size:20px;margin:8px 0 0">Food Quality Audit</h1>
+      </div>
+      <div style="padding:20px;background:#F5F0DC">
+        <h2 style="color:#1A5C34">${report.restaurant}</h2>
+        <p style="color:#666">${formatDate(report.audit_date)} · ${report.auditor}${report.team?" · "+report.team:""}</p>
+        <div style="background:#1A5C34;border-radius:8px;padding:12px;text-align:center;margin:16px 0">
+          <span style="color:#fff;font-size:24px;font-weight:bold">${report.pct}%</span>
+          <span style="color:#39D400;font-size:14px;margin-left:10px">${scoreLabel(report.pct)}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse">
+          ${SECTIONS.map(s=>{
+            const sc=report.sectionScores[s.id];
+            const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
+            return `<tr style="border-bottom:1px solid #d4ceb8">
+              <td style="padding:8px;color:#333">${s.label}</td>
+              <td style="padding:8px;text-align:right;font-weight:bold;color:${scoreColor(pct)}">${pct}%</td>
+            </tr>
+            ${report.notes[s.id]?`<tr><td colspan="2" style="padding:4px 8px 8px;color:#888;font-size:12px">📝 ${report.notes[s.id]}</td></tr>`:""}`;
+          }).join("")}
+        </table>
+        <p style="color:#999;font-size:11px;margin-top:16px">Full audit report attached as PDF.</p>
+      </div>
+    </div>`;
+
+  await fetch("https://api.resend.com/emails",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+RESEND_KEY},
+    body:JSON.stringify({
+      from:"Pizza Pilgrims Audit <onboarding@resend.dev>",
+      to:recipients,
+      subject,
+      html,
+      attachments:[{filename:`audit-${report.restaurant.toLowerCase().replace(/\s+/g,"-")}-${report.audit_date}.pdf`,content:base64}]
+    })
+  });
+}
+
 async function handleSubmit(){
   state.submitting=true;state.submitError="";render();
   try{
@@ -216,10 +413,10 @@ async function handleSubmit(){
     }
     const result=calcScores(state.scores,state.availability);
     const payload={
-      restaurant:state.pizzeria, auditor:state.auditor, team:state.team,
-      scores:state.scores, notes:state.notes,
-      photo_urls:photoUrls, pct:result.pct,
-      total_weighted:result.total, section_scores:result.sectionScores,
+      restaurant:state.pizzeria,auditor:state.auditor,team:state.team,
+      scores:state.scores,notes:state.notes,
+      photo_urls:photoUrls,pct:result.pct,
+      total_weighted:result.total,section_scores:result.sectionScores,
       availability:state.availability,
       audit_date:new Date().toISOString().split("T")[0]
     };
@@ -230,6 +427,13 @@ async function handleSubmit(){
     });
     if(!res.ok){const t=await res.text();throw new Error(t);}
     state.currentReport={...payload,...result};
+
+    // Generate PDF and send email
+    try{
+      const pdfDataUri=await generatePDF(state.currentReport);
+      await sendEmail(state.currentReport,pdfDataUri);
+    }catch(e){console.error("Email/PDF error:",e);}
+
     state.view="report";
   }catch(e){
     state.submitError="Save failed: "+e.message;
@@ -243,12 +447,6 @@ function resetForm(){
   render();
 }
 
-function handleConfirmPhoto(input){
-  const file=input.files[0]; if(!file)return;
-  state.confirmPhoto=URL.createObjectURL(file);
-  render();
-}
-
 function handlePhotoChange(sid,input){
   const file=input.files[0];if(!file)return;
   state.photoFiles[sid]=file;
@@ -257,10 +455,7 @@ function handlePhotoChange(sid,input){
 }
 
 function banner(subtitle){
-  return `<div class="top-banner">
-    <div class="brand-name">Pizza Pilgrims</div>
-    <div class="page-title">${subtitle}</div>
-  </div>`;
+  return `<div class="top-banner"><div class="brand-name">Pizza Pilgrims</div><div class="page-title">${subtitle}</div></div>`;
 }
 
 function render(){
@@ -309,8 +504,8 @@ function renderForm(app){
       ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){state.activeSection=0;render();}">Start Audit →</button>`:""}
     </div>`;
   } else {
-    const pct=Math.round((ac/TOTAL_Q)*100);
-    html+=`    <div class="progress-wrap">
+    const pct=Math.round((ac/TOTAL_WITH_PHOTOS)*100);
+    html+=`<div class="progress-wrap">
       <div class="progress-info">
         <span style="display:flex;align-items:center;gap:8px">
           <button onclick="state.pizzeria='';state.auditor='';state.team='';state.activeSection=0;render()" style="font-size:11px;color:#1A5C34;background:none;border:0.5px solid #1A5C34;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'Chelsea',sans-serif">← Edit</button>
@@ -322,15 +517,12 @@ function renderForm(app){
     </div>
     <div class="tabs">
       ${SECTIONS.map((sec,i)=>{
-        const done=sec.special?state.availability.answer!=="":sec.questions.every(q=>state.scores[sec.id]?.[q.id]!==undefined);
+        const done=sec.special?state.availability.answer!=="":sec.questions.every(q=>state.scores[sec.id]?.[q.id]!==undefined)&&(PHOTO_RULES[sec.id]!=="mandatory"||state.photoFiles[sec.id]);
         return `<button class="tab${state.activeSection===i?" active":done?" done":""}" onclick="state.activeSection=${i};render()">${sec.label}</button>`;
       }).join("")}
     </div>
     <div class="card">
-      <div class="section-header">
-        <span class="section-title">${s.label}</span>
-        ${s.weight>1&&s.id!=="pizza"&&s.id!=="drinks"?`<span class="weight-badge">×${s.weight}</span>`:""}
-      </div>`;
+      <div class="section-header"><span class="section-title">${s.label}</span></div>`;
 
     const av=state.availability;
     if(s.special==="availability"){
@@ -366,21 +558,26 @@ function renderForm(app){
       html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>`;
     }
 
-    html+=`<div style="margin-top:10px">
+    const photoRule=PHOTO_RULES[s.id];
+    if(photoRule!=="none"){
+      html+=`<div style="margin-top:10px">
         ${state.photoPreviews[s.id]
           ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
-          :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()">📷 Add photo (optional)</button>`}
+          :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()" style="${photoRule==='mandatory'?'border-color:#1A5C34;color:#1A5C34':''}">${photoRule==='mandatory'?'📷 Add pizza photo (required)':'📷 Add photo (optional)'}</button>`}
         <input type="file" id="f-${s.id}" accept="image/*" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
-      </div>
-    </div>
+        ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo of the pizza</p>`:""}
+      </div>`;
+    }
+
+    html+=`</div>
     ${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
     <div class="btn-row">
       ${state.activeSection>0?`<button class="btn" onclick="state.activeSection--;render()">← Back</button>`:""}
       ${state.activeSection<SECTIONS.length-1
         ?`<button class="btn btn-primary" onclick="state.activeSection++;render()">Next →</button>`
-        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving…":"Submit Audit ✓"}</button>`}
+        :`<button class="btn btn-primary"${canSubmit?"":" disabled"} onclick="handleSubmit()">${state.submitting?"Saving & sending…":"Submit Audit ✓"}</button>`}
     </div>
-    ${!canSubmit&&ac<TOTAL_Q&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions to submit</p>`:""}`;
+    ${!canSubmit&&ac<TOTAL_WITH_PHOTOS&&state.activeSection===SECTIONS.length-1?`<p class="hint">Answer all questions and add the pizza photo to submit</p>`:""}`;
   }
   html+='</div>';
   app.innerHTML=html;
