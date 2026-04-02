@@ -295,8 +295,14 @@ function renderForm(app){
     </div>`;
   } else {
     const pct=Math.round((ac/TOTAL_Q)*100);
-    html+=`<div class="progress-wrap">
-      <div class="progress-info"><span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span><span>${ac}/${TOTAL_Q}</span></div>
+    html+=`    <div class="progress-wrap">
+      <div class="progress-info">
+        <span style="display:flex;align-items:center;gap:8px">
+          <button onclick="state.pizzeria='';state.auditor='';state.team='';state.activeSection=0;render()" style="font-size:11px;color:#1A5C34;background:none;border:0.5px solid #1A5C34;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'Chelsea',sans-serif">← Edit</button>
+          <span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span>
+        </span>
+        <span>${ac}/${TOTAL_Q}</span>
+      </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>
     <div class="tabs">
