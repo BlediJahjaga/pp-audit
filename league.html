@@ -93,35 +93,54 @@ async function loadLeague(){
   document.getElementById("meta").textContent="Loading…";
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
   try{
-    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date&order=pct.desc",{
+    const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date&order=audit_date.desc",{
       headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}
     });
     const rows=await r.json();
-    const seen=new Set(),best=[];
-    (rows||[]).forEach(r=>{ if(!seen.has(r.restaurant)){seen.add(r.restaurant);best.push(r);} });
-    const all=RESTAURANTS.map(r=>{ const f=best.find(e=>e.restaurant===r); return f||{restaurant:r,pct:null,audit_date:null}; });
-    const sorted=[...all].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
 
-    document.getElementById("meta").textContent="";
+    // Build per-restaurant data
+    const data={};
+    (rows||[]).forEach(row=>{
+      if(!data[row.restaurant]) data[row.restaurant]={latest:null,latestDate:null,scores:[]};
+      if(!data[row.restaurant].latest){ data[row.restaurant].latest=row.pct; data[row.restaurant].latestDate=row.audit_date; }
+      data[row.restaurant].scores.push(row.pct);
+    });
+
+    const all=RESTAURANTS.map(r=>{
+      const d=data[r];
+      if(!d) return {restaurant:r,latest:null,avg:null,latestDate:null};
+      const avg=Math.round(d.scores.reduce((a,b)=>a+b,0)/d.scores.length);
+      return {restaurant:r,latest:d.latest,avg,latestDate:d.latestDate,count:d.scores.length};
+    });
+    const sorted=[...all].sort((a,b)=>(b.avg??-1)-(a.avg??-1));
+
+    document.getElementById("meta").textContent=Object.keys(data).length+" of "+RESTAURANTS.length+" pizzerias audited";
 
     let html=`<div class="table-wrap">
       <div class="table-head">
         <span class="th">#</span>
         <span class="th">Pizzeria</span>
-        <span class="th" style="text-align:center">Score</span>
-        <span class="th" style="text-align:right">Last audit</span>
+        <span class="th" style="text-align:center">Last audit</span>
+        <span class="th" style="text-align:center">Average</span>
+        <span class="th" style="text-align:right">Date</span>
       </div>`;
     sorted.forEach((r,i)=>{
-      html+=`<div class="table-row${r.pct!==null&&i===0?' top':''}">
-        <span style="font-family:'PizzaPilgrims',sans-serif;font-size:16px;color:${r.pct!==null&&i<3?scoreColor(r.pct):'#ccc'}">${r.pct!==null?i+1:"–"}</span>
-        <div style="font-size:14px;font-weight:${r.pct!==null?500:300};color:${r.pct!==null?'#111':'#bbb'}">${r.restaurant}</div>
+      html+=`<div class="table-row${r.latest!==null&&i===0?' top':''}">
+        <span style="font-family:'PizzaPilgrims',sans-serif;font-size:15px;color:${r.avg!==null&&i<3?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
+        <div style="font-size:13px;font-weight:${r.latest!==null?500:300};color:${r.latest!==null?'#111':'#bbb'}">${r.restaurant}</div>
         <div style="text-align:center">
-          ${r.pct!==null
-            ?`<div style="font-family:'PizzaPilgrims',sans-serif;font-size:16px;color:${scoreColor(r.pct)}">${r.pct}%</div>
-               <div style="font-size:10px;color:${scoreColor(r.pct)};font-weight:500">${scoreLabel(r.pct)}</div>`
+          ${r.latest!==null
+            ?`<div style="font-family:'PizzaPilgrims',sans-serif;font-size:15px;color:${scoreColor(r.latest)}">${r.latest}%</div>
+               <div style="font-size:9px;color:${scoreColor(r.latest)}">${scoreLabel(r.latest)}</div>`
             :`<span style="color:#ccc">—</span>`}
         </div>
-        <div style="text-align:right;font-size:12px;color:#aaa">${r.audit_date?formatDate(r.audit_date):"—"}</div>
+        <div style="text-align:center">
+          ${r.avg!==null
+            ?`<div style="font-family:'PizzaPilgrims',sans-serif;font-size:15px;color:${scoreColor(r.avg)}">${r.avg}%</div>
+               <div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`
+            :`<span style="color:#ccc">—</span>`}
+        </div>
+        <div style="text-align:right;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>
       </div>`;
     });
     html+='</div>';
