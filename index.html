@@ -120,7 +120,15 @@ const SECTIONS = [
   ]}
 ];
 
-const TOTAL_Q = SECTIONS.reduce((a,s)=>a+(s.special?1:s.questions.length),0);
+const PHOTO_RULES = {
+  pizza: "mandatory",
+  sides: "optional",
+  dippers: "none",
+  afterpizza: "optional",
+  drinks: "optional",
+  availability: "none",
+  vibe: "none"
+};
 
 let state = {
   view:"form", pizzeria:"", auditor:"", team:"",
@@ -164,11 +172,15 @@ function calcScores(scores,avail){
 }
 
 function answeredCount(){
-  return SECTIONS.reduce((a,s)=>{
+  const qCount = SECTIONS.reduce((a,s)=>{
     if(s.special==="availability") return a+(state.availability.answer!==""?1:0);
     return a+s.questions.filter(q=>state.scores[s.id]?.[q.id]!==undefined).length;
   },0);
+  const photoCount = MANDATORY_PHOTOS.filter(sid=>state.photoFiles[sid]).length;
+  return qCount + photoCount;
 }
+
+const TOTAL_WITH_PHOTOS = TOTAL_Q + MANDATORY_PHOTOS.length;
 
 async function compressImage(file){
   return new Promise(resolve=>{
@@ -274,7 +286,7 @@ function renderConfirm(app){
 function renderForm(app){
   const ac=answeredCount();
   const availNoteRequired=state.availability.answer==="no"&&!state.notes['availability'];
-  const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_Q&&!state.submitting&&!availNoteRequired;
+  const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_WITH_PHOTOS&&!state.submitting&&!availNoteRequired;
   const s=SECTIONS[state.activeSection];
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
 
@@ -304,7 +316,7 @@ function renderForm(app){
           <button onclick="state.pizzeria='';state.auditor='';state.team='';state.activeSection=0;render()" style="font-size:11px;color:#1A5C34;background:none;border:0.5px solid #1A5C34;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'Chelsea',sans-serif">← Edit</button>
           <span>${state.pizzeria} · ${state.auditor}${state.team?" · "+state.team:""}</span>
         </span>
-        <span>${ac}/${TOTAL_Q}</span>
+        <span>${ac}/${TOTAL_WITH_PHOTOS}</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>
