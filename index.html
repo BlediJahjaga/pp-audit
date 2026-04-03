@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Pilgrims — Food Quality Audit</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 @font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); font-weight: normal; }
@@ -39,8 +38,7 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #d4ceb8; }
 .photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Chelsea', sans-serif; }
 .photo-name { font-size: 12px; color: #888; }
-.btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Chelsea', sans-serif; border: 1px solid #c8c2aa; background: #eee8d5; color: #333; }
-.btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 20px; cursor: pointer; margin-top: 18px; font-family: 'PizzaPilgrims'; letter-spacing: 0.05em; }
+.btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 20px; cursor: pointer; margin-top: 18px; font-family: 'PizzaPilgrims'; letter-spacing: 0.05em; display: block; }
 .error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
 .hint { margin-top: 10px; font-size: 12px; color: #888; text-align: center; }
 .yn-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; font-family: 'Chelsea', sans-serif; font-weight: 500; }
@@ -55,47 +53,9 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 <body>
 <div class="wrap" id="app"><div class="loading">Loading…</div></div>
 <script>
-const EMAILJS_SERVICE = "service_kb96q0v";
-const EMAILJS_TEMPLATE = "template_0gff26g";
-const EMAILJS_KEY = "dUBmfwVagYEHWTBpn";
-
 const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
 const H = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
-
-const FIXED_EMAILS = ["bledijahjaga@gmail.com"];
-
-const PIZZERIA_EMAILS = {
-  "Soho":"deanst@pizzapilgrims.co.uk",
-  "Carnaby":"kinglyst@pizzapilgrims.co.uk",
-  "Exmouth Market":"exmouthmarket@pizzapilgrims.co.uk",
-  "Covent Garden":"garrickst@pizzapilgrims.co.uk",
-  "Shoreditch":"shoreditch@pizzapilgrims.co.uk",
-  "Canary Wharf":"wiq@pizzapilgrims.co.uk",
-  "Liverpool Street":"city@pizzapilgrims.co.uk",
-  "London Bridge":"londonbridge@pizzapilgrims.co.uk",
-  "Westfield":"westfield@pizzapilgrims.co.uk",
-  "Victoria":"victoria@pizzapilgrims.co.uk",
-  "Camden":"camden@pizzapilgrims.co.uk",
-  "Waterloo":"lowermarsh@pizzapilgrims.co.uk",
-  "Hyde Park":"hydepark@pizzapilgrims.co.uk",
-  "Selfridges":"selfridges@pizzapilgrims.co.uk",
-  "Swingers West End":"swingers@pizzapilgrims.co.uk",
-  "Queens Park":"queenspark@pizzapilgrims.co.uk",
-  "Euston":"euston@pizzapilgrims.co.uk",
-  "Chelsea":"chelsea@pizzapilgrims.co.uk",
-  "Spitalfields":"bricklane@pizzapilgrims.co.uk",
-  "King's Cross":"kingscross@pizzapilgrims.co.uk",
-  "Brighton":"brighton@pizzapilgrims.co.uk",
-  "Cambridge":"cambridge@pizzapilgrims.co.uk",
-  "Nottingham":"nottingham@pizzapilgrims.co.uk",
-  "Leeds":"leeds@pizzapilgrims.co.uk",
-  "Cardiff":"cardiff@pizzapilgrims.co.uk",
-  "Edinburgh":"edinburgh@pizzapilgrims.co.uk",
-  "Manchester":"manchester@pizzapilgrims.co.uk",
-  "Birmingham":"birmingham@pizzapilgrims.co.uk",
-  "Glasgow":"glasgow@pizzapilgrims.co.uk"
-};
 
 const RESTAURANTS = [
   "Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff",
@@ -216,8 +176,6 @@ async function generatePDF(report){
   const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
   const W=210,margin=15,contentW=W-margin*2;
   let y=margin;
-
-  // Header
   doc.setFillColor(26,92,52);
   doc.rect(0,0,W,35,"F");
   doc.setTextColor(57,212,0);
@@ -227,16 +185,12 @@ async function generatePDF(report){
   doc.setFontSize(16);
   doc.text("FOOD QUALITY AUDIT",W/2,22,{align:"center"});
   y=42;
-
-  // Meta
   doc.setTextColor(30,30,30);
   doc.setFontSize(14);
   doc.text(report.restaurant,margin,y); y+=7;
   doc.setFontSize(9);
   doc.setTextColor(100,100,100);
   doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:""),margin,y); y+=8;
-
-  // Overall score
   const rgb=report.pct===100?[201,168,76]:report.pct>=95?[26,92,52]:report.pct>=90?[57,212,0]:report.pct>=85?[107,143,168]:report.pct>=75?[239,159,39]:[226,75,74];
   doc.setFillColor(...rgb);
   doc.roundedRect(margin,y,contentW,14,3,3,"F");
@@ -244,8 +198,6 @@ async function generatePDF(report){
   doc.setFontSize(13);
   doc.text(report.pct+"% — "+scoreLabel(report.pct),W/2,y+9,{align:"center"});
   y+=20;
-
-  // Sections
   SECTIONS.forEach(s=>{
     const sc=report.sectionScores[s.id];
     const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
@@ -288,8 +240,6 @@ async function generatePDF(report){
     }
     y+=3;
   });
-
-  // Page 2 — Photos
   const photoSections=SECTIONS.filter(s=>PHOTO_RULES[s.id]&&PHOTO_RULES[s.id]!=="none"&&state.photoFiles[s.id]);
   if(photoSections.length>0){
     doc.addPage();
@@ -316,26 +266,6 @@ async function generatePDF(report){
     }
   }
   return doc.output("datauristring");
-}
-
-async function sendEmail(report){
-  emailjs.init(EMAILJS_KEY);
-  const templateParams={
-    to_email: FIXED_EMAILS.join(","),
-    subject: "Pizza Pilgrims Food Quality Audit — "+report.restaurant+" — "+formatDate(report.audit_date),
-    pizzeria: report.restaurant,
-    auditor: report.auditor,
-    team: report.team||"—",
-    date: formatDate(report.audit_date),
-    overall_score: report.pct+"%",
-    rating: scoreLabel(report.pct),
-    sections: SECTIONS.map(s=>{
-      const sc=report.sectionScores[s.id];
-      const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
-      return s.label+": "+pct+"%"+(report.notes[s.id]?" — "+report.notes[s.id]:"");
-    }).join("\n")
-  };
-  await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, templateParams);
 }
 
 async function handleSubmit(){
@@ -365,7 +295,7 @@ async function handleSubmit(){
     state.view="report";
     state.submitting=false;
     render();
-    try{ await sendEmail(state.currentReport); } catch(e){ console.error("Email error:",e); }
+    generatePDF(state.currentReport).then(uri=>{ state.pdfDataUri=uri; }).catch(e=>console.error("PDF error:",e));
     return;
   } catch(e){
     state.submitError="Save failed: "+e.message;
@@ -375,7 +305,7 @@ async function handleSubmit(){
 
 function resetForm(){
   state={...state,view:"form",pizzeria:"",auditor:"",team:"",scores:{},photoFiles:{},photoPreviews:{},notes:{},
-    availability:{answer:"",items:"",pizzas:""},submitting:false,submitError:"",currentReport:null};
+    availability:{answer:"",items:"",pizzas:""},submitting:false,submitError:"",currentReport:null,pdfDataUri:null};
   render();
 }
 
@@ -403,25 +333,8 @@ function renderConfirm(app){
     <div class="confirm-brand">pizz'&amp;love</div>
     <div class="confirm-meta">${state.currentReport.restaurant} · ${formatDate(state.currentReport.audit_date)}</div>
     <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="https://i.ibb.co/99gsW0yx/IMG-6616.jpg" style="width:100%;display:block"></div>
-    <button class="btn-start" style="max-width:240px;margin:0 auto 12px;display:block" onclick="downloadPDF()">Download PDF Report</button>
-    <button class="btn-start" style="max-width:240px;margin:0 auto;display:block;background:#555" onclick="resetForm()">New Audit</button>
+    <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
   </div></div>`;
-  generateAndStorePDF();
-}
-
-async function generateAndStorePDF(){
-  try{
-    const uri=await generatePDF(state.currentReport);
-    state.pdfDataUri=uri;
-  }catch(e){ console.error("PDF error:",e); }
-}
-
-function downloadPDF(){
-  if(!state.pdfDataUri){ alert("PDF still generating, try again in a moment."); return; }
-  const a=document.createElement("a");
-  a.href=state.pdfDataUri;
-  a.download=`audit-${state.currentReport.restaurant.toLowerCase().replace(/\s+/g,"-")}-${state.currentReport.audit_date}.pdf`;
-  a.click();
 }
 
 function renderForm(app){
