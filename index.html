@@ -17,8 +17,8 @@ body { font-family: 'Chelsea', -apple-system, sans-serif; font-weight: 300; back
 body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52,0.82); z-index: 0; }
 .wrap { max-width: 540px; margin: 0 auto; padding: 0 0 3rem; position: relative; z-index: 1; background: #F5F0DC; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
 .top-banner { background: #1A5C34; padding: 18px 20px 14px; text-align: center; margin-bottom: 20px; }
-.brand-name { font-family: 'PizzaPilgrims'; font-size: 20px; font-weight: normal; color: #39D400; letter-spacing: 0.05em; margin-bottom: 4px; }
-.page-title { font-family: 'PizzaPilgrims'; font-size: 28px; font-weight: normal; color: #F5F0DC; letter-spacing: 0.03em; }
+.brand-name { font-family: 'PizzaPilgrims'; font-size: 20px; color: #39D400; margin-bottom: 4px; }
+.page-title { font-family: 'PizzaPilgrims'; font-size: 28px; color: #F5F0DC; }
 .inner { padding: 0 1rem; }
 .card { background: #fff; border: 0.5px solid #d4ceb8; border-radius: 12px; padding: 16px 14px; margin-bottom: 14px; }
 label { font-size: 13px; color: #555; display: block; margin-bottom: 6px; font-weight: 500; }
@@ -28,12 +28,8 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 6px; }
 .progress-bar { height: 5px; border-radius: 3px; background: #d4ceb8; }
 .progress-fill { height: 5px; border-radius: 3px; background: #1A5C34; transition: width 0.3s; }
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.tab { padding: 6px 11px; border-radius: 16px; font-size: 12px; border: 1px solid #c8c2aa; background: #fff; color: #666; cursor: pointer; font-family: 'Chelsea', sans-serif; font-weight: 300; }
-.tab.active { border-color: #1A5C34; background: #1A5C34; color: #F5F0DC; font-weight: 500; }
-.tab.done { background: rgba(26,92,52,0.1); color: #1A5C34; border-color: #1A5C34; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.section-title { font-family: 'PizzaPilgrims'; font-size: 22px; font-weight: normal; color: #1A5C34; letter-spacing: 0.02em; }
+.section-title { font-family: 'PizzaPilgrims'; font-size: 22px; color: #1A5C34; }
 .question { margin-bottom: 18px; }
 .question p { font-size: 14px; color: #222; margin-bottom: 11px; line-height: 1.5; }
 .score-btns { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -43,10 +39,7 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #d4ceb8; }
 .photo-change { font-size: 12px; color: #1A5C34; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Chelsea', sans-serif; }
 .photo-name { font-size: 12px; color: #888; }
-.btn-row { display: flex; gap: 10px; margin-top: 6px; }
 .btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Chelsea', sans-serif; border: 1px solid #c8c2aa; background: #eee8d5; color: #333; }
-.btn-primary { background: #1A5C34; color: #F5F0DC; border-color: #1A5C34; font-weight: 500; }
-.btn-primary:disabled { background: #b0b0a0; border-color: #b0b0a0; color: #eee; cursor: default; }
 .btn-start { width: 100%; padding: 14px; border-radius: 8px; background: #1A5C34; color: #F5F0DC; border: none; font-size: 20px; cursor: pointer; margin-top: 18px; font-family: 'PizzaPilgrims'; letter-spacing: 0.05em; }
 .error-box { margin-bottom: 10px; padding: 10px 14px; border-radius: 8px; background: rgba(226,75,74,0.08); color: #a32d2d; font-size: 13px; }
 .hint { margin-top: 10px; font-size: 12px; color: #888; text-align: center; }
@@ -62,11 +55,15 @@ textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid
 <body>
 <div class="wrap" id="app"><div class="loading">Loading…</div></div>
 <script>
+const EMAILJS_SERVICE = "service_kb96q0v";
+const EMAILJS_TEMPLATE = "template_0gff26g";
+const EMAILJS_KEY = "dUBmfwVagYEHWTBpn";
+
 const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
 const H = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
 
-const FIXED_EMAILS = ["bledi@pizzapilgrims.co.uk"];
+const FIXED_EMAILS = ["bledijahjaga@gmail.com"];
 
 const PIZZERIA_EMAILS = {
   "Soho":"deanst@pizzapilgrims.co.uk",
@@ -147,26 +144,11 @@ let state = {
   view:"form", pizzeria:"", auditor:"", team:"",
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
-  activeSection:0, submitting:false, submitError:"",
-  currentReport:null
+  submitting:false, submitError:"", currentReport:null
 };
 
-function scoreColor(p){
-  if(p===100) return "#1A5C34";
-  if(p>=95) return "#1A5C34";
-  if(p>=90) return "#39D400";
-  if(p>=85) return "#C8B97A";
-  if(p>=75) return "#EF9F27";
-  return "#E24B4A";
-}
-function scoreLabel(p){
-  if(p===100) return "Faje Paura!";
-  if(p>=95) return "STARS!";
-  if(p>=90) return "Very good!";
-  if(p>=85) return "Good but..!";
-  if(p>=75) return "Not great!";
-  return "NEED TO FIX URGENTLY!";
-}
+function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
+function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX URGENTLY!"; }
 
 function calcScores(scores,avail){
   let total=0,maxTotal=0;
@@ -205,15 +187,15 @@ function answeredCount(){
   return qCount+photoCount;
 }
 
-async function compressImage(file,maxSize=1000,quality=0.7){
+async function compressImage(file){
   return new Promise(resolve=>{
     const img=new Image(),url=URL.createObjectURL(file);
     img.onload=()=>{
-      let w=img.width,h=img.height;
-      if(w>maxSize||h>maxSize){if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}else{w=Math.round(w*maxSize/h);h=maxSize;}}
+      const MAX=1000;let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
       const c=document.createElement("canvas");c.width=w;c.height=h;
       c.getContext("2d").drawImage(img,0,0,w,h);
-      c.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob);},"image/jpeg",quality);
+      c.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob);},"image/jpeg",0.7);
     };img.src=url;
   });
 }
@@ -229,200 +211,40 @@ async function uploadPhoto(blob,sid,pizzeria){
   return SB_URL+"/storage/v1/object/public/audit-photos/"+name;
 }
 
-function fileToDataURL(file){
-  return new Promise(resolve=>{
-    const r=new FileReader();
-    r.onload=e=>resolve(e.target.result);
-    r.readAsDataURL(file);
-  });
-}
-
-async function generatePDF(report){
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
-  const W=210,margin=15,contentW=W-margin*2;
-  let y=margin;
-
-  // Header
-  doc.setFillColor(26,92,52);
-  doc.rect(0,0,W,35,"F");
-  doc.setTextColor(57,212,0);
-  doc.setFontSize(10);
-  doc.text("PIZZA PILGRIMS",W/2,12,{align:"center"});
-  doc.setTextColor(245,240,220);
-  doc.setFontSize(16);
-  doc.text("FOOD QUALITY AUDIT",W/2,22,{align:"center"});
-  y=42;
-
-  // Meta info
-  doc.setTextColor(30,30,30);
-  doc.setFontSize(13);
-  doc.text(report.restaurant,margin,y); y+=7;
-  doc.setFontSize(10);
-  doc.setTextColor(100,100,100);
-  doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:""),margin,y); y+=8;
-
-  // Overall score box
-  const sc=scoreColor(report.pct);
-  const rgb=sc==="#1A5C34"?[26,92,52]:sc==="#39D400"?[57,212,0]:sc==="#C8B97A"?[200,185,122]:sc==="#EF9F27"?[239,159,39]:[226,75,74];
-  doc.setFillColor(...rgb);
-  doc.roundedRect(margin,y,contentW,14,3,3,"F");
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(14);
-  doc.text(report.pct+"% — "+scoreLabel(report.pct),W/2,y+9,{align:"center"});
-  y+=20;
-
-  // Section scores
-  SECTIONS.forEach(s=>{
-    const sc2=report.sectionScores[s.id];
-    const pct2=sc2.maxWeighted>0?Math.round((sc2.weighted/sc2.maxWeighted)*100):0;
-    const col=scoreColor(pct2);
-    const rgb2=col==="#1A5C34"?[26,92,52]:col==="#39D400"?[57,212,0]:col==="#C8B97A"?[200,185,122]:col==="#EF9F27"?[239,159,39]:[226,75,74];
-
-    if(y>255){ doc.addPage(); y=margin; }
-
-    doc.setFillColor(245,240,220);
-    doc.roundedRect(margin,y,contentW,8,2,2,"F");
-    doc.setTextColor(26,92,52);
-    doc.setFontSize(10);
-    doc.text(s.label,margin+3,y+5.5);
-    doc.setFillColor(...rgb2);
-    doc.roundedRect(W-margin-22,y+1.5,22,5,1,1,"F");
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(8);
-    doc.text(pct2+"%",W-margin-11,y+5.5,{align:"center"});
-    y+=11;
-
-    // Questions
-    if(!s.special){
-      s.questions.forEach(q=>{
-        const val=report.scores[s.id]?.[q.id];
-        doc.setTextColor(80,80,80);
-        doc.setFontSize(8);
-        const lines=doc.splitTextToSize("• "+q.label,contentW-20);
-        doc.text(lines,margin+2,y);
-        doc.setTextColor(30,30,30);
-        doc.setFontSize(9);
-        doc.text(val!==undefined?val+"/5":"–",W-margin-2,y,{align:"right"});
-        y+=lines.length*4+1;
-      });
-    } else {
-      doc.setTextColor(80,80,80);
-      doc.setFontSize(8);
-      const avText=report.availability?.answer==="yes"?"Full menu available":
-        "Items unavailable: "+(report.availability?.items||0)+" (pizzas: "+(report.availability?.pizzas||0)+")";
-      doc.text("• "+avText,margin+2,y); y+=5;
-    }
-
-    // Notes
-    if(report.notes[s.id]){
-      doc.setTextColor(100,100,100);
-      doc.setFontSize(8);
-      const nLines=doc.splitTextToSize("Notes: "+report.notes[s.id],contentW-4);
-      doc.text(nLines,margin+2,y);
-      y+=nLines.length*4+1;
-    }
-    y+=3;
-  });
-
-  // Page 2 — Photos
-  const photoSections=SECTIONS.filter(s=>PHOTO_RULES[s.id]&&PHOTO_RULES[s.id]!=="none"&&state.photoFiles[s.id]);
-  if(photoSections.length>0){
-    doc.addPage();
-    let py=margin;
-    doc.setFillColor(26,92,52);
-    doc.rect(0,0,W,18,"F");
-    doc.setTextColor(245,240,220);
-    doc.setFontSize(12);
-    doc.text("PHOTOS — "+report.restaurant.toUpperCase(),W/2,12,{align:"center"});
-    py=25;
-
-    for(const s of photoSections){
-      const file=state.photoFiles[s.id];
-      if(!file) continue;
-      const dataUrl=await fileToDataURL(file);
-      const imgW=contentW;
-      const imgH=Math.min(80,imgW*0.6);
-      if(py+imgH+10>285){break;}
-      doc.setFontSize(9);
-      doc.setTextColor(26,92,52);
-      doc.text(s.label,margin,py); py+=5;
-      doc.addImage(dataUrl,"JPEG",margin,py,imgW,imgH);
-      py+=imgH+8;
-    }
-  }
-
-  return doc.output("datauristring");
-}
-
-async function sendEmail(report, pdfDataUri){
-  const recipients=[...FIXED_EMAILS];
-  // Pizzeria email temporarily disabled for testing
-  // if(PIZZERIA_EMAILS[report.restaurant]) recipients.push(PIZZERIA_EMAILS[report.restaurant]);
-
-  const base64=pdfDataUri.split(",")[1];
-  const subject=`Pizza Pilgrims Food Quality Audit — ${report.restaurant} — ${formatDate(report.audit_date)}`;
-
-  const html=`
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <div style="background:#1A5C34;padding:20px;text-align:center">
-        <p style="color:#39D400;font-size:12px;margin:0">PIZZA PILGRIMS</p>
-        <h1 style="color:#F5F0DC;font-size:20px;margin:8px 0 0">Food Quality Audit</h1>
-      </div>
-      <div style="padding:20px;background:#F5F0DC">
-        <h2 style="color:#1A5C34">${report.restaurant}</h2>
-        <p style="color:#666">${formatDate(report.audit_date)} · ${report.auditor}${report.team?" · "+report.team:""}</p>
-        <div style="background:#1A5C34;border-radius:8px;padding:12px;text-align:center;margin:16px 0">
-          <span style="color:#fff;font-size:24px;font-weight:bold">${report.pct}%</span>
-          <span style="color:#39D400;font-size:14px;margin-left:10px">${scoreLabel(report.pct)}</span>
-        </div>
-        <table style="width:100%;border-collapse:collapse">
-          ${SECTIONS.map(s=>{
-            const sc=report.sectionScores[s.id];
-            const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
-            return `<tr style="border-bottom:1px solid #d4ceb8">
-              <td style="padding:8px;color:#333">${s.label}</td>
-              <td style="padding:8px;text-align:right;font-weight:bold;color:${scoreColor(pct)}">${pct}%</td>
-            </tr>
-            ${report.notes[s.id]?`<tr><td colspan="2" style="padding:4px 8px 8px;color:#888;font-size:12px">📝 ${report.notes[s.id]}</td></tr>`:""}`;
-          }).join("")}
-        </table>
-        <p style="color:#999;font-size:11px;margin-top:16px">Full audit report attached as PDF.</p>
-      </div>
-    </div>`;
-
-  await fetch(`${SB_URL}/functions/v1/send-audit-email`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${SB_KEY}`
-    },
-    body: JSON.stringify({
-      to: recipients,
-      subject,
-      html,
-      attachments: [{
-        filename: `audit-${report.restaurant.toLowerCase().replace(/\s+/g,"-")}-${report.audit_date}.pdf`,
-        content: base64
-      }]
-    })
-  });
+async function sendEmail(report){
+  emailjs.init(EMAILJS_KEY);
+  const templateParams={
+    to_email: FIXED_EMAILS.join(","),
+    subject: "Pizza Pilgrims Food Quality Audit — "+report.restaurant+" — "+formatDate(report.audit_date),
+    pizzeria: report.restaurant,
+    auditor: report.auditor,
+    team: report.team||"—",
+    date: formatDate(report.audit_date),
+    overall_score: report.pct+"%",
+    rating: scoreLabel(report.pct),
+    sections: SECTIONS.map(s=>{
+      const sc=report.sectionScores[s.id];
+      const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
+      return s.label+": "+pct+"%"+(report.notes[s.id]?" — "+report.notes[s.id]:"");
+    }).join("\n")
+  };
+  await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, templateParams);
 }
 
 async function handleSubmit(){
-  state.submitting=true;state.submitError="";render();
+  state.submitting=true; state.submitError=""; render();
   try{
     const photoUrls={};
     for(const [sid,file] of Object.entries(state.photoFiles)){
-      try{const blob=await compressImage(file);photoUrls[sid]=await uploadPhoto(blob,sid,state.pizzeria);}
-      catch(e){photoUrls[sid]=null;}
+      try{ const blob=await compressImage(file); photoUrls[sid]=await uploadPhoto(blob,sid,state.pizzeria); }
+      catch(e){ photoUrls[sid]=null; }
     }
     const result=calcScores(state.scores,state.availability);
     const payload={
-      restaurant:state.pizzeria,auditor:state.auditor,team:state.team,
-      scores:state.scores,notes:state.notes,
-      photo_urls:photoUrls,pct:result.pct,
-      total_weighted:result.total,section_scores:result.sectionScores,
+      restaurant:state.pizzeria, auditor:state.auditor, team:state.team,
+      scores:state.scores, notes:state.notes,
+      photo_urls:photoUrls, pct:result.pct,
+      total_weighted:result.total, section_scores:result.sectionScores,
       availability:state.availability,
       audit_date:new Date().toISOString().split("T")[0]
     };
@@ -431,38 +253,34 @@ async function handleSubmit(){
       headers:Object.assign({},H,{"Prefer":"return=minimal"}),
       body:JSON.stringify(payload)
     });
-    if(!res.ok){const t=await res.text();throw new Error(t);}
+    if(!res.ok){ const t=await res.text(); throw new Error(t); }
     state.currentReport={...payload,...result};
     state.view="report";
     state.submitting=false;
     render();
-
-    // Send email in background — doesn't block the confirmation screen
-    try{
-      await sendEmail(state.currentReport);
-    }catch(e){ console.error("Email error:",e); }
+    try{ await sendEmail(state.currentReport); } catch(e){ console.error("Email error:",e); }
     return;
-  }catch(e){
+  } catch(e){
     state.submitError="Save failed: "+e.message;
   }
-  state.submitting=false;render();
+  state.submitting=false; render();
 }
 
 function resetForm(){
   state={...state,view:"form",pizzeria:"",auditor:"",team:"",scores:{},photoFiles:{},photoPreviews:{},notes:{},
-    availability:{answer:"",items:"",pizzas:""},activeSection:0,submitting:false,submitError:"",currentReport:null};
+    availability:{answer:"",items:"",pizzas:""},submitting:false,submitError:"",currentReport:null};
   render();
 }
 
 function handlePhotoChange(sid,input){
-  const file=input.files[0];if(!file)return;
+  const file=input.files[0]; if(!file)return;
   state.photoFiles[sid]=file;
   state.photoPreviews[sid]={url:URL.createObjectURL(file),name:file.name};
   render();
 }
 
-function banner(subtitle){
-  return `<div class="top-banner"><div class="brand-name">Pizza Pilgrims</div><div class="page-title">${subtitle}</div></div>`;
+function banner(){
+  return '<div class="top-banner"><div class="brand-name">Pizza Pilgrims</div><div class="page-title">Food Quality Audit</div></div>';
 }
 
 function render(){
@@ -472,17 +290,14 @@ function render(){
 }
 
 function renderConfirm(app){
-  app.innerHTML=banner("Food Quality Audit")+`
-  <div class="inner">
-    <div class="confirm-wrap">
-      <div class="confirm-check">✓</div>
-      <div class="confirm-title">Audit Completed!</div>
-      <div class="confirm-brand">pizz'&amp;love</div>
-      <div class="confirm-meta">${state.currentReport.restaurant} · ${formatDate(state.currentReport.audit_date)}</div>
-      <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="https://i.ibb.co/99gsW0yx/IMG-6616.jpg" style="width:100%;display:block"></div>
-      <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
-    </div>
-  </div>`;
+  app.innerHTML=banner()+`<div class="inner"><div class="confirm-wrap">
+    <div class="confirm-check">✓</div>
+    <div class="confirm-title">Audit Completed!</div>
+    <div class="confirm-brand">pizz'&amp;love</div>
+    <div class="confirm-meta">${state.currentReport.restaurant} · ${formatDate(state.currentReport.audit_date)}</div>
+    <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="https://i.ibb.co/99gsW0yx/IMG-6616.jpg" style="width:100%;display:block"></div>
+    <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
+  </div></div>`;
 }
 
 function renderForm(app){
@@ -490,8 +305,7 @@ function renderForm(app){
   const availNoteRequired=state.availability.answer==="no"&&!state.notes['availability'];
   const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_WITH_PHOTOS&&!state.submitting&&!availNoteRequired;
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
-
-  let html=banner("Food Quality Audit")+'<div class="inner">';
+  let html=banner()+'<div class="inner">';
 
   if(!state.pizzeria||!state.auditor){
     html+=`<div class="card">
@@ -507,7 +321,7 @@ function renderForm(app){
       <div><label>Your team</label>
         <input type="text" id="team-input" value="${state.team}" placeholder="Your team…" oninput="state.team=this.value">
       </div>
-      ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){state.activeSection=0;render();}">Start Audit →</button>`:""}
+      ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){render();}">Start Audit →</button>`:""}
       <div style="margin-top:16px;border-radius:10px;overflow:hidden;max-width:70%;margin-left:auto;margin-right:auto"><img src="https://i.ibb.co/0yndCqdc/IMG-5797.jpg" style="width:100%;display:block"></div>
     </div>`;
   } else {
@@ -527,9 +341,7 @@ function renderForm(app){
 
     SECTIONS.forEach(s=>{
       const av=state.availability;
-      html+=`<div class="card">
-        <div class="section-header"><span class="section-title">${s.label}</span></div>`;
-
+      html+=`<div class="card"><div class="section-header"><span class="section-title">${s.label}</span></div>`;
       if(s.special==="availability"){
         html+=`<div class="question"><p>Is all the menu available?</p>
           <div style="display:flex;gap:10px;margin-top:8px">
@@ -543,13 +355,11 @@ function renderForm(app){
             ${av.items>0?`<div><label>How many of those are pizzas?</label>
               <input type="number" min="0" max="${av.items}" value="${av.pizzas}" placeholder="0" oninput="state.availability.pizzas=this.value;render()">
             </div>`:''}
-          </div>
-          <div style="margin-top:14px">
-            <label>List the unavailable items here</label>
-            <textarea rows="3" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="border-color:${!state.notes['availability']?'#E24B4A':'#c8c2aa'}">${state.notes['availability']||""}</textarea>
-            ${!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list the unavailable items</p>`:""}
-          </div>`:''}
-        </div>`;
+            <div style="margin-top:12px"><label>List the unavailable items here</label>
+              <textarea rows="3" placeholder="List the unavailable items here…" oninput="state.notes['availability']=this.value" style="border-color:${!state.notes['availability']?'#E24B4A':'#c8c2aa'}">${state.notes['availability']||""}</textarea>
+              ${!state.notes['availability']?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please list the unavailable items</p>`:""}
+            </div>`:''}
+          </div>`;
       } else {
         html+=s.questions.map(q=>{
           const val=state.scores[s.id]?.[q.id];
@@ -562,7 +372,6 @@ function renderForm(app){
         }).join("");
         html+=`<textarea rows="2" placeholder="Notes (optional)…" oninput="state.notes['${s.id}']=this.value">${state.notes[s.id]||""}</textarea>`;
       }
-
       const photoRule=PHOTO_RULES[s.id];
       if(photoRule!=="none"){
         html+=`<div style="margin-top:10px">
@@ -573,17 +382,15 @@ function renderForm(app){
           ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo of the pizza</p>`:""}
         </div>`;
       }
-
       html+=`</div>`;
     });
 
     html+=`${state.submitError?`<div class="error-box">${state.submitError}</div>`:""}
-    <button class="btn-start" ${canSubmit?"":'style="background:#b0b0a0;border-color:#b0b0a0"'} ${canSubmit?`onclick="handleSubmit()"`:""}>
+    <button class="btn-start" style="${canSubmit?'':'background:#b0b0a0;'}" ${canSubmit?'onclick="handleSubmit()"':''}>
       ${state.submitting?"Saving…":"Submit Audit ✓"}
     </button>
     ${!canSubmit?`<p class="hint">Answer all questions and add the pizza photo to submit</p>`:""}`;
   }
-
   html+='</div>';
   app.innerHTML=html;
 }
