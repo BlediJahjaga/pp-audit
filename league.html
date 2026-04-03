@@ -59,9 +59,7 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
         <div class="legend-item"><div class="legend-dot" style="background:#6B8FA8"></div>85–89% — Good but..!</div>
         <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84% — Not great!</div>
         <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX URGENTLY!</div>
-        <div style="margin-top:16px;border:1px solid #1A5C34;border-radius:6px;padding:6px 8px;background:rgba(26,92,52,0.06);font-size:11px;color:#1A5C34">
-          The <strong>Average</strong> column is the ranking score
-        </div>
+        <div style="margin-top:16px;font-size:11px;color:#888;line-height:1.4">★ Overall Score is the average across all audits and determines the ranking</div>
       </div>
     </div>
   </div>
@@ -100,24 +98,24 @@ async function loadLeague(){
     let html=`<div class="table-head">
       <span class="th">#</span>
       <span class="th">Pizzeria</span>
-      <span class="th" style="text-align:center">Last audit</span>
-      <span class="th avg">Average ★</span>
-      <span class="th" style="text-align:right">Date</span>
+      <span class="th avg">Overall Score ★</span>
+      <span class="th" style="text-align:center">Last Audit Score</span>
+      <span class="th" style="text-align:right">Last Audit Date</span>
     </div>`;
 
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
         <span style="font-family:'PizzaPilgrims';font-size:13px;color:${r.avg!==null?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
         <div style="font-size:12px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
-        <div style="text-align:center">
-          ${r.latest!==null?`<span style="font-family:'Chelsea';font-weight:700;font-size:13px;color:${scoreColor(r.latest)}">${r.latest}%</span>`:'<span style="color:#ccc">—</span>'}
-        </div>
         <div class="${r.avg!==null?'avg-cell':''}">
           ${r.avg!==null
             ?r.avg===100
               ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`
               :`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`
             :'<span style="color:#ccc">—</span>'}
+        </div>
+        <div style="text-align:center">
+          ${r.latest!==null?`<span style="font-family:'Chelsea';font-weight:700;font-size:13px;color:${scoreColor(r.latest)}">${r.latest}%</span>`:'<span style="color:#ccc">—</span>'}
         </div>
         <div style="text-align:right;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>
       </div>`;
