@@ -59,7 +59,7 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
         <div class="legend-item"><div class="legend-dot" style="background:#6B8FA8"></div>85–89% — Good but..!</div>
         <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84% — Not great!</div>
         <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX URGENTLY!</div>
-        <div style="margin-top:16px;font-size:11px;color:#888;line-height:1.4">★ Overall Score is the average across all audits and determines the ranking</div>
+
       </div>
     </div>
   </div>
@@ -99,8 +99,8 @@ async function loadLeague(){
       <span class="th">#</span>
       <span class="th">Pizzeria</span>
       <span class="th avg">Overall Score ★</span>
-      <span class="th" style="text-align:center">Last Audit Score</span>
-      <span class="th" style="text-align:right">Last Audit Date</span>
+      <span class="th" style="text-align:center">Last Audit<br>Score</span>
+      <span class="th" style="text-align:right">Last Audit<br>Date</span>
     </div>`;
 
     sorted.forEach((r,i)=>{
