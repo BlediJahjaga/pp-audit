@@ -105,19 +105,19 @@ async function loadLeague(){
 
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
-        <span style="font-family:'PizzaPilgrims';font-size:13px;color:${r.avg!==null?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
+        <span style="font-family:'PizzaPilgrims';font-size:13px;color:${r.avg!==null?scoreColor(r.avg):'#ccc'};display:block;text-align:center">${r.avg!==null?i+1:"–"}</span>
         <div style="font-size:12px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
         <div class="${r.avg!==null?'avg-cell':''}">
           ${r.avg!==null
             ?r.avg===100
-              ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`
-              :`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`
-            :'<span style="color:#ccc">—</span>'}
+              ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C;text-align:center">100%</div><div style="font-size:9px;color:#C9A84C;text-align:center">Faje Paura!</div>`
+              :`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)};text-align:center">${r.avg}%</div><div style="font-size:9px;color:#aaa;text-align:center">${r.count} audit${r.count>1?'s':''}</div>`
+            :'<span style="color:#ccc;display:block;text-align:center">—</span>'}
         </div>
         <div style="text-align:center">
           ${r.latest!==null?`<span style="font-family:'Chelsea';font-weight:700;font-size:13px;color:${scoreColor(r.latest)}">${r.latest}%</span>`:'<span style="color:#ccc">—</span>'}
         </div>
-        <div style="text-align:right;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>
+        <div style="text-align:center;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>
       </div>`;
     });
 
