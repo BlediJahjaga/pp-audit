@@ -144,7 +144,7 @@ let state = {
   view:"form", pizzeria:"", auditor:"", team:"",
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
-  submitting:false, submitError:"", currentReport:null
+  submitting:false, submitError:"", currentReport:null, pdfDataUri:null
 };
 
 function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
@@ -209,6 +209,111 @@ async function uploadPhoto(blob,sid,pizzeria){
   });
   if(!r.ok) throw new Error("Photo upload failed");
   return SB_URL+"/storage/v1/object/public/audit-photos/"+name;
+}
+
+async function generatePDF(report){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  const W=210,margin=15,contentW=W-margin*2;
+  let y=margin;
+
+  // Header
+  doc.setFillColor(26,92,52);
+  doc.rect(0,0,W,35,"F");
+  doc.setTextColor(57,212,0);
+  doc.setFontSize(9);
+  doc.text("PIZZA PILGRIMS",W/2,11,{align:"center"});
+  doc.setTextColor(245,240,220);
+  doc.setFontSize(16);
+  doc.text("FOOD QUALITY AUDIT",W/2,22,{align:"center"});
+  y=42;
+
+  // Meta
+  doc.setTextColor(30,30,30);
+  doc.setFontSize(14);
+  doc.text(report.restaurant,margin,y); y+=7;
+  doc.setFontSize(9);
+  doc.setTextColor(100,100,100);
+  doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:""),margin,y); y+=8;
+
+  // Overall score
+  const rgb=report.pct===100?[201,168,76]:report.pct>=95?[26,92,52]:report.pct>=90?[57,212,0]:report.pct>=85?[107,143,168]:report.pct>=75?[239,159,39]:[226,75,74];
+  doc.setFillColor(...rgb);
+  doc.roundedRect(margin,y,contentW,14,3,3,"F");
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(13);
+  doc.text(report.pct+"% — "+scoreLabel(report.pct),W/2,y+9,{align:"center"});
+  y+=20;
+
+  // Sections
+  SECTIONS.forEach(s=>{
+    const sc=report.sectionScores[s.id];
+    const pct=sc.maxWeighted>0?Math.round((sc.weighted/sc.maxWeighted)*100):0;
+    const rgb2=pct===100?[201,168,76]:pct>=95?[26,92,52]:pct>=90?[57,212,0]:pct>=85?[107,143,168]:pct>=75?[239,159,39]:[226,75,74];
+    if(y>260){doc.addPage();y=margin;}
+    doc.setFillColor(245,240,220);
+    doc.roundedRect(margin,y,contentW,8,2,2,"F");
+    doc.setTextColor(26,92,52);
+    doc.setFontSize(9);
+    doc.text(s.label,margin+3,y+5.5);
+    doc.setFillColor(...rgb2);
+    doc.roundedRect(W-margin-22,y+1.5,22,5,1,1,"F");
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(8);
+    doc.text(pct+"%",W-margin-11,y+5.5,{align:"center"});
+    y+=11;
+    if(!s.special){
+      s.questions.forEach(q=>{
+        const val=report.scores[s.id]?.[q.id];
+        doc.setTextColor(80,80,80);
+        doc.setFontSize(8);
+        const lines=doc.splitTextToSize("• "+q.label,contentW-20);
+        doc.text(lines,margin+2,y);
+        doc.setTextColor(30,30,30);
+        doc.text(val!==undefined?val+"/5":"–",W-margin-2,y,{align:"right"});
+        y+=lines.length*4+1;
+      });
+    } else {
+      doc.setTextColor(80,80,80);
+      doc.setFontSize(8);
+      const avText=report.availability?.answer==="yes"?"Full menu available":"Items unavailable: "+(report.availability?.items||0)+" (pizzas: "+(report.availability?.pizzas||0)+")";
+      doc.text("• "+avText,margin+2,y); y+=5;
+    }
+    if(report.notes[s.id]){
+      doc.setTextColor(100,100,100);
+      doc.setFontSize(8);
+      const nLines=doc.splitTextToSize("Notes: "+report.notes[s.id],contentW-4);
+      doc.text(nLines,margin+2,y);
+      y+=nLines.length*4+1;
+    }
+    y+=3;
+  });
+
+  // Page 2 — Photos
+  const photoSections=SECTIONS.filter(s=>PHOTO_RULES[s.id]&&PHOTO_RULES[s.id]!=="none"&&state.photoFiles[s.id]);
+  if(photoSections.length>0){
+    doc.addPage();
+    let py=margin;
+    doc.setFillColor(26,92,52);
+    doc.rect(0,0,W,18,"F");
+    doc.setTextColor(245,240,220);
+    doc.setFontSize(11);
+    doc.text("PHOTOS — "+report.restaurant.toUpperCase(),W/2,12,{align:"center"});
+    py=25;
+    for(const s of photoSections){
+      const file=state.photoFiles[s.id];
+      if(!file) continue;
+      const dataUrl=await new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(file);});
+      const imgH=Math.min(80,contentW*0.6);
+      if(py+imgH+10>285) break;
+      doc.setFontSize(9);
+      doc.setTextColor(26,92,52);
+      doc.text(s.label,margin,py); py+=5;
+      doc.addImage(dataUrl,"JPEG",margin,py,contentW,imgH);
+      py+=imgH+8;
+    }
+  }
+  return doc.output("datauristring");
 }
 
 async function sendEmail(report){
@@ -296,8 +401,25 @@ function renderConfirm(app){
     <div class="confirm-brand">pizz'&amp;love</div>
     <div class="confirm-meta">${state.currentReport.restaurant} · ${formatDate(state.currentReport.audit_date)}</div>
     <div style="margin:20px auto 28px;max-width:300px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)"><img src="https://i.ibb.co/99gsW0yx/IMG-6616.jpg" style="width:100%;display:block"></div>
-    <button class="btn-start" style="max-width:240px;margin:0 auto;display:block" onclick="resetForm()">New Audit</button>
+    <button class="btn-start" style="max-width:240px;margin:0 auto 12px;display:block" onclick="downloadPDF()">Download PDF Report</button>
+    <button class="btn-start" style="max-width:240px;margin:0 auto;display:block;background:#555" onclick="resetForm()">New Audit</button>
   </div></div>`;
+  generateAndStorePDF();
+}
+
+async function generateAndStorePDF(){
+  try{
+    const uri=await generatePDF(state.currentReport);
+    state.pdfDataUri=uri;
+  }catch(e){ console.error("PDF error:",e); }
+}
+
+function downloadPDF(){
+  if(!state.pdfDataUri){ alert("PDF still generating, try again in a moment."); return; }
+  const a=document.createElement("a");
+  a.href=state.pdfDataUri;
+  a.download=`audit-${state.currentReport.restaurant.toLowerCase().replace(/\s+/g,"-")}-${state.currentReport.audit_date}.pdf`;
+  a.click();
 }
 
 function renderForm(app){
