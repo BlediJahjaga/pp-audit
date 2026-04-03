@@ -304,12 +304,14 @@ async function generatePDF(report){
       const file=state.photoFiles[s.id];
       if(!file) continue;
       const dataUrl=await new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(file);});
-      const imgH=Math.min(80,contentW*0.6);
+      const imgW=Math.min(120,contentW);
+      const imgH=Math.min(80,imgW*0.75);
+      const imgX=margin+(contentW-imgW)/2;
       if(py+imgH+10>285) break;
       doc.setFontSize(9);
       doc.setTextColor(26,92,52);
       doc.text(s.label,margin,py); py+=5;
-      doc.addImage(dataUrl,"JPEG",margin,py,contentW,imgH);
+      doc.addImage(dataUrl,"JPEG",imgX,py,imgW,imgH);
       py+=imgH+8;
     }
   }
