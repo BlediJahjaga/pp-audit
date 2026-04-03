@@ -13,29 +13,34 @@ body { font-family: 'Chelsea', -apple-system, sans-serif; font-weight: 300; back
   background-image: url('https://www.datocms-assets.com/94903/1741971975-pp-pizza-spread-with-menu.jpg?auto=format&w=2080');
   background-size: cover; background-position: center; background-attachment: fixed; }
 body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52,0.82); z-index: 0; }
-.wrap { max-width: 600px; margin: 0 auto; padding: 0 0 3rem; position: relative; z-index: 1; background: #F5F0DC; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 0 3rem; position: relative; z-index: 1; background: #F5F0DC; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
 .top-banner { background: #1A5C34; padding: 18px 20px 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .banner-center { text-align: center; flex: 1; }
 .brand-name { font-family: 'PizzaPilgrims'; font-size: 18px; color: #39D400; margin-bottom: 4px; }
 .page-title { font-family: 'PizzaPilgrims'; font-size: 24px; color: #F5F0DC; }
 .refresh-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #39D400; background: transparent; color: #39D400; cursor: pointer; font-size: 13px; font-family: 'Chelsea', sans-serif; white-space: nowrap; }
-.inner { padding: 0 1rem; }
-.table-wrap { border: 0.5px solid #d4ceb8; border-radius: 12px; overflow: hidden; background: #fff; }
-.table-head { display: grid; grid-template-columns: 28px 1fr 90px 90px; padding: 6px 12px; background: #1A5C34; }
-.th { font-family: 'PizzaPilgrims'; font-size: 13px; color: #39D400; }
-.table-row { display: grid; grid-template-columns: 28px 1fr 90px 90px; padding: 6px 12px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; }
+.inner { padding: 0 1.5rem; }
+.content-row { display: flex; gap: 20px; align-items: flex-start; }
+.table-wrap { flex: 1; border: 0.5px solid #d4ceb8; border-radius: 12px; overflow: hidden; background: #fff; }
+.table-head { display: grid; grid-template-columns: 28px 1fr 80px 110px 80px; padding: 7px 12px; background: #1A5C34; gap: 4px; }
+.th { font-family: 'PizzaPilgrims'; font-size: 12px; color: #39D400; }
+.th.avg { background: rgba(57,212,0,0.15); border-radius: 4px; padding: 2px 6px; text-align: center; }
+.table-row { display: grid; grid-template-columns: 28px 1fr 80px 110px 80px; padding: 5px 12px; border-bottom: 0.5px solid #ede8d8; align-items: center; background: #fff; gap: 4px; }
 .table-row:last-child { border-bottom: none; }
-.table-row.top { background: rgba(26,92,52,0.05); }
-.legend { margin-top: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #555; }
-.legend-item { display: flex; align-items: center; gap: 8px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 5px; flex-shrink: 0; }
+.table-row.top { background: rgba(26,92,52,0.04); }
+.avg-cell { background: rgba(26,92,52,0.06); border: 1px solid #1A5C34; border-radius: 6px; padding: 3px 6px; text-align: center; margin: 1px 0; }
+.legend-panel { width: 180px; flex-shrink: 0; }
+.legend-title { font-family: 'PizzaPilgrims'; font-size: 13px; color: #1A5C34; margin-bottom: 10px; }
+.legend-note { font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.4; border-left: 2px solid #1A5C34; padding-left: 8px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #555; margin-bottom: 7px; }
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .loading { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top-banner">
-    <div style="width:80px"></div>
+    <div style="width:90px"></div>
     <div class="banner-center">
       <div class="brand-name">Pizza Pilgrims</div>
       <div class="page-title">Food Quality League Table</div>
@@ -43,15 +48,22 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
     <button class="refresh-btn" onclick="loadLeague()">↻ Refresh</button>
   </div>
   <div class="inner">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:16px;font-size:11px;color:#555">
-      <div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px">🤌</span>100% — Faje Paura!</div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#1A5C34;flex-shrink:0"></div>95–99% — STARS!</div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#39D400;flex-shrink:0"></div>90–94% — Very good!</div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#6B8FA8;flex-shrink:0"></div>85–89% — Good but..!</div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#EF9F27;flex-shrink:0"></div>75–84% — Not great!</div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:50%;background:#E24B4A;flex-shrink:0"></div>Under 75% — Fix urgently!</div>
+    <div class="content-row">
+      <div class="table-wrap" id="table"><div class="loading">Loading…</div></div>
+      <div class="legend-panel">
+        <div class="legend-title">Key</div>
+        <div class="legend-note">Ranked by average score across all audits</div>
+        <div class="legend-item"><span style="font-size:13px">🤌</span>100% — Faje Paura!</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1A5C34"></div>95–99% — STARS!</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#39D400"></div>90–94% — Very good!</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6B8FA8"></div>85–89% — Good but..!</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84% — Not great!</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% — NEED TO FIX URGENTLY!</div>
+        <div style="margin-top:16px;border:1px solid #1A5C34;border-radius:6px;padding:6px 8px;background:rgba(26,92,52,0.06);font-size:11px;color:#1A5C34">
+          The <strong>Average</strong> column is the ranking score
+        </div>
+      </div>
     </div>
-    <div id="table"><div class="loading">Loading…</div></div>
   </div>
 </div>
 <script>
@@ -60,8 +72,11 @@ const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 const RESTAURANTS=["Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff","Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market","Glasgow","Greenwich","Hyde Park","King's Cross","Leeds","Liverpool Street","London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch","Soho","Spitalfields","Swingers West End","Victoria","Waterloo","Westfield","Westfield Stratford","Wimbledon"];
 
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
+
 function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
-function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX URGENTLY!"; }
+function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX!"; }
 
 async function loadLeague(){
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
@@ -70,27 +85,44 @@ async function loadLeague(){
     const rows=await r.json();
     const data={};
     (rows||[]).forEach(row=>{
-      if(!data[row.restaurant])data[row.restaurant]={latest:null,scores:[]};
-      if(!data[row.restaurant].latest)data[row.restaurant].latest=row.pct;
+      if(!data[row.restaurant])data[row.restaurant]={latest:null,latestDate:null,scores:[]};
+      if(!data[row.restaurant].latest){data[row.restaurant].latest=row.pct;data[row.restaurant].latestDate=row.audit_date;}
       data[row.restaurant].scores.push(row.pct);
     });
     const all=RESTAURANTS.map(r=>{
       const d=data[r];
-      if(!d)return{restaurant:r,latest:null,avg:null,count:0};
+      if(!d)return{restaurant:r,latest:null,avg:null,latestDate:null,count:0};
       const avg=Math.round(d.scores.reduce((a,b)=>a+b,0)/d.scores.length);
-      return{restaurant:r,latest:d.latest,avg,count:d.scores.length};
+      return{restaurant:r,latest:d.latest,avg,latestDate:d.latestDate,count:d.scores.length};
     });
     const sorted=[...all].sort((a,b)=>(b.avg??-1)-(a.avg??-1));
-    let html='<div class="table-wrap"><div class="table-head"><span class="th">#</span><span class="th">Pizzeria</span><span class="th" style="text-align:center">Last audit</span><span class="th" style="text-align:center">Average</span></div>';
+
+    let html=`<div class="table-head">
+      <span class="th">#</span>
+      <span class="th">Pizzeria</span>
+      <span class="th" style="text-align:center">Last audit</span>
+      <span class="th avg">Average ★</span>
+      <span class="th" style="text-align:right">Date</span>
+    </div>`;
+
     sorted.forEach((r,i)=>{
       html+=`<div class="table-row${r.avg!==null&&i===0?' top':''}">
-        <span style="font-family:'PizzaPilgrims';font-size:14px;color:${r.avg!==null?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
-        <div style="font-size:13px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
-        <div style="text-align:center">${r.latest!==null?r.latest===100?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`:`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.latest)}">${r.latest}%</div>`:'<span style="color:#ccc">—</span>'}</div>
-        <div style="text-align:center">${r.avg!==null?r.avg===100?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`:`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`:'<span style="color:#ccc">—</span>'}</div>
+        <span style="font-family:'PizzaPilgrims';font-size:13px;color:${r.avg!==null?scoreColor(r.avg):'#ccc'}">${r.avg!==null?i+1:"–"}</span>
+        <div style="font-size:12px;font-weight:${r.avg!==null?500:300};color:${r.avg!==null?'#111':'#bbb'}">${r.restaurant}</div>
+        <div style="text-align:center">
+          ${r.latest!==null?`<span style="font-family:'Chelsea';font-weight:700;font-size:13px;color:${scoreColor(r.latest)}">${r.latest}%</span>`:'<span style="color:#ccc">—</span>'}
+        </div>
+        <div class="${r.avg!==null?'avg-cell':''}">
+          ${r.avg!==null
+            ?r.avg===100
+              ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#C9A84C">Faje Paura!</div>`
+              :`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)}">${r.avg}%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`
+            :'<span style="color:#ccc">—</span>'}
+        </div>
+        <div style="text-align:right;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>
       </div>`;
     });
-    html+='</div>';
+
     document.getElementById("table").innerHTML=html;
   }catch(e){
     document.getElementById("table").innerHTML='<div class="loading">Failed to load. Try refreshing.</div>';
