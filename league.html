@@ -117,7 +117,7 @@ async function loadLeague(){
         <div style="text-align:center">
           ${r.latest!==null?`<span style="font-family:'Chelsea';font-weight:700;font-size:13px;color:${scoreColor(r.latest)}">${r.latest}%</span>`:'<span style="color:#ccc">—</span>'}
         </div>
-        <div style="text-align:center;font-size:11px;color:#aaa">${r.latestDate?formatDate(r.latestDate):"—"}</div>      </div>`;
+        <div style="text-align:center;font-size:11px;color:#aaa;display:flex;align-items:center;justify-content:center">${r.latestDate?formatDate(r.latestDate):"—"}</div>      </div>`;
     });
 
     document.getElementById("table").innerHTML=html;
