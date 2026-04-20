@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Pilgrims — Quality Dashboard</title>
+<style>
+@font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); }
+@font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
+@font-face { font-family: 'Chelsea'; src: url('ChelseaRRLight.otf') format('opentype'); font-weight: 300; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #1A5C34;
+  --lime: #39D400;
+  --cream: #F5F0DC;
+  --gold: #C9A84C;
+  --amber: #EF9F27;
+  --red: #E24B4A;
+  --blue: #6B8FA8;
+}
+
+body {
+  font-family: 'Chelsea', sans-serif;
+  font-weight: 300;
+  background: var(--green);
+  min-height: 100vh;
+  background-image: url('https://www.datocms-assets.com/94903/1741971975-pp-pizza-spread-with-menu.jpg?auto=format&w=2080');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(26,92,52,0.84);
+  z-index: 0;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+  position: relative;
+  z-index: 1;
+  background: var(--cream);
+  min-height: 100vh;
+  box-shadow: 0 0 80px rgba(0,0,0,0.5);
+}
+
+/* HEADER */
+.header {
+  background: var(--green);
+  padding: 18px 32px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+.header-logo img { height: 40px; }
+.header-center { text-align: center; flex: 1; }
+.header-brand { font-family: 'PizzaPilgrims'; font-size: 22px; color: var(--lime); margin-bottom: 3px; }
+.header-title { font-family: 'PizzaPilgrims'; font-size: 20px; color: var(--cream); }
+.header-nav { display: flex; gap: 10px; }
+.nav-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(57,212,0,0.4);
+  background: transparent;
+  color: var(--lime);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Chelsea', sans-serif;
+  font-weight: 300;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: rgba(57,212,0,0.12); border-color: var(--lime); }
+.nav-btn.active { background: var(--lime); color: var(--green); border-color: var(--lime); font-weight: 700; }
+
+/* DATE FILTER BAR */
+.filter-bar {
+  background: var(--green);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.filter-label { font-size: 11px; color: rgba(245,240,220,0.6); text-transform: uppercase; letter-spacing: 0.1em; }
+.filter-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(57,212,0,0.3);
+  background: transparent;
+  color: rgba(245,240,220,0.7);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Chelsea', sans-serif;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--lime); color: var(--lime); }
+.filter-btn.active { background: var(--lime); color: var(--green); border-color: var(--lime); font-weight: 700; }
+.filter-sep { color: rgba(255,255,255,0.15); }
+.last-updated { margin-left: auto; font-size: 11px; color: rgba(245,240,220,0.4); }
+
+/* MAIN GRID */
+.main { padding: 0 32px; }
+
+/* HELICOPTER ROW */
+.heli-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid #ddd8c8;
+  border-radius: 12px;
+  padding: 20px 16px 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card.green-card::before { background: var(--green); }
+.stat-card.lime-card::before { background: var(--lime); }
+.stat-card.amber-card::before { background: var(--amber); }
+.stat-card.red-card::before { background: var(--red); }
+.stat-card.gold-card::before { background: var(--gold); }
+
+.stat-num {
+  font-family: 'PizzaPilgrims';
+  font-size: 42px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.3; }
+.stat-sub { font-size: 10px; color: #bbb; margin-top: 4px; }
+
+/* STATUS BAND */
+.status-band {
+  background: var(--green);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+.band-seg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 8px 4px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  cursor: default;
+}
+.band-seg:last-child { border-right: none; }
+.band-dot { width: 12px; height: 12px; border-radius: 50%; margin-bottom: 6px; }
+.band-count { font-family: 'PizzaPilgrims'; font-size: 22px; color: var(--cream); }
+.band-pct { font-size: 10px; color: rgba(245,240,220,0.5); margin-top: 2px; }
+.band-desc { font-size: 10px; color: rgba(245,240,220,0.6); margin-top: 2px; text-align: center; }
+
+/* TWO-COL LAYOUT */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+.three-col { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 28px; }
+
+/* PANELS */
+.panel {
+  background: #fff;
+  border: 1px solid #ddd8c8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.panel-head {
+  background: var(--green);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-title { font-size: 11px; font-weight: 700; color: var(--lime); text-transform: uppercase; letter-spacing: 0.12em; font-family: 'Chelsea'; }
+.panel-sub { font-size: 10px; color: rgba(57,212,0,0.6); }
+.panel-body { padding: 16px; }
+
+/* SECTION BARS */
+.section-bar-row { margin-bottom: 14px; }
+.section-bar-row:last-child { margin-bottom: 0; }
+.section-bar-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.section-bar-name { font-size: 12px; color: #333; font-weight: 500; font-family: 'Chelsea'; }
+.section-bar-pct { font-size: 13px; font-weight: 700; font-family: 'Chelsea'; }
+.bar-track { background: #f0ece0; border-radius: 4px; height: 8px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+/* TRENDS CHART */
+.chart-wrap { padding: 16px; position: relative; }
+.chart-area { position: relative; height: 200px; }
+.chart-svg { width: 100%; height: 100%; }
+.chart-restaurant-select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #ddd8c8;
+  border-radius: 8px;
+  font-family: 'Chelsea', sans-serif;
+  font-size: 13px;
+  color: var(--green);
+  background: #fff;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* URGENT LIST */
+.urgent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0ece0;
+}
+.urgent-item:last-child { border-bottom: none; }
+.urgent-name { font-size: 13px; color: #333; font-weight: 500; }
+.urgent-date { font-size: 11px; color: #aaa; }
+.urgent-score { font-family: 'PizzaPilgrims'; font-size: 18px; }
+
+/* MOST IMPROVED / DECLINING */
+.movers-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0ece0;
+}
+.movers-item:last-child { border-bottom: none; }
+.movers-arrow { font-size: 18px; flex-shrink: 0; }
+.movers-name { font-size: 13px; color: #333; font-weight: 500; flex: 1; }
+.movers-change { font-size: 13px; font-weight: 700; font-family: 'Chelsea'; }
+
+/* NO DATA */
+.no-data { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
+
+/* LOADING */
+.loading { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
+
+/* ESTATE HISTORY CHART */
+.estate-chart-wrap { padding: 16px; }
+.estate-svg { width: 100%; height: 160px; }
+
+.tooltip {
+  position: fixed;
+  background: var(--green);
+  color: var(--cream);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* WORD CLOUD */
+.wordcloud-wrap {
+  padding: 24px;
+  min-height: 180px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  justify-content: center;
+}
+.wc-word {
+  font-family: 'Chelsea', sans-serif;
+  font-weight: 700;
+  cursor: default;
+  transition: transform 0.15s, opacity 0.15s;
+  line-height: 1.1;
+}
+.wc-word:hover { transform: scale(1.12); opacity: 0.85; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">
+      <img src="https://bledijahjaga.github.io/pp-audit/logo.png" alt="Pizza Pilgrims" style="max-width:100%">
+    </div>
+    <div class="header-center">
+      <div class="header-brand">Pizza Pilgrims</div>
+      <div class="header-title">Quality Dashboard</div>
+    </div>
+    <div class="header-nav">
+      <a href="league.html" class="nav-btn">📊 League Table</a>
+      <button class="nav-btn active" onclick="loadAll()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <span class="filter-label">Period</span>
+    <button class="filter-btn active" onclick="setFilter(30,this)">Last 30 days</button>
+    <button class="filter-btn" onclick="setFilter(90,this)">Last 90 days</button>
+    <button class="filter-btn" onclick="setFilter(180,this)">Last 6 months</button>
+    <button class="filter-btn" onclick="setFilter(0,this)">All time</button>
+    <span class="last-updated" id="lastUpdated"></span>
+  </div>
+
+  <div class="main">
+
+    <!-- HELICOPTER: KPI CARDS -->
+    <div class="heli-row" id="heliRow">
+      <div class="loading" style="grid-column:1/-1">Loading dashboard…</div>
+    </div>
+
+    <!-- STATUS BAND -->
+    <div class="status-band" id="statusBand"></div>
+
+    <!-- ROW: SECTION WEAKNESS + URGENT -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Section Performance</span>
+          <span class="panel-sub">Estate average by category</span>
+        </div>
+        <div class="panel-body" id="sectionBars"><div class="loading">…</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">🚨 Needs Attention</span>
+          <span class="panel-sub">Sites scoring under 75%</span>
+        </div>
+        <div id="urgentList"><div class="loading">…</div></div>
+      </div>
+    </div>
+
+    <!-- ROW: TRENDS + MOVERS -->
+    <div class="three-col">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Site Score Trend</span>
+          <span class="panel-sub">Score over time per restaurant</span>
+        </div>
+        <div class="chart-wrap">
+          <select class="chart-restaurant-select" id="trendSelect" onchange="drawTrend()">
+            <option value="">— Select a restaurant —</option>
+          </select>
+          <div class="chart-area" id="trendChart"><div class="no-data">Select a restaurant above</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Most Improved</span>
+          <span class="panel-sub">Biggest score rise</span>
+        </div>
+        <div id="improvedList"><div class="loading">…</div></div>
+        <div class="panel-head" style="margin-top:1px">
+          <span class="panel-title">Declining</span>
+          <span class="panel-sub">Biggest score drop</span>
+        </div>
+        <div id="decliningList"><div class="loading">…</div></div>
+      </div>
+    </div>
+
+    <!-- ESTATE AVERAGE OVER TIME -->
+    <div class="panel" style="margin-bottom:28px">
+      <div class="panel-head">
+        <span class="panel-title">Estate Average Over Time</span>
+        <span class="panel-sub">Monthly average score across all sites</span>
+      </div>
+      <div class="estate-chart-wrap" id="estateChart"><div class="loading">…</div></div>
+    </div>
+
+    <!-- WORD CLOUD -->
+    <div class="panel" style="margin-bottom:28px">
+      <div class="panel-head">
+        <span class="panel-title">💬 What's Being Talked About</span>
+        <span class="panel-sub">Most frequent words from auditor notes — bigger = mentioned more</span>
+      </div>
+      <div class="wordcloud-wrap" id="wordCloud"><div class="loading">…</div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const SB_URL = "https://jjziogebkovhcxvsuayf.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
+
+const SECTIONS = [
+  { id: "pizza", label: "Pizza", weight: 14 },
+  { id: "sides", label: "Sides & Salads", weight: 1 },
+  { id: "dippers", label: "Dippers", weight: 0.5 },
+  { id: "afterpizza", label: "After Pizza", weight: 1 },
+  { id: "drinks", label: "Drinks", weight: 1.5 },
+  { id: "availability", label: "Menu Availability", weight: 1 },
+  { id: "vibe", label: "Overall Vibe & Service", weight: 1 },
+];
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function scoreColor(p) {
+  if (p === 100) return "#C9A84C";
+  if (p >= 95) return "#1A5C34";
+  if (p >= 90) return "#39D400";
+  if (p >= 85) return "#6B8FA8";
+  if (p >= 75) return "#EF9F27";
+  return "#E24B4A";
+}
+function scoreLabel(p) {
+  if (p === 100) return "Faje Paura!";
+  if (p >= 95) return "STARS!";
+  if (p >= 90) return "Very good!";
+  if (p >= 85) return "Good but..!";
+  if (p >= 75) return "Not great!";
+  return "NEED TO FIX!";
+}
+
+let filterDays = 30;
+let allRows = [];
+
+function setFilter(days, btn) {
+  filterDays = days;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function getFilteredRows() {
+  if (!filterDays) return allRows;
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - filterDays);
+  return allRows.filter(r => new Date(r.audit_date) >= cutoff);
+}
+
+async function loadAll() {
+  try {
+    const r = await fetch(SB_URL + "/rest/v1/audits?select=*&order=audit_date.asc", {
+      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
+    });
+    allRows = await r.json();
+    document.getElementById('lastUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    populateTrendSelect();
+    renderAll();
+  } catch(e) {
+    document.getElementById('heliRow').innerHTML = '<div class="loading" style="grid-column:1/-1;color:#E24B4A">Failed to load data. Try refreshing.</div>';
+  }
+}
+
+function populateTrendSelect() {
+  const restaurants = [...new Set(allRows.map(r => r.restaurant))].sort();
+  const sel = document.getElementById('trendSelect');
+  sel.innerHTML = '<option value="">— Select a restaurant —</option>';
+  restaurants.forEach(name => {
+    sel.innerHTML += `<option value="${name}">${name}</option>`;
+  });
+}
+
+function renderAll() {
+  const rows = getFilteredRows();
+  renderHeli(rows);
+  renderStatusBand(rows);
+  renderSectionBars(rows);
+  renderUrgent(rows);
+  renderMovers(rows);
+  renderEstateChart(rows);
+  renderWordCloud(rows);
+  const sel = document.getElementById('trendSelect').value;
+  if (sel) drawTrend();
+}
+
+function renderHeli(rows) {
+  if (!rows.length) {
+    document.getElementById('heliRow').innerHTML = '<div class="no-data" style="grid-column:1/-1">No audits in this period</div>';
+    document.getElementById('statusBand').innerHTML = '';
+    return;
+  }
+
+  // Latest score per restaurant
+  const latestPerSite = {};
+  rows.forEach(r => {
+    if (!latestPerSite[r.restaurant] || r.audit_date > latestPerSite[r.restaurant].audit_date) {
+      latestPerSite[r.restaurant] = r;
+    }
+  });
+  const latestScores = Object.values(latestPerSite).map(r => r.pct);
+  const estateAvg = Math.round(latestScores.reduce((a,b)=>a+b,0) / latestScores.length);
+  const totalAudits = rows.length;
+  const sitesAudited = Object.keys(latestPerSite).length;
+  const topSite = Object.entries(latestPerSite).sort((a,b)=>b[1].pct-a[1].pct)[0];
+  const bottomSite = Object.entries(latestPerSite).sort((a,b)=>a[1].pct-b[1].pct)[0];
+
+  document.getElementById('heliRow').innerHTML = `
+    <div class="stat-card green-card">
+      <div class="stat-num" style="color:${scoreColor(estateAvg)}">${estateAvg}%</div>
+      <div class="stat-label">Estate Average</div>
+      <div class="stat-sub">${scoreLabel(estateAvg)}</div>
+    </div>
+    <div class="stat-card lime-card">
+      <div class="stat-num" style="color:#1A5C34">${sitesAudited}</div>
+      <div class="stat-label">Sites Audited</div>
+      <div class="stat-sub">${totalAudits} total audit${totalAudits!==1?'s':''}</div>
+    </div>
+    <div class="stat-card lime-card">
+      <div class="stat-num" style="color:${scoreColor(topSite[1].pct)};font-size:28px">${topSite[0].split(' ')[0]}</div>
+      <div class="stat-label">Top Site</div>
+      <div class="stat-sub">${topSite[1].pct}% — ${scoreLabel(topSite[1].pct)}</div>
+    </div>
+    <div class="stat-card amber-card">
+      <div class="stat-num" style="color:${scoreColor(bottomSite[1].pct)};font-size:28px">${bottomSite[0].split(' ')[0]}</div>
+      <div class="stat-label">Needs Most Work</div>
+      <div class="stat-sub">${bottomSite[1].pct}%</div>
+    </div>
+    <div class="stat-card gold-card">
+      <div class="stat-num" style="color:#1A5C34">${latestScores.filter(s=>s<75).length}</div>
+      <div class="stat-label">Urgent Sites</div>
+      <div class="stat-sub">Scoring under 75%</div>
+    </div>
+  `;
+}
+
+function renderStatusBand(rows) {
+  if (!rows.length) { document.getElementById('statusBand').innerHTML = ''; return; }
+
+  const latestPerSite = {};
+  rows.forEach(r => {
+    if (!latestPerSite[r.restaurant] || r.audit_date > latestPerSite[r.restaurant].audit_date)
+      latestPerSite[r.restaurant] = r;
+  });
+  const scores = Object.values(latestPerSite).map(r => r.pct);
+  const total = scores.length;
+
+  const bands = [
+    { label: "Faje Paura!", color: "#C9A84C", check: s => s === 100 },
+    { label: "STARS!", color: "#1A5C34", check: s => s >= 95 && s < 100 },
+    { label: "Very good!", color: "#39D400", check: s => s >= 90 && s < 95 },
+    { label: "Good but..!", color: "#6B8FA8", check: s => s >= 85 && s < 90 },
+    { label: "Not great!", color: "#EF9F27", check: s => s >= 75 && s < 85 },
+    { label: "Urgent!", color: "#E24B4A", check: s => s < 75 },
+  ];
+
+  document.getElementById('statusBand').innerHTML = bands.map(b => {
+    const count = scores.filter(b.check).length;
+    const pct = total ? Math.round(count/total*100) : 0;
+    return `<div class="band-seg">
+      <div class="band-dot" style="background:${b.color}"></div>
+      <div class="band-count">${count}</div>
+      <div class="band-pct">${pct}%</div>
+      <div class="band-desc">${b.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSectionBars(rows) {
+  if (!rows.length) { document.getElementById('sectionBars').innerHTML = '<div class="no-data">No data</div>'; return; }
+
+  // Aggregate section scores
+  const sectionTotals = {};
+  SECTIONS.forEach(s => sectionTotals[s.id] = { sum: 0, count: 0 });
+
+  rows.forEach(row => {
+    if (!row.section_scores) return;
+    SECTIONS.forEach(s => {
+      const sc = row.section_scores[s.id];
+      if (sc && sc.maxWeighted > 0) {
+        const pct = Math.round((sc.weighted / sc.maxWeighted) * 100);
+        sectionTotals[s.id].sum += pct;
+        sectionTotals[s.id].count++;
+      }
+    });
+  });
+
+  document.getElementById('sectionBars').innerHTML = SECTIONS.map(s => {
+    const t = sectionTotals[s.id];
+    const avg = t.count ? Math.round(t.sum / t.count) : null;
+    if (avg === null) return `<div class="section-bar-row"><div class="section-bar-top"><span class="section-bar-name">${s.label}</span><span style="color:#bbb;font-size:12px">No data</span></div></div>`;
+    return `<div class="section-bar-row">
+      <div class="section-bar-top">
+        <span class="section-bar-name">${s.label}</span>
+        <span class="section-bar-pct" style="color:${scoreColor(avg)}">${avg}%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${avg}%;background:${scoreColor(avg)}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderUrgent(rows) {
+  if (!rows.length) { document.getElementById('urgentList').innerHTML = '<div class="no-data">No data</div>'; return; }
+
+  const latestPerSite = {};
+  rows.forEach(r => {
+    if (!latestPerSite[r.restaurant] || r.audit_date > latestPerSite[r.restaurant].audit_date)
+      latestPerSite[r.restaurant] = r;
+  });
+
+  const urgent = Object.values(latestPerSite)
+    .filter(r => r.pct < 75)
+    .sort((a,b) => a.pct - b.pct);
+
+  if (!urgent.length) {
+    document.getElementById('urgentList').innerHTML = '<div class="no-data" style="color:#39D400;padding:2rem">✓ No sites under 75%</div>';
+    return;
+  }
+
+  document.getElementById('urgentList').innerHTML = urgent.map(r => {
+    const d = r.audit_date.split('-');
+    const dateStr = parseInt(d[2]) + ' ' + MONTHS[parseInt(d[1])-1];
+    return `<div class="urgent-item">
+      <div>
+        <div class="urgent-name">${r.restaurant}</div>
+        <div class="urgent-date">${dateStr}</div>
+      </div>
+      <div class="urgent-score" style="color:${scoreColor(r.pct)}">${r.pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMovers(rows) {
+  // Need at least 2 audits per site
+  const bysite = {};
+  rows.forEach(r => {
+    if (!bysite[r.restaurant]) bysite[r.restaurant] = [];
+    bysite[r.restaurant].push(r);
+  });
+
+  const changes = Object.entries(bysite)
+    .filter(([,audits]) => audits.length >= 2)
+    .map(([name, audits]) => {
+      const sorted = audits.sort((a,b) => a.audit_date.localeCompare(b.audit_date));
+      const first = sorted[0].pct;
+      const last = sorted[sorted.length-1].pct;
+      return { name, change: last - first, first, last };
+    })
+    .sort((a,b) => Math.abs(b.change) - Math.abs(a.change));
+
+  const improved = changes.filter(c => c.change > 0).slice(0,3);
+  const declining = changes.filter(c => c.change < 0).slice(0,3);
+
+  document.getElementById('improvedList').innerHTML = improved.length
+    ? improved.map(c => `<div class="movers-item">
+        <span class="movers-arrow">↑</span>
+        <span class="movers-name">${c.name}</span>
+        <span class="movers-change" style="color:#39D400">+${c.change}%</span>
+      </div>`).join('')
+    : '<div class="no-data">Need 2+ audits per site</div>';
+
+  document.getElementById('decliningList').innerHTML = declining.length
+    ? declining.map(c => `<div class="movers-item">
+        <span class="movers-arrow" style="color:#E24B4A">↓</span>
+        <span class="movers-name">${c.name}</span>
+        <span class="movers-change" style="color:#E24B4A">${c.change}%</span>
+      </div>`).join('')
+    : '<div class="no-data">No declining sites</div>';
+}
+
+function drawTrend() {
+  const restaurant = document.getElementById('trendSelect').value;
+  const container = document.getElementById('trendChart');
+  if (!restaurant) { container.innerHTML = '<div class="no-data">Select a restaurant above</div>'; return; }
+
+  const filtered = getFilteredRows();
+  const siteData = filtered
+    .filter(r => r.restaurant === restaurant)
+    .sort((a,b) => a.audit_date.localeCompare(b.audit_date));
+
+  if (siteData.length < 1) { container.innerHTML = '<div class="no-data">No audits for this site in the selected period</div>'; return; }
+  if (siteData.length === 1) {
+    const r = siteData[0];
+    container.innerHTML = `<div class="no-data" style="color:${scoreColor(r.pct)}">Only 1 audit: ${r.pct}%<br><span style="color:#aaa;font-size:11px">${r.audit_date}</span></div>`;
+    return;
+  }
+
+  const W = container.offsetWidth || 500;
+  const H = 200;
+  const pad = { top: 16, right: 20, bottom: 36, left: 36 };
+  const iW = W - pad.left - pad.right;
+  const iH = H - pad.top - pad.bottom;
+
+  const scores = siteData.map(r => r.pct);
+  const minS = Math.max(0, Math.min(...scores) - 10);
+  const maxS = Math.min(100, Math.max(...scores) + 10);
+
+  const xScale = i => pad.left + (i / (siteData.length - 1)) * iW;
+  const yScale = v => pad.top + iH - ((v - minS) / (maxS - minS)) * iH;
+
+  // Grid lines
+  let gridLines = '';
+  [25,50,75,90,95,100].filter(v => v >= minS && v <= maxS).forEach(v => {
+    const y = yScale(v);
+    gridLines += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="${scoreColor(v)}" stroke-opacity="0.15" stroke-dasharray="3,3"/>
+    <text x="${pad.left - 4}" y="${y + 4}" text-anchor="end" font-size="9" fill="#aaa">${v}</text>`;
+  });
+
+  // Path
+  const pts = siteData.map((r,i) => `${xScale(i)},${yScale(r.pct)}`).join(' ');
+  const pathD = siteData.map((r,i) => (i===0?'M':'L') + xScale(i) + ',' + yScale(r.pct)).join(' ');
+  const fillD = pathD + ` L${xScale(siteData.length-1)},${pad.top+iH} L${xScale(0)},${pad.top+iH} Z`;
+
+  // X labels
+  let xLabels = '';
+  siteData.forEach((r,i) => {
+    if (siteData.length <= 8 || i % Math.ceil(siteData.length/6) === 0 || i === siteData.length-1) {
+      const d = r.audit_date.split('-');
+      const label = parseInt(d[2]) + '/' + MONTHS[parseInt(d[1])-1];
+      xLabels += `<text x="${xScale(i)}" y="${H - 6}" text-anchor="middle" font-size="9" fill="#aaa">${label}</text>`;
+    }
+  });
+
+  // Dots
+  let dots = '';
+  siteData.forEach((r,i) => {
+    const col = scoreColor(r.pct);
+    dots += `<circle cx="${xScale(i)}" cy="${yScale(r.pct)}" r="5" fill="${col}" stroke="#fff" stroke-width="2"
+      onmouseenter="showTooltip(event,'${r.restaurant}: ${r.pct}% on ${r.audit_date}')"
+      onmouseleave="hideTooltip()" style="cursor:pointer"/>`;
+  });
+
+  container.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs>
+      <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1A5C34" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#1A5C34" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${fillD}" fill="url(#trendGrad)"/>
+    <path d="${pathD}" fill="none" stroke="#1A5C34" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}
+    ${xLabels}
+  </svg>`;
+}
+
+function renderEstateChart(rows) {
+  if (!rows.length) { document.getElementById('estateChart').innerHTML = '<div class="no-data">No data</div>'; return; }
+
+  // Group by month
+  const byMonth = {};
+  rows.forEach(r => {
+    const key = r.audit_date.slice(0,7); // YYYY-MM
+    if (!byMonth[key]) byMonth[key] = [];
+    byMonth[key].push(r.pct);
+  });
+
+  const months = Object.keys(byMonth).sort();
+  if (months.length < 2) {
+    document.getElementById('estateChart').innerHTML = '<div class="no-data">Need audits across multiple months to show trend</div>';
+    return;
+  }
+
+  const monthAvgs = months.map(m => Math.round(byMonth[m].reduce((a,b)=>a+b,0)/byMonth[m].length));
+  const container = document.getElementById('estateChart');
+  const W = container.offsetWidth || 800;
+  const H = 160;
+  const pad = { top: 16, right: 20, bottom: 36, left: 40 };
+  const iW = W - pad.left - pad.right;
+  const iH = H - pad.top - pad.bottom;
+
+  const minS = Math.max(0, Math.min(...monthAvgs) - 10);
+  const maxS = Math.min(100, Math.max(...monthAvgs) + 10);
+
+  const xScale = i => pad.left + (i / (months.length - 1)) * iW;
+  const yScale = v => pad.top + iH - ((v - minS) / (maxS - minS)) * iH;
+
+  let gridLines = '';
+  [75, 85, 90, 95].filter(v => v >= minS && v <= maxS).forEach(v => {
+    const y = yScale(v);
+    gridLines += `<line x1="${pad.left}" y1="${y}" x2="${W-pad.right}" y2="${y}" stroke="${scoreColor(v)}" stroke-opacity="0.2" stroke-dasharray="4,4"/>
+    <text x="${pad.left-6}" y="${y+4}" text-anchor="end" font-size="9" fill="#aaa">${v}%</text>`;
+  });
+
+  const pathD = monthAvgs.map((v,i) => (i===0?'M':'L') + xScale(i) + ',' + yScale(v)).join(' ');
+  const fillD = pathD + ` L${xScale(months.length-1)},${pad.top+iH} L${xScale(0)},${pad.top+iH} Z`;
+
+  let xLabels = '';
+  months.forEach((m,i) => {
+    if (months.length <= 12 || i % Math.ceil(months.length/8) === 0 || i === months.length-1) {
+      const parts = m.split('-');
+      xLabels += `<text x="${xScale(i)}" y="${H-6}" text-anchor="middle" font-size="10" fill="#aaa">${MONTHS[parseInt(parts[1])-1]} ${parts[0].slice(2)}</text>`;
+    }
+  });
+
+  let dots = '';
+  monthAvgs.forEach((v,i) => {
+    const col = scoreColor(v);
+    dots += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="5" fill="${col}" stroke="#fff" stroke-width="2"
+      onmouseenter="showTooltip(event,'${months[i]}: ${v}% estate avg (${byMonth[months[i]].length} audits)')"
+      onmouseleave="hideTooltip()" style="cursor:pointer"/>
+    <text x="${xScale(i)}" y="${yScale(v)-10}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}">${v}%</text>`;
+  });
+
+  container.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs>
+      <linearGradient id="estateGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#39D400" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#39D400" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${fillD}" fill="url(#estateGrad)"/>
+    <path d="${pathD}" fill="none" stroke="#39D400" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}
+    ${xLabels}
+  </svg>`;
+}
+
+function renderWordCloud(rows) {
+  const container = document.getElementById('wordCloud');
+  if (!rows.length) { container.innerHTML = '<div class="no-data">No notes in this period</div>'; return; }
+
+  // Stop words — common words to ignore
+  const STOP = new Set([
+    'a','an','the','and','or','but','in','on','at','to','for','of','with','is','was',
+    'it','its','this','that','are','be','as','by','from','not','no','so','we','i',
+    'they','he','she','very','quite','bit','just','also','some','all','been','had',
+    'have','has','could','would','should','there','were','did','do','our','up','down',
+    'good','bad','great','nice','ok','okay','fine','well','really','when','but','got',
+    'get','one','two','few','more','less','need','needs','looked','looks','seem','seems'
+  ]);
+
+  // Collect all notes text
+  const allText = rows
+    .map(r => {
+      if (!r.notes) return '';
+      if (typeof r.notes === 'string') return r.notes;
+      // notes is an object keyed by section
+      return Object.values(r.notes).join(' ');
+    })
+    .join(' ')
+    .toLowerCase()
+    .replace(/[^a-z\s'-]/g, ' ');
+
+  const words = allText.split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
+
+  if (!words.length) { container.innerHTML = '<div class="no-data">No notes yet — comments will appear here as audits come in</div>'; return; }
+
+  // Count frequencies
+  const freq = {};
+  words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+
+  // Sort and take top 50
+  const sorted = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, 50);
+  const maxCount = sorted[0][1];
+  const minCount = sorted[sorted.length-1][1];
+
+  // Colour palette cycling through brand colours
+  const colours = ['#1A5C34','#39D400','#C9A84C','#6B8FA8','#EF9F27','#E24B4A'];
+
+  // Shuffle for visual variety (stable shuffle based on word)
+  const shuffled = [...sorted].sort((a,b) => {
+    const ha = a[0].charCodeAt(0) + a[0].charCodeAt(a[0].length-1);
+    const hb = b[0].charCodeAt(0) + b[0].charCodeAt(b[0].length-1);
+    return (ha % 7) - (hb % 7);
+  });
+
+  container.innerHTML = shuffled.map(([word, count], i) => {
+    const ratio = minCount === maxCount ? 0.5 : (count - minCount) / (maxCount - minCount);
+    const size = Math.round(12 + ratio * 28); // 12px to 40px
+    const color = colours[i % colours.length];
+    const opacity = 0.5 + ratio * 0.5;
+    return `<span class="wc-word" style="font-size:${size}px;color:${color};opacity:${opacity}"
+      onmouseenter="showTooltip(event,'${word}: mentioned ${count} time${count>1?'s':''}')"
+      onmouseleave="hideTooltip()">${word}</span>`;
+  }).join('');
+}
+
+
+  const t = document.getElementById('tooltip');
+  t.textContent = text;
+  t.style.opacity = '1';
+  t.style.left = (e.clientX + 12) + 'px';
+  t.style.top = (e.clientY - 10) + 'px';
+}
+function hideTooltip() {
+  document.getElementById('tooltip').style.opacity = '0';
+}
+
+loadAll();
+</script>
+</body>
+</html>
