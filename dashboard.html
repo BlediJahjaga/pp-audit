@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizza Pilgrims — Food Quality Dashboard</title>
+<title>Pizza Pilgrims — Quality Dashboard</title>
 <style>
 @font-face { font-family: 'PizzaPilgrims'; src: url('PizzaPilgrims.otf') format('opentype'); }
 @font-face { font-family: 'Chelsea'; src: url('ChelseaRRBold.otf') format('opentype'); font-weight: 700; }
@@ -826,7 +826,6 @@ function renderWordCloud(rows) {
   const container = document.getElementById('wordCloud');
   if (!rows.length) { container.innerHTML = '<div class="no-data">No notes in this period</div>'; return; }
 
-  // Stop words — common words to ignore
   const STOP = new Set([
     'a','an','the','and','or','but','in','on','at','to','for','of','with','is','was',
     'it','its','this','that','are','be','as','by','from','not','no','so','we','i',
@@ -836,13 +835,12 @@ function renderWordCloud(rows) {
     'get','one','two','few','more','less','need','needs','looked','looks','seem','seems'
   ]);
 
-  // Collect all notes text
   const allText = rows
     .map(r => {
       if (!r.notes) return '';
       if (typeof r.notes === 'string') return r.notes;
-      // notes is an object keyed by section
-      return Object.values(r.notes).join(' ');
+      if (typeof r.notes === 'object') return Object.values(r.notes).filter(Boolean).join(' ');
+      return '';
     })
     .join(' ')
     .toLowerCase()
@@ -850,21 +848,20 @@ function renderWordCloud(rows) {
 
   const words = allText.split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
 
-  if (!words.length) { container.innerHTML = '<div class="no-data">No notes yet — comments will appear here as audits come in</div>'; return; }
+  if (!words.length) {
+    container.innerHTML = '<div class="no-data">No notes yet — comments will appear here as audits come in</div>';
+    return;
+  }
 
-  // Count frequencies
   const freq = {};
   words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
 
-  // Sort and take top 50
   const sorted = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, 50);
   const maxCount = sorted[0][1];
   const minCount = sorted[sorted.length-1][1];
 
-  // Colour palette cycling through brand colours
   const colours = ['#1A5C34','#39D400','#C9A84C','#6B8FA8','#EF9F27','#E24B4A'];
 
-  // Shuffle for visual variety (stable shuffle based on word)
   const shuffled = [...sorted].sort((a,b) => {
     const ha = a[0].charCodeAt(0) + a[0].charCodeAt(a[0].length-1);
     const hb = b[0].charCodeAt(0) + b[0].charCodeAt(b[0].length-1);
@@ -873,22 +870,24 @@ function renderWordCloud(rows) {
 
   container.innerHTML = shuffled.map(([word, count], i) => {
     const ratio = minCount === maxCount ? 0.5 : (count - minCount) / (maxCount - minCount);
-    const size = Math.round(12 + ratio * 28); // 12px to 40px
+    const size = Math.round(12 + ratio * 28);
     const color = colours[i % colours.length];
     const opacity = 0.5 + ratio * 0.5;
+    const safeWord = word.replace(/'/g, "\\'");
     return `<span class="wc-word" style="font-size:${size}px;color:${color};opacity:${opacity}"
-      onmouseenter="showTooltip(event,'${word}: mentioned ${count} time${count>1?'s':''}')"
+      onmouseenter="showTooltip(event,'${safeWord}: mentioned ${count} time${count>1?'s':''}')"
       onmouseleave="hideTooltip()">${word}</span>`;
   }).join('');
 }
 
-
+function showTooltip(e, text) {
   const t = document.getElementById('tooltip');
   t.textContent = text;
   t.style.opacity = '1';
   t.style.left = (e.clientX + 12) + 'px';
   t.style.top = (e.clientY - 10) + 'px';
 }
+
 function hideTooltip() {
   document.getElementById('tooltip').style.opacity = '0';
 }
