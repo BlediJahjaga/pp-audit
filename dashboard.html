@@ -138,8 +138,7 @@ body::before {
 .stat-card.green-card::before { background: var(--green); }
 .stat-card.lime-card::before { background: var(--lime); }
 .stat-card.amber-card::before { background: var(--amber); }
-.stat-card.red-card::before { background: var(--red); }
-.stat-card.gold-card::before { background: var(--gold); }
+.stat-card.red-card::before { background: var(--red); }.stat-card.gold-card::before { background: var(--gold); }
 
 .stat-num {
   font-family: 'PizzaPilgrims';
@@ -466,12 +465,15 @@ async function loadAll() {
   }
 }
 
+const ALL_RESTAURANTS = ["Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff","Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market","Glasgow","Greenwich","Hyde Park","King's Cross","Leeds","Liverpool Street","London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch","Soho","Spitalfields","Swingers West End","Victoria","Waterloo","Westfield","Westfield Stratford","Wimbledon"];
+
 function populateTrendSelect() {
-  const restaurants = [...new Set(allRows.map(r => r.restaurant))].sort();
+  const audited = new Set(allRows.map(r => r.restaurant));
   const sel = document.getElementById('trendSelect');
   sel.innerHTML = '<option value="">— Select a restaurant —</option>';
-  restaurants.forEach(name => {
-    sel.innerHTML += `<option value="${name}">${name}</option>`;
+  ALL_RESTAURANTS.forEach(name => {
+    const hasData = audited.has(name);
+    sel.innerHTML += `<option value="${name}"${!hasData ? ' style="color:#aaa"' : ''}>${name}${!hasData ? ' (no audits yet)' : ''}</option>`;
   });
 }
 
@@ -527,13 +529,13 @@ function renderHeli(rows) {
     </div>
     <div class="stat-card amber-card">
       <div class="stat-num" style="color:${scoreColor(bottomSite[1].pct)};font-size:28px">${bottomSite[0].split(' ')[0]}</div>
-      <div class="stat-label">Needs Most Work</div>
+      <div class="stat-label">Lowest Scoring Site</div>
       <div class="stat-sub">${bottomSite[1].pct}%</div>
     </div>
-    <div class="stat-card gold-card">
-      <div class="stat-num" style="color:#1A5C34">${latestScores.filter(s=>s<75).length}</div>
-      <div class="stat-label">Urgent Sites</div>
-      <div class="stat-sub">Scoring under 75%</div>
+    <div class="stat-card red-card">
+      <div class="stat-num" style="color:#E24B4A">${latestScores.filter(s=>s<75).length}</div>
+      <div class="stat-label" style="color:#E24B4A">Urgent Sites</div>
+      <div class="stat-sub" style="color:#E24B4A">Scoring under 75%</div>
     </div>
   `;
 }
@@ -551,7 +553,7 @@ function renderStatusBand(rows) {
 
   const bands = [
     { label: "Faje Paura!", color: "#C9A84C", check: s => s === 100 },
-    { label: "STARS!", color: "#1A5C34", check: s => s >= 95 && s < 100 },
+    { label: "STARS!", color: "#1A5C34", check: s => s >= 95 && s < 100, border: true },
     { label: "Very good!", color: "#39D400", check: s => s >= 90 && s < 95 },
     { label: "Good but..!", color: "#6B8FA8", check: s => s >= 85 && s < 90 },
     { label: "Not great!", color: "#EF9F27", check: s => s >= 75 && s < 85 },
@@ -562,7 +564,7 @@ function renderStatusBand(rows) {
     const count = scores.filter(b.check).length;
     const pct = total ? Math.round(count/total*100) : 0;
     return `<div class="band-seg">
-      <div class="band-dot" style="background:${b.color}"></div>
+      <div class="band-dot" style="background:${b.color};${b.border?'border:2px solid #39D400;box-sizing:border-box;':''}""></div>
       <div class="band-count">${count}</div>
       <div class="band-pct">${pct}%</div>
       <div class="band-desc">${b.label}</div>
