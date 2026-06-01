@@ -111,7 +111,7 @@ async function loadLeague(){
         <div class="${r.avg!==null?'avg-cell':''}">
           ${r.avg!==null
             ?r.avg===100
-              ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C;text-align:center">100%</div><div style="font-size:9px;color:#C9A84C;text-align:center">Faje Paura!</div>`
+             ?`<div style="font-family:'PizzaPilgrims';font-size:14px;color:#C9A84C">100%</div><div style="font-size:9px;color:#aaa">${r.count} audit${r.count>1?'s':''}</div>`
               :`<div style="font-family:'Chelsea';font-weight:700;font-size:14px;color:${scoreColor(r.avg)};text-align:center">${r.avg}%</div><div style="font-size:9px;color:#aaa;text-align:center">${r.count} audit${r.count>1?'s':''}</div>`
             :'<span style="color:#ccc;display:block;text-align:center">—</span>'}
         </div>
