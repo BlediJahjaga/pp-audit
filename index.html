@@ -414,9 +414,9 @@ function renderForm(app){
         html+=`<div style="margin-top:10px">
           ${state.photoPreviews[s.id]
             ?`<div class="photo-preview"><img src="${state.photoPreviews[s.id].url}"><div><div class="photo-name">${state.photoPreviews[s.id].name}</div><button class="photo-change" onclick="document.getElementById('f-${s.id}').click()">Change photo</button></div></div>`
-            :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()" style="${photoRule==='mandatory'?'border-color:#1A5C34;color:#1A5C34':''}">${photoRule==='mandatory'?'📷 Add pizza photo (required)':'📷 Add photo (optional)'}</button>`}
+            :`<button class="photo-btn" onclick="document.getElementById('f-${s.id}').click()" style="${photoRule==='mandatory'?'border-color:#1A5C34;color:#1A5C34':''}">${photoRule==='mandatory'?'📷 Add photo (required)':'📷 Add photo (optional)'}</button>`}
           <input type="file" id="f-${s.id}" accept="image/*" style="display:none" onchange="handlePhotoChange('${s.id}',this)">
-          ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo of the pizza</p>`:""}
+          ${photoRule==='mandatory'&&!state.photoPreviews[s.id]?`<p style="font-size:11px;color:#E24B4A;margin-top:4px">Required — please add a photo</p>`:""}
         </div>`;
       }
       html+=`</div>`;
