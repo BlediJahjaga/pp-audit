@@ -88,11 +88,15 @@ async function loadLeague(){
       if(!data[row.restaurant].latest){data[row.restaurant].latest=row.pct;data[row.restaurant].latestDate=row.audit_date;}
       data[row.restaurant].scores.push(row.pct);
     });
+    const STALE_DAYS=14;
+    const today=new Date();
     const all=RESTAURANTS.map(r=>{
       const d=data[r];
       if(!d)return{restaurant:r,latest:null,avg:null,latestDate:null,count:0};
       const avg=Math.round(d.scores.reduce((a,b)=>a+b,0)/d.scores.length);
-      return{restaurant:r,latest:d.latest,avg,latestDate:d.latestDate,count:d.scores.length};
+      const daysSince=Math.floor((today-new Date(d.latestDate))/86400000);
+      if(daysSince>STALE_DAYS)return{restaurant:r,latest:null,avg:null,latestDate:d.latestDate,count:d.scores.length,stale:true,daysSince};
+      return{restaurant:r,latest:d.latest,avg,latestDate:d.latestDate,count:d.scores.length,daysSince};
     });
     const sorted=[...all].sort((a,b)=>(b.avg??-1)-(a.avg??-1));
 
