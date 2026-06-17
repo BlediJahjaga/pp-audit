@@ -190,7 +190,7 @@ async function generatePDF(report){
   doc.text(report.restaurant,margin,y); y+=7;
   doc.setFontSize(9);
   doc.setTextColor(100,100,100);
-  doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:""),margin,y); y+=8;
+  doc.text(formatDate(report.audit_date)+" · "+report.auditor+(report.team?" · "+report.team:"")+(report.chef?" · Chef: "+report.chef:""),margin,y); y+=8;
   const rgb=report.pct===100?[201,168,76]:report.pct>=95?[26,92,52]:report.pct>=90?[57,212,0]:report.pct>=85?[107,143,168]:report.pct>=75?[239,159,39]:[226,75,74];
   doc.setFillColor(...rgb);
   doc.roundedRect(margin,y,contentW,14,3,3,"F");
