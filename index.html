@@ -358,8 +358,8 @@ function renderForm(app){
       <div style="margin-bottom:14px"><label>Your team</label>
         <input type="text" id="team-input" value="${state.team}" placeholder="Your team…" oninput="state.team=this.value">
       </div>
-      <div><label>Chef on Shift</label>
-        <input type="text" id="chef-input" value="${state.chef}" placeholder="Chef on shift…" oninput="state.chef=this.value">
+      <div><label>Chef on Shift <span style="color:#E24B4A">*</span></label>
+        <input type="text" id="chef-input" value="${state.chef}" placeholder="Chef on shift… (required)" oninput="state.chef=this.value">
       </div>
       ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;state.chef=document.getElementById('chef-input').value;if(state.auditor&&state.chef){render();}">Start Audit →</button>`:""}
       <div style="margin-top:16px;border-radius:10px;overflow:hidden;max-width:70%;margin-left:auto;margin-right:auto"><img src="https://i.ibb.co/0yndCqdc/IMG-5797.jpg" style="width:100%;display:block"></div>
