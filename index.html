@@ -355,10 +355,13 @@ function renderForm(app){
       <div style="margin-bottom:14px"><label>Your name</label>
         <input type="text" id="auditor-input" value="${state.auditor}" placeholder="Your name" oninput="state.auditor=this.value">
       </div>
-      <div><label>Your team</label>
+      <div style="margin-bottom:14px"><label>Your team</label>
         <input type="text" id="team-input" value="${state.team}" placeholder="Your team…" oninput="state.team=this.value">
       </div>
-      ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;if(state.auditor){render();}">Start Audit →</button>`:""}
+      <div><label>Chef on Shift</label>
+        <input type="text" id="chef-input" value="${state.chef}" placeholder="Chef on shift…" oninput="state.chef=this.value">
+      </div>
+      ${state.pizzeria?`<button class="btn-start" onclick="state.auditor=document.getElementById('auditor-input').value;state.team=document.getElementById('team-input').value;state.chef=document.getElementById('chef-input').value;if(state.auditor){render();}">Start Audit →</button>`:""}
       <div style="margin-top:16px;border-radius:10px;overflow:hidden;max-width:70%;margin-left:auto;margin-right:auto"><img src="https://i.ibb.co/0yndCqdc/IMG-5797.jpg" style="width:100%;display:block"></div>
     </div>`;
   } else {
