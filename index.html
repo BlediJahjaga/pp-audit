@@ -340,7 +340,7 @@ function renderConfirm(app){
 function renderForm(app){
   const ac=answeredCount();
   const availNoteRequired=state.availability.answer==="no"&&!state.notes['availability'];
-  const canSubmit=state.pizzeria&&state.auditor&&ac===TOTAL_WITH_PHOTOS&&!state.submitting&&!availNoteRequired;
+  const canSubmit=state.pizzeria&&state.auditor&&state.chef&&ac===TOTAL_WITH_PHOTOS&&!state.submitting&&!availNoteRequired;
   const cols=["#E24B4A","#D85A30","#EF9F27","#639922","#1D9E75","#0F6E56"];
   let html=banner()+'<div class="inner">';
 
