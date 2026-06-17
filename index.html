@@ -101,7 +101,7 @@ const MONTHS_LONG = ["January","February","March","April","May","June","July","A
 function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+" "+MONTHS_LONG[parseInt(p[1])-1]+" "+p[0]; }
 
 let state = {
-  view:"form", pizzeria:"", auditor:"", team:"",
+  view:"form", pizzeria:"", auditor:"", team:"", chef:"",
   scores:{}, photoFiles:{}, photoPreviews:{}, notes:{},
   availability:{answer:"",items:"",pizzas:""},
   submitting:false, submitError:"", currentReport:null, pdfDataUri:null
