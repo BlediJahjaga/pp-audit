@@ -278,7 +278,7 @@ async function handleSubmit(){
     }
     const result=calcScores(state.scores,state.availability);
     const payload={
-      restaurant:state.pizzeria, auditor:state.auditor, team:state.team,
+      restaurant:state.pizzeria, auditor:state.auditor, team:state.team, chef:state.chef,
       scores:state.scores, notes:state.notes,
       photo_urls:photoUrls, pct:result.pct,
       total_weighted:result.total, section_scores:result.sectionScores,
