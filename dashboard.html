@@ -513,14 +513,14 @@ function renderHeli(rows) {
       <div class="stat-sub">${totalAudits} total audit${totalAudits!==1?'s':''}</div>
     </div>
     <div class="stat-card lime-card">
-      <div class="stat-num" style="color:${scoreColor(topSite.avgDisplay)};font-size:20px;line-height:1.2">${topSite.name}</div>
+      <div class="stat-num" style="color:${topSite?scoreColor(topSite.avgDisplay):'#bbb'};font-size:20px;line-height:1.2">${topSite?topSite.name:'—'}</div>
       <div class="stat-label">Top Site</div>
-      <div class="stat-sub">${topSite.avgDisplay}% avg — ${scoreLabel(topSite.avgDisplay)}</div>
+      <div class="stat-sub">${topSite?`${topSite.avgDisplay}% avg — ${scoreLabel(topSite.avgDisplay)}`:'No audits in 14 days'}</div>
     </div>
     <div class="stat-card amber-card">
-      <div class="stat-num" style="color:${scoreColor(bottomSite.avgDisplay)};font-size:20px;line-height:1.2">${bottomSite.name}</div>
+      <div class="stat-num" style="color:${bottomSite?scoreColor(bottomSite.avgDisplay):'#bbb'};font-size:20px;line-height:1.2">${bottomSite?bottomSite.name:'—'}</div>
       <div class="stat-label">Lowest Scoring Site</div>
-      <div class="stat-sub">${bottomSite.avgDisplay}% avg</div>
+      <div class="stat-sub">${bottomSite?`${bottomSite.avgDisplay}% avg`:'No audits in 14 days'}</div>
     </div>
     <div class="stat-card red-card">
       <div class="stat-num" style="color:#E24B4A">${latestScores.filter(s=>s<75).length}</div>
