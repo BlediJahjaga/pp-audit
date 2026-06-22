@@ -482,8 +482,19 @@ function renderHeli(rows) {
   const estateAvg = Math.round(latestScores.reduce((a,b)=>a+b,0) / latestScores.length);
   const totalAudits = rows.length;
   const sitesAudited = Object.keys(latestPerSite).length;
-  const topSite = Object.entries(latestPerSite).sort((a,b)=>b[1].pct-a[1].pct)[0];
-  const bottomSite = Object.entries(latestPerSite).sort((a,b)=>a[1].pct-b[1].pct)[0];
+
+  // Top Site & Lowest Scoring Site rank by AVERAGE score, to match the league table
+  const avgPerSite = {};
+  rows.forEach(r => {
+    if (!avgPerSite[r.restaurant]) avgPerSite[r.restaurant] = { sum: 0, count: 0 };
+    avgPerSite[r.restaurant].sum += r.pct;
+    avgPerSite[r.restaurant].count++;
+  });
+  const siteAverages = Object.entries(avgPerSite).map(([name, v]) => ({
+    name, avg: v.sum / v.count, avgDisplay: Math.round(v.sum / v.count)
+  }));
+  const topSite = [...siteAverages].sort((a,b) => b.avg - a.avg)[0];
+  const bottomSite = [...siteAverages].sort((a,b) => a.avg - b.avg)[0];
 
   document.getElementById('heliRow').innerHTML = `
     <div class="stat-card green-card">
