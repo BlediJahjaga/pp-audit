@@ -61,6 +61,7 @@ body::before { content: ''; position: fixed; inset: 0; background: rgba(26,92,52
         <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>75–84% - Not great!</div>
         <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Under 75% - NEED TO FIX URGENTLY!</div>
         <div style="font-size:11px;color:#777;margin-top:50px;line-height:1.45;background:rgba(239,159,39,0.1);border-left:2px solid #EF9F27;padding:8px 10px;border-radius:6px">Sites not audited in 14+ days drop out of the ranking and sit greyed-out at the bottom, with an amber "days ago" tag. Sites that have had no audits have no score.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -69,7 +70,9 @@ const SB_URL="https://jjziogebkovhcxvsuayf.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqemlvZ2Via292aGN4dnN1YXlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjc3NDIsImV4cCI6MjA5MDcwMzc0Mn0.EBbrq-4c7IAA2YIevfiATuPcnDxf9WEzcwzaprdp_UI";
 
 const RESTAURANTS=["Birmingham","Brighton","Bristol","Camden","Cambridge","Canary Wharf","Cardiff","Carnaby","Chelsea","Covent Garden","Edinburgh","Euston","Exmouth Market","Glasgow","Hyde Park","King's Cross","Leeds","Liverpool Street","London Bridge","Manchester","Nottingham","Queens Park","Selfridges","Shoreditch","Soho","Spitalfields","Stratford","Victoria","Waterloo","Westfield","Wimbledon"];
-  function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
+
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function formatDate(d){ const p=d.split("-"); return parseInt(p[2])+"/"+MONTHS[parseInt(p[1])-1]+"/"+p[0].slice(2); }
 
 function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
 function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX!"; }
