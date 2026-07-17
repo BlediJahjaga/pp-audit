@@ -74,7 +74,7 @@ const RESTAURANTS=["Birmingham","Brighton","Bristol","Camden","Cambridge","Canar
 function scoreColor(p){ if(p===100)return"#C9A84C";if(p>=95)return"#1A5C34";if(p>=90)return"#39D400";if(p>=85)return"#6B8FA8";if(p>=75)return"#EF9F27";return"#E24B4A"; }
 function scoreLabel(p){ if(p===100)return"Faje Paura!";if(p>=95)return"STARS!";if(p>=90)return"Very good!";if(p>=85)return"Good but..!";if(p>=75)return"Not great!";return"NEED TO FIX!"; }
 
-function loadLeague(){
+async function loadLeague(){
   document.getElementById("table").innerHTML='<div class="loading">Loading…</div>';
   try{
     const r=await fetch(SB_URL+"/rest/v1/audits?select=restaurant,pct,audit_date,created_at&order=created_at.desc",{headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});
