@@ -134,7 +134,9 @@ function calcScores(scores,avail){
       if(weighted!==null){total+=weighted;maxTotal+=5*s.weight;}
     }
   });
-  const pct=maxTotal>0?Math.round((total/maxTotal)*100):0;
+    const rawPct = maxTotal>0 ? (total/maxTotal)*100 : 0;
+  // 100% is reserved for a genuinely perfect audit — anything less can't round up to 100
+  const pct = rawPct>=100 ? 100 : Math.min(99, Math.round(rawPct));
   return {sectionScores:ss,total:Math.round(total*10)/10,maxTotal,pct};
 }
 
