@@ -162,7 +162,7 @@ async function compressImage(file){
 }
 
 async function uploadPhoto(blob,sid,pizzeria){
-  const name=pizzeria.replace(/\s+/g,"-").toLowerCase()+"-"+sid+"-"+Date.now()+".jpg";
+    const name=pizzeria.toLowerCase().replace(/ß/g,"ss").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")+"-"+sid+"-"+Date.now()+".jpg";
   const r=await fetch(SB_URL+"/storage/v1/object/audit-photos/"+name,{
     method:"POST",
     headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"image/jpeg","x-upsert":"true"},
